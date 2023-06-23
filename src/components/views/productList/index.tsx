@@ -1,5 +1,3 @@
-import { Download } from "@styled-icons/bootstrap/Download";
-import { Plus } from "@styled-icons/boxicons-regular/Plus";
 import { ButtonMain } from "components/ui/button/button";
 import { CardItem } from "components/ui/card";
 import { Search } from "components/ui/search";
@@ -12,6 +10,8 @@ import { history } from "utils/history";
 import styles from "./index.module.scss";
 import { productMock } from "data/product-mockData";
 import { IProduct } from "services/productService";
+import { Add, Download } from "components/ui/icon";
+import FunctionBtn from "components/container/functionBtn";
 
 export interface ProductListProps {}
 
@@ -86,16 +86,7 @@ const ProductList: React.FC<ProductListProps> = () => {
             </ButtonMain>
             <ButtonMain onClick={() => filter("dress")}>DRESS</ButtonMain>
           </div>
-          <div className={styles["btnCrud"]}>
-            <ButtonMain onClick={handleAddProduct}>
-              <Plus size={20} className={styles["icon"]} />
-            </ButtonMain>
-            {role === "ADMIN" && (
-              <ButtonMain>
-                <Download size={20} className={styles["icon"]} />
-              </ButtonMain>
-            )}
-          </div>
+          <FunctionBtn />
         </div>
         {data.length > 0 && (
           <>

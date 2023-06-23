@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./modal.module.scss";
 import classNames from "classnames";
-import { CloseOutline } from "@styled-icons/evaicons-outline/CloseOutline";
+import { Close } from "components/ui/icon";
 
 export interface ModalProps {
   children: any;
@@ -16,7 +16,7 @@ export const Modal: React.FC<ModalProps> = ({
   return (
     <div className={classNames(styles["root"], className)}>
       <div className={styles["container"]}>
-        <CloseOutline onClick={onClick} className="close" />
+        <Close onClick={onClick} customClass="close" />
         {children}
       </div>
     </div>

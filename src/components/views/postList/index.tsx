@@ -3,8 +3,7 @@ import { CardList } from "components/ui/card";
 import { Layout } from "components/views/layout";
 import { useAppDispatch, useAppSelector } from "hooks/useRedux";
 import React, { useEffect, useState } from "react";
-import { Plus } from "@styled-icons/boxicons-regular/Plus";
-import { Download } from "@styled-icons/bootstrap/Download";
+
 import { postActions } from "redux/reducers/postSlice";
 import postService from "services/postService";
 import { history } from "utils/history";
@@ -12,6 +11,8 @@ import styles from "./index.module.scss";
 import { Search } from "components/ui/search";
 import { IPost } from "services/postService";
 import { postMock } from "data/post-mockData";
+import { Add, Download } from "components/ui/icon";
+import FunctionBtn from "components/container/functionBtn";
 
 export interface PostListProps {}
 
@@ -83,16 +84,7 @@ const PostList: React.FC<PostListProps> = (props) => {
             </ButtonMain>
             <ButtonMain onClick={() => filter("dress")}>DRESS</ButtonMain>
           </div>
-          <div className={styles["btnCrud"]}>
-            <ButtonMain onClick={handleAddPost}>
-              <Plus size={20} className={styles["icon"]} />
-            </ButtonMain>
-            {role === "ADMIN" && (
-              <ButtonMain>
-                <Download size={20} className={styles["icon"]} />
-              </ButtonMain>
-            )}
-          </div>
+          <FunctionBtn />
         </div>
         {data.length > 0 && (
           <>

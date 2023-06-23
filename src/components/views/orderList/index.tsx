@@ -3,13 +3,14 @@ import styles from "./index.module.scss";
 import { Layout } from "components/views/layout";
 import { ButtonMain } from "components/ui/button/button";
 import { Card } from "components/ui/card";
-import { Plus } from "@styled-icons/boxicons-regular/Plus";
-import { Download } from "@styled-icons/bootstrap/Download";
+
 import { useAppDispatch, useAppSelector } from "hooks/useRedux";
 import orderService from "services/orderService";
 import { orderActions } from "redux/reducers/orderSlice";
 import { history } from "utils/history";
 import { Search } from "components/ui/search";
+import { Add, Download } from "components/ui/icon";
+import FunctionBtn from "components/container/functionBtn";
 export interface OrderListProps {}
 
 const OrderList: React.FC<OrderListProps> = (props) => {
@@ -76,16 +77,8 @@ const OrderList: React.FC<OrderListProps> = (props) => {
             <ButtonMain onClick={() => filter("shipping")}>SHIPPING</ButtonMain>
             <ButtonMain onClick={() => filter("done")}>DONE</ButtonMain>
           </div>
-          <div className={styles["btnCrud"]}>
-            <ButtonMain onClick={handleAddOrder}>
-              <Plus size={20} className={styles["icon"]} />
-            </ButtonMain>
-            {role === "ADMIN" && (
-              <ButtonMain>
-                <Download size={20} className={styles["icon"]} />
-              </ButtonMain>
-            )}
-          </div>
+          <FunctionBtn />
+
         </div>
         {data.length > 0 && (
           <ul className={styles["card-container"]}>

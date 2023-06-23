@@ -6,9 +6,11 @@ import { useAppSelector } from "hooks/useRedux";
 import DarkMode from "components/ui/darkmode";
 import styles from "./sidebar.module.scss";
 
-export interface SidebarProps {}
+export interface SidebarProps {
+  customClass?: string;
+}
 
-const Sidebar: React.FC<SidebarProps> = () => {
+const Sidebar: React.FC<SidebarProps> = ({ customClass }) => {
   const [subNav, setSubNav] = useState(false);
   const [role, setRole] = useState("");
   const { user } = useAppSelector((state) => state.auth);
@@ -30,7 +32,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
   };
 
   return (
-    <div className={styles["root"]}>
+    <div className={classNames(styles["root"], customClass)}>
       <span className={styles["logo"]}>S</span>
       <a className={styles["logo-expand"]} href="/dashboard">
         Trine Closet

@@ -1,14 +1,16 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import styles from "./index.module.scss";
 import classnames from "classnames";
 export interface IconProps {
   customClass?: string;
+  onClick?: MouseEventHandler<SVGSVGElement>;
 }
 
-export const Dashboard: React.FC<IconProps> = ({ customClass }) => {
+export const Dashboard: React.FC<IconProps> = ({ customClass, onClick }) => {
   return (
     <svg
       className={classnames(styles["root"], customClass)}
+      onClick={onClick}
       fill="currentColor"
       width="36"
       height="36"
@@ -19,10 +21,11 @@ export const Dashboard: React.FC<IconProps> = ({ customClass }) => {
   );
 };
 
-export const Document: React.FC<IconProps> = ({ customClass }) => {
+export const Document: React.FC<IconProps> = ({ customClass, onClick }) => {
   return (
     <svg
       className={classnames(styles["root"], customClass)}
+      onClick={onClick}
       fill="currentColor"
       width="36"
       height="36"
@@ -34,10 +37,11 @@ export const Document: React.FC<IconProps> = ({ customClass }) => {
     </svg>
   );
 };
-export const Contact: React.FC<IconProps> = ({ customClass }) => {
+export const Contact: React.FC<IconProps> = ({ customClass, onClick }) => {
   return (
     <svg
       className={classnames(styles["root"], customClass)}
+      onClick={onClick}
       fill="currentColor"
       width="36"
       height="36"
@@ -50,10 +54,11 @@ export const Contact: React.FC<IconProps> = ({ customClass }) => {
     </svg>
   );
 };
-export const Store: React.FC<IconProps> = ({ customClass }) => {
+export const Store: React.FC<IconProps> = ({ customClass, onClick }) => {
   return (
     <svg
       className={classnames(styles["root"], customClass)}
+      onClick={onClick}
       fill="currentColor"
       width="36"
       height="36"
@@ -66,10 +71,11 @@ export const Store: React.FC<IconProps> = ({ customClass }) => {
     </svg>
   );
 };
-export const Cart: React.FC<IconProps> = ({ customClass }) => {
+export const Cart: React.FC<IconProps> = ({ customClass, onClick }) => {
   return (
     <svg
       className={classnames(styles["root"], customClass)}
+      onClick={onClick}
       fill="currentColor"
       width="36"
       height="36"
@@ -83,10 +89,11 @@ export const Cart: React.FC<IconProps> = ({ customClass }) => {
     </svg>
   );
 };
-export const Sun: React.FC<IconProps> = ({ customClass }) => {
+export const Sun: React.FC<IconProps> = ({ customClass, onClick }) => {
   return (
     <svg
       className={classnames(styles["root"], customClass)}
+      onClick={onClick}
       fill="currentColor"
       width="36"
       height="36"
@@ -98,10 +105,11 @@ export const Sun: React.FC<IconProps> = ({ customClass }) => {
     </svg>
   );
 };
-export const Moon: React.FC<IconProps> = ({ customClass }) => {
+export const Moon: React.FC<IconProps> = ({ customClass, onClick }) => {
   return (
     <svg
       className={classnames(styles["root"], customClass)}
+      onClick={onClick}
       fill="currentColor"
       width="36"
       height="36"
@@ -113,10 +121,11 @@ export const Moon: React.FC<IconProps> = ({ customClass }) => {
   );
 };
 
-export const User: React.FC<IconProps> = ({ customClass }) => {
+export const User: React.FC<IconProps> = ({ customClass, onClick }) => {
   return (
     <svg
       className={classnames(styles["root"], customClass)}
+      onClick={onClick}
       fill="currentColor"
       width="36"
       height="36"
@@ -127,6 +136,121 @@ export const User: React.FC<IconProps> = ({ customClass }) => {
         fillRule="evenodd"
         clipRule="evenodd"
         d="M575.226 167.103V408.123C575.226 488.936 538.131 544.443 472.853 565.442C462.784 489.515 383.401 430.556 287.627 430.556C191.854 430.556 112.472 489.517 102.406 565.447C121.388 572.062 143.247 575.226 167.119 575.226H408.14C411.118 575.226 414.065 575.177 416.979 575.078C414.06 575.177 411.107 575.226 408.123 575.226H167.103C143.231 575.226 121.373 572.063 102.39 565.448C37.1021 544.452 0 488.942 0 408.123V167.103C0 62.4121 62.4121 0 167.103 0H408.123C512.814 0 575.226 62.4121 575.226 167.103ZM472.853 565.442L472.853 565.447C460.596 569.718 447.14 572.55 432.717 574.02C447.134 572.549 460.584 569.717 472.836 565.448L472.853 565.442ZM287.61 378.787C344.558 378.787 390.576 332.481 390.576 275.533C390.576 218.587 344.558 172.568 287.61 172.568C230.663 172.568 184.645 218.587 184.645 275.533C184.645 332.481 230.663 378.787 287.61 378.787Z"
+      />
+    </svg>
+  );
+};
+
+export const LogOut: React.FC<IconProps> = ({ customClass, onClick }) => {
+  return (
+    <svg
+      className={classnames(styles["root"], customClass)}
+      onClick={onClick}
+      fill="currentColor"
+      width="36"
+      height="36"
+      viewBox="0 0 124 124"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M91.6623 0H75.5552C55.7311 0 43.3411 12.3901 43.3411 32.2142V57.3041H82.06C84.6 57.3041 86.7063 59.4104 86.7063 61.9503C86.7063 64.4903 84.6 66.5966 82.06 66.5966H43.3411V91.6865C43.3411 111.511 55.7311 123.901 75.5552 123.901H91.6004C111.424 123.901 123.815 111.511 123.815 91.6865V32.2142C123.877 12.3901 111.486 0 91.6623 0Z" />
+      <path d="M15.8438 57.3028L28.6675 44.4793C29.5968 43.5501 30.0304 42.373 30.0304 41.196C30.0304 40.0189 29.5968 38.7799 28.6675 37.9126C26.871 36.116 23.8973 36.116 22.1008 37.9126L1.34742 58.6657C-0.44914 60.4623 -0.44914 63.4359 1.34742 65.2325L22.1008 85.9858C23.8973 87.7824 26.871 87.7824 28.6675 85.9858C30.4641 84.1893 30.4641 81.2157 28.6675 79.4191L15.8438 66.5954H43.3498V57.3028H15.8438Z" />
+    </svg>
+  );
+};
+export const ArrowDown: React.FC<IconProps> = ({ customClass, onClick }) => {
+  return (
+    <svg
+      className={classnames(styles["root"], customClass)}
+      onClick={onClick}
+      fill="currentColor"
+      width="36"
+      height="36"
+      viewBox="0 0 124 62"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M61.9073 61.4072C56.9075 61.4072 51.9078 59.4787 48.1223 55.6932L1.55349 9.12452C-0.51783 7.0532 -0.51783 3.62481 1.55349 1.55349C3.62481 -0.51783 7.0532 -0.51783 9.12452 1.55349L55.6933 48.1222C59.1217 51.5506 64.6928 51.5506 68.1212 48.1222L114.69 1.55349C116.762 -0.51783 120.19 -0.51783 122.261 1.55349C124.333 3.62481 124.333 7.0532 122.261 9.12452L75.6923 55.6932C71.9067 59.4787 66.907 61.4072 61.9073 61.4072Z" />
+    </svg>
+  );
+};
+
+export const Add: React.FC<IconProps> = ({ customClass, onClick }) => {
+  return (
+    <svg
+      className={classnames(styles["root"], customClass)}
+      onClick={onClick}
+      fill="currentColor"
+      width="36"
+      height="36"
+      viewBox="0 0 125 124"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M88.3916 0.0366211H36.4873C13.9418 0.0366211 0.501221 13.4772 0.501221 36.0227V87.865C0.501221 110.472 13.9418 123.913 36.4873 123.913H88.3296C110.875 123.913 124.316 110.472 124.316 87.927V36.0227C124.378 13.4772 110.937 0.0366211 88.3916 0.0366211ZM87.2147 66.6202H67.0848V86.7501C67.0848 89.2896 64.9789 91.3955 62.4395 91.3955C59.9 91.3955 57.7941 89.2896 57.7941 86.7501V66.6202H37.6642C35.1247 66.6202 33.0188 64.5143 33.0188 61.9749C33.0188 59.4354 35.1247 57.3295 37.6642 57.3295H57.7941V37.1996C57.7941 34.6601 59.9 32.5542 62.4395 32.5542C64.9789 32.5542 67.0848 34.6601 67.0848 37.1996V57.3295H87.2147C89.7542 57.3295 91.8601 59.4354 91.8601 61.9749C91.8601 64.5143 89.7542 66.6202 87.2147 66.6202Z" />
+    </svg>
+  );
+};
+
+export const Minus: React.FC<IconProps> = ({ customClass, onClick }) => {
+  return (
+    <svg
+      className={classnames(styles["root"], customClass)}
+      onClick={onClick}
+      fill="currentColor"
+      width="36"
+      height="36"
+      viewBox="0 0 124 124"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M87.8904 0H35.9861C13.4406 0 0 13.4406 0 35.9861V87.8284C0 110.436 13.4406 123.876 35.9861 123.876H87.8284C110.374 123.876 123.815 110.436 123.815 87.8904V35.9861C123.876 13.4406 110.436 0 87.8904 0ZM86.7135 66.5836H37.1629C34.6235 66.5836 32.5176 64.4777 32.5176 61.9382C32.5176 59.3988 34.6235 57.2929 37.1629 57.2929H86.7135C89.253 57.2929 91.3589 59.3988 91.3589 61.9382C91.3589 64.4777 89.253 66.5836 86.7135 66.5836Z" />
+    </svg>
+  );
+};
+
+export const Close: React.FC<IconProps> = ({ customClass, onClick }) => {
+  return (
+    <svg
+      className={classnames(styles["root"], customClass)}
+      onClick={onClick}
+      fill="currentColor"
+      width="36"
+      height="36"
+      viewBox="0 0 124 124"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M87.8904 0H35.9861C13.4406 0 0 13.4406 0 35.9861V87.8284C0 110.436 13.4406 123.876 35.9861 123.876H87.8284C110.374 123.876 123.815 110.436 123.815 87.8904V35.9861C123.876 13.4406 110.436 0 87.8904 0ZM82.7495 76.184C84.5457 77.9802 84.5457 80.9533 82.7495 82.7495C81.8204 83.6786 80.6436 84.1121 79.4668 84.1121C78.2899 84.1121 77.1131 83.6786 76.184 82.7495L61.9382 68.5037L47.6924 82.7495C46.7634 83.6786 45.5865 84.1121 44.4097 84.1121C43.2329 84.1121 42.0561 83.6786 41.127 82.7495C39.3308 80.9533 39.3308 77.9802 41.127 76.184L55.3728 61.9382L41.127 47.6924C39.3308 45.8962 39.3308 42.9232 41.127 41.127C42.9232 39.3308 45.8962 39.3308 47.6924 41.127L61.9382 55.3728L76.184 41.127C77.9802 39.3308 80.9533 39.3308 82.7495 41.127C84.5457 42.9232 84.5457 45.8962 82.7495 47.6924L68.5037 61.9382L82.7495 76.184Z" />
+    </svg>
+  );
+};
+
+export const Download: React.FC<IconProps> = ({ customClass, onClick }) => {
+  return (
+    <svg
+      className={classnames(styles["root"], customClass)}
+      onClick={onClick}
+      fill="currentColor"
+      width="36"
+      height="36"
+      viewBox="0 0 124 131"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M117.298 53.3707H98.4653C83.021 53.3707 70.4441 40.7937 70.4441 25.3494V6.51656C70.4441 2.93245 67.5116 0 63.9275 0H36.2973C16.2262 0 0 13.0331 0 36.2973V94.034C0 117.298 16.2262 130.331 36.2973 130.331H87.5175C107.588 130.331 123.815 117.298 123.815 94.034V59.8872C123.815 56.3031 120.882 53.3707 117.298 53.3707ZM63.732 89.7983L50.6989 102.831C50.2427 103.288 49.6562 103.679 49.0697 103.874C48.4832 104.135 47.8968 104.265 47.2451 104.265C46.5934 104.265 46.0069 104.135 45.4205 103.874C44.8991 103.679 44.3778 103.288 43.9868 102.897C43.9216 102.831 43.8565 102.831 43.8565 102.766L30.8234 89.7331C28.9335 87.8433 28.9335 84.7153 30.8234 82.8255C32.7132 80.9357 35.8411 80.9357 37.7309 82.8255L42.3577 87.5826V60.2782C42.3577 57.6064 44.5733 55.3908 47.2451 55.3908C49.9169 55.3908 52.1325 57.6064 52.1325 60.2782V87.5826L56.8244 82.8907C58.7143 81.0009 61.8422 81.0009 63.732 82.8907C65.6218 84.7805 65.6218 87.9085 63.732 89.7983Z" />
+      <path d="M97.2902 44.3809C103.481 44.4461 112.083 44.4461 119.447 44.4461C123.161 44.4461 125.116 40.08 122.509 37.4734C113.125 28.0244 96.3127 11.0161 86.6682 1.3716C83.9964 -1.30019 79.3696 0.524448 79.3696 4.23889V26.9817C79.3696 36.4959 87.4502 44.3809 97.2902 44.3809Z" />
+    </svg>
+  );
+};
+export const Bell: React.FC<IconProps> = ({ customClass, onClick }) => {
+  return (
+    <svg
+      className={classnames(styles["root"], customClass)}
+      onClick={onClick}
+      fill="currentColor"
+      width="36"
+      height="36"
+      viewBox="0 0 24 24"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M18.707 8.796c0 1.256.332 1.997 1.063 2.85.553.628.73 1.435.73 2.31 0 .874-.287 1.704-.863 2.378a4.537 4.537 0 01-2.9 1.413c-1.571.134-3.143.247-4.736.247-1.595 0-3.166-.068-4.737-.247a4.532 4.532 0 01-2.9-1.413 3.616 3.616 0 01-.864-2.378c0-.875.178-1.682.73-2.31.754-.854 1.064-1.594 1.064-2.85V8.37c0-1.682.42-2.781 1.283-3.858C7.861 2.942 9.919 2 11.956 2h.09c2.08 0 4.204.987 5.466 2.625.82 1.054 1.195 2.108 1.195 3.745v.426zM9.074 20.061c0-.504.462-.734.89-.833.5-.106 3.545-.106 4.045 0 .428.099.89.33.89.833-.025.48-.306.904-.695 1.174a3.635 3.635 0 01-1.713.731 3.795 3.795 0 01-1.008 0 3.618 3.618 0 01-1.714-.732c-.39-.269-.67-.694-.695-1.173z"
       />
     </svg>
   );

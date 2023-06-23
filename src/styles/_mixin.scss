@@ -28,55 +28,6 @@
   box-shadow: 17px 17px 86px 0px rgba($light-black, 0.1);
 }
 
-@mixin rightArrow {
-  position: relative;
-  width: 60%;
-  border-top: 2px solid $white;
-  &::before {
-    content: "";
-    position: absolute;
-    width: 5px;
-    height: 5px;
-    border: solid $white;
-    border-width: 0 2px 2px 0;
-    top: -4px;
-    right: 0;
-    transform: rotate(-45deg);
-  }
-}
-@mixin leftArrow {
-  position: relative;
-  width: 60%;
-  border-top: 2px solid $white;
-  &::before {
-    content: "";
-    position: absolute;
-    width: 5px;
-    height: 5px;
-    border: solid $white;
-    border-width: 0 2px 2px 0;
-    top: -4px;
-    left: 0;
-    transform: rotate(135deg);
-  }
-}
-
-@mixin downArrow {
-  position: relative;
-  width: 60%;
-  border-top: 2px solid $white;
-  &::before {
-    content: "";
-    position: absolute;
-    width: 5px;
-    height: 5px;
-    border: solid $white;
-    border-width: 0 2px 2px 0;
-    top: -4px;
-    left: 0;
-    transform: rotate(45deg);
-  }
-}
 
 // DARK MODE
 

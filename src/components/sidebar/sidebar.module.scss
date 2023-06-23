@@ -3,39 +3,27 @@
 @import "styles/mixin";
 
 .root {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  z-index: 999999;
   width: 70px;
   height: 100%;
+
+  z-index: 999999;
   padding: 30px 20px;
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
   overflow-y: auto;
   overflow-x: hidden;
   font-family: $font-p;
   background-color: $button-bg;
   border-radius: 0 20px 20px 0;
-  transition: 0.3s all;
-
+  @include Transition();
   @include light {
     background-color: $ligth-theme-bg;
     @include boxShadow();
   }
 
-  // .wrapper {
-  //   .side-menu {
-  //     li {
-  //       .link {
-  //         p {
-  //           display: none;
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
   &:hover {
     width: 260px;
     .wrapper {

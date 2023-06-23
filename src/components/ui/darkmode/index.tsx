@@ -1,6 +1,4 @@
 import React, { ChangeEventHandler } from "react";
-import { SunFill } from "@styled-icons/bootstrap/SunFill";
-import { WeatherMoon } from "@styled-icons/fluentui-system-filled/WeatherMoon";
 import styles from "./index.module.scss";
 import { Moon, Sun } from "../icon";
 export interface DarkModeProps {}

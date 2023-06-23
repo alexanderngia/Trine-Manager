@@ -1,7 +1,6 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
-import { Plus } from "@styled-icons/boxicons-regular/Plus";
-import { Download } from "@styled-icons/bootstrap/Download";
+
 import * as Yup from "yup";
 import { useAppDispatch, useAppSelector } from "hooks/useRedux";
 import { register } from "redux/reducers/authSlice";
@@ -12,6 +11,8 @@ import { CardList } from "components/ui/card";
 import { Modal } from "components/ui/modal/modal";
 import { Layout } from "components/views/layout";
 import styles from "./index.module.scss";
+import { Add, Download } from "components/ui/icon";
+import FunctionBtn from "components/container/functionBtn";
 
 export interface MemberListProps {}
 
@@ -248,16 +249,8 @@ const MemberList: React.FC<MemberListProps> = (props) => {
     <Layout>
       <div className={styles["root"]}>
         <h1>DANH SÁCH THÀNH VIÊN</h1>
-        {role === "ADMIN" && (
-          <div className={styles["btn-container"]}>
-            <ButtonMain onClick={openModal}>
-              <Plus size={20} className={styles["icon"]} />
-            </ButtonMain>
-            <ButtonMain>
-              <Download size={20} className={styles["icon"]} />
-            </ButtonMain>
-          </div>
-        )}
+        <FunctionBtn />
+
 
         {modal && (
           <Modal onClick={closeModal}>

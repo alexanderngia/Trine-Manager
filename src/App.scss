@@ -1,6 +1,13 @@
 @import "./styles/responsive";
 @import "./styles/variables";
+@import "./styles/mixin";
 
 #root {
+  @include flex();
   width: 100%;
+  background-color: $ligth-theme-bg;
+  font-family: $font-p;
+  @include dark {
+    background-color: $theme-bg;
+  }
 }

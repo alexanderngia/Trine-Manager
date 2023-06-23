@@ -1,7 +1,6 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
-import { Plus } from "@styled-icons/boxicons-regular/Plus";
-import { Download } from "@styled-icons/bootstrap/Download";
+
 import * as Yup from "yup";
 import { useAppDispatch, useAppSelector } from "hooks/useRedux";
 import { messageActions } from "redux/reducers/messageSlice";
@@ -11,6 +10,8 @@ import { CardList } from "components/ui/card";
 import { Modal } from "components/ui/modal/modal";
 import { Layout } from "components/views/layout";
 import styles from "./index.module.scss";
+import { Add, Download } from "components/ui/icon";
+import FunctionBtn from "components/container/functionBtn";
 
 export interface CustomerListProps {}
 
@@ -194,16 +195,8 @@ const CustomerList: React.FC<CustomerListProps> = (props) => {
     <Layout>
       <div className={styles["root"]}>
         <h1>DANH SÁCH KHÁCH HÀNG</h1>
-        <div className={styles["btn-container"]}>
-          <ButtonMain onClick={openModal}>
-            <Plus size={20} className={styles["icon"]} />
-          </ButtonMain>
-          {role === "ADMIN" && (
-            <ButtonMain>
-              <Download size={20} className={styles["icon"]} />
-            </ButtonMain>
-          )}
-        </div>
+        <FunctionBtn />
+
         {modal && (
           <Modal onClick={closeModal}>
             <h1>Thêm Khách Hàng Thân Thiết Nào!</h1>

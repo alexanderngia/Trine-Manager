@@ -1,3 +1,7 @@
+@import "styles/variables";
+@import "styles/responsive";
+@import "styles/mixin";
+
 html,
 body,
 div,
@@ -83,7 +87,6 @@ video {
   padding: 0;
   border: 0;
   font-size: 100%;
-  font: inherit;
   vertical-align: baseline;
   text-decoration: none;
   box-sizing: border-box;

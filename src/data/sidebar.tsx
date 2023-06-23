@@ -4,7 +4,6 @@ import OrderList from "components/views/orderList";
 import CustomerList from "components/views/customerList";
 import MemberList from "components/views/memberList";
 import PostList from "components/views/postList";
-// import { Dashboard } from "@styled-icons/boxicons-solid/Dashboard";
 
 import {
   Dashboard,
@@ -17,14 +16,14 @@ import {
 export const menuAdmin = [
   {
     id: 1,
-    title: "Tổng Quan",
+    title: "Tổng quan",
     path: "/dashboard",
     page: <DashBoard />,
     icon: <Dashboard />,
   },
   {
     id: 2,
-    title: "Quản Lí Bài Viết",
+    title: "Quản lí bài viết",
     path: "/post-manager",
     page: <PostList />,
     icon: <Document />,
@@ -41,7 +40,7 @@ export const menuAdmin = [
   },
   {
     id: 3,
-    title: "Quản Lí Sản Phẩm",
+    title: "Quản lí sản phẩm",
     path: "/product-manager",
     page: <ProductList />,
     icon: <Store />,
@@ -58,7 +57,7 @@ export const menuAdmin = [
   },
   {
     id: 4,
-    title: "Quản Lí Đơn Hàng",
+    title: "Quản lí đơn hàng",
     path: "/order-manager",
     page: <OrderList />,
     icon: <Cart />,
@@ -75,7 +74,7 @@ export const menuAdmin = [
   },
   {
     id: 5,
-    title: "Quản Lí Khách Hàng",
+    title: "Quản lí khách hàng",
     path: "/customer-manager",
     page: <CustomerList />,
     icon: <Contact />,
@@ -92,7 +91,7 @@ export const menuAdmin = [
   },
   {
     id: 6,
-    title: "Quản Lí Thành Viên",
+    title: "Quản lí thành viên",
     path: "/member-manager",
     page: <MemberList />,
     icon: <User />,

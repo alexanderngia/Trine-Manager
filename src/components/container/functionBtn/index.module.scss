@@ -1,0 +1,27 @@
+@import "styles/variables";
+@import "styles/responsive";
+@import "styles/mixin";
+.root {
+  @include flex();
+  .btn {
+    border-radius: 10px;
+    .icon {
+      fill: $black-head;
+      @include dark {
+        fill: $body-color;
+      }
+    }
+
+    &:hover {
+      @include dark {
+        background-color: $light-primary;
+      }
+      .icon {
+        fill: $white;
+        @include dark {
+          fill: $white;
+        }
+      }
+    }
+  }
+}
