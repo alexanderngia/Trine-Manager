@@ -1,0 +1,310 @@
+@import "styles/variables";
+@import "styles/responsive";
+@import "styles/mixin";
+
+.root {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 999999;
+  width: 70px;
+  height: 100%;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  font-family: $font-p;
+  background-color: $button-bg;
+  border-radius: 0 20px 20px 0;
+  transition: 0.3s all;
+
+  @include light {
+    background-color: $ligth-theme-bg;
+    @include boxShadow();
+  }
+
+  // .wrapper {
+  //   .side-menu {
+  //     li {
+  //       .link {
+  //         p {
+  //           display: none;
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+  &:hover {
+    width: 260px;
+    .wrapper {
+      .side-menu {
+        li {
+          .link {
+            p {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+    .logo-expand {
+      visibility: visible;
+      font-size: 19px;
+    }
+  }
+
+  .logo {
+    display: none;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    // color: #fff;
+    align-items: center;
+    border-radius: 50%;
+    justify-content: center;
+
+    &-expand {
+      width: 160px;
+      visibility: hidden;
+      text-decoration: none;
+      color: $white;
+      font-size: 0px;
+      font-weight: 600;
+      line-height: 34px;
+      position: sticky;
+      top: 0;
+      @include light {
+        color: $light-second;
+      }
+      &:before {
+        content: "";
+        position: absolute;
+        top: -30px;
+        left: 0;
+        width: 200px;
+        height: 70px;
+        z-index: -1;
+      }
+    }
+  }
+
+  &.collapse {
+    width: 90px;
+    border-right: 1px solid $border-color;
+    .logo-expand,
+    .side-title {
+      display: none;
+    }
+    .logo {
+      display: flex;
+    }
+    .side-wrapper {
+      width: 30px;
+    }
+    .side-menu svg {
+      margin-right: 30px;
+    }
+  }
+}
+
+@keyframes bottom {
+  0% {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.wrapper {
+  border-bottom: 1px solid $border-color;
+  padding: 36px 0;
+  width: 220px;
+  & + & {
+    border-bottom: none;
+  }
+
+  .side-menu {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    li {
+      &:hover {
+        @include Transition();
+        .link {
+          font-weight: 600;
+          color: $light-primary;
+          @include dark {
+            color: $white;
+          }
+          svg {
+            @include light {
+              background-color: $light-primary;
+              fill: $light-component;
+            }
+            @include dark {
+              fill: $light-component;
+            }
+          }
+        }
+
+        @include dark {
+          &:nth-child(2n + 1) {
+            svg {
+              background-color: #ff7551;
+            }
+          }
+          &:nth-child(2n) {
+            svg {
+              background: #32a7e2;
+            }
+          }
+          &:nth-child(2n + 3) {
+            svg {
+              background: #6c5ecf;
+            }
+          }
+        }
+      }
+      .link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: $light-second;
+        @include Transition();
+
+        @include dark {
+          color: $body-color;
+        }
+
+        &.activated {
+          color: $white;
+          font-weight: 600;
+          @include light {
+            color: $light-primary;
+          }
+          @include dark {
+            color: $white;
+          }
+          svg {
+            background: #ff7551;
+            @include light {
+              box-shadow: 0px 0px 15px rgba($light-primary, 0.2);
+              fill: $light-component;
+              background-color: $light-primary;
+            }
+            @include dark {
+              fill: $light-component;
+            }
+          }
+        }
+
+        svg {
+          @include Transition();
+
+          padding: 8px;
+          border-radius: 10px;
+          background-color: $button-bg;
+          flex-shrink: 0;
+          margin-right: 16px;
+          width: 20px;
+          height: 20px;
+          @include light {
+            background-color: $light-component;
+          }
+          @include dark {
+            fill: $light-component;
+          }
+        }
+
+        p {
+          width: 85%;
+        }
+      }
+
+      & + li {
+        margin-top: 26px;
+      }
+    }
+  }
+}
+.title {
+  font-size: 12px;
+  letter-spacing: 0.07em;
+  margin-bottom: 24px;
+  color: $body-color;
+}
+
+// .sub-link {
+//   display: flex;
+//   align-items: center;
+//   text-decoration: none;
+//   color: #808191;
+//   padding-left: 10px;
+//   margin-top: 15px;
+//   p {
+//     width: 70%;
+//   }
+//   .icon {
+//     padding: 8px;
+//     border-radius: 10px;
+//     background-color: $button-bg;
+//     flex-shrink: 0;
+//     margin-right: 16px;
+//     &:hover {
+//       color: #fff;
+//     }
+//     ion-icon {
+//       font-size: 20px;
+//     }
+//   }
+//   &:hover,
+//   &.is-active {
+//     color: #fff;
+//     font-weight: 600;
+
+//     &:nth-child(2n + 1) {
+//       .icon {
+//         background: #ff7551;
+//       }
+//     }
+//     &:nth-child(2n) {
+//       .icon {
+//         background: #32a7e2;
+//       }
+//     }
+//     &:nth-child(2n + 3) {
+//       .icon {
+//         background: #6c5ecf;
+//       }
+//     }
+//   }
+// }
+
+// .rightArr {
+//   @include rightArrow();
+//   width: 10px;
+//   height: 10px;
+//   border-top: 0px;
+//   &::before {
+//     top: 0;
+//     border: $button-bg;
+//   }
+// }
+// .downArr {
+//   @include downArrow();
+//   width: 10px;
+//   height: 10px;
+//   border-top: 0px;
+
+//   &::before {
+//     top: 0;
+//     border: $button-bg;
+//   }
+// }

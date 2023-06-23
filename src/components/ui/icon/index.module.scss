@@ -1,0 +1,8 @@
+@import "styles/variables";
+@import "styles/responsive";
+@import "styles/mixin";
+.root {
+  fill: $black-head;
+  width: 20px;
+  height: 20px;
+}

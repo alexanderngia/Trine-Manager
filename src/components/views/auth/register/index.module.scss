@@ -1,0 +1,36 @@
+@import "styles/variables";
+@import "styles/responsive";
+@import "styles/mixin";
+.root {
+  width: 100%;
+  @include flex();
+}
+.login-page {
+  width: 360px;
+  margin: auto;
+  h1 {
+    margin-bottom: 30px;
+    font-size: 2rem;
+    font-family: $font-head;
+  }
+}
+.form {
+  position: relative;
+  z-index: 1;
+  background: $white;
+  max-width: 360px;
+  padding: 45px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  @include formModal();
+  .box {
+    width: 100%;
+  }
+}
+
+//
+.errMessage {
+  margin-bottom: 15px;
+  color: red;
+  text-align: left;
+}
