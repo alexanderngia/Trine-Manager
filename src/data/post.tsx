@@ -1,5 +1,5 @@
-import { IPost } from "services/postService";
-export const postMock: IPost[] = [
+import { IPost } from "types/post";
+export const post: IPost[] = [
   {
     id: 2,
     author: "alexander",

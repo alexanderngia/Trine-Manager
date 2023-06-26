@@ -9,7 +9,7 @@
   justify-content: flex-start;
   align-items: flex-start;
   @include light {
-    background-color: $ligth-theme-bg;
+    background-color: $white;
   }
   h1 {
     @include Heading();

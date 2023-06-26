@@ -10,7 +10,7 @@
   justify-content: flex-start;
   align-items: flex-start;
   @include light {
-    background-color: $ligth-theme-bg;
+    background-color: $white;
   }
   h1 {
     @include Heading();
@@ -30,11 +30,9 @@
 
   .card-container {
     width: 100%;
-    .customer-list {
-      li {
-        width: 20%;
-      }
-    }
+    @include flex();
+    justify-content: flex-start;
+    column-gap: 15px;
   }
   .form {
     @include formModal();

@@ -2,22 +2,13 @@ import { messageActions } from "./messageSlice";
 import authService from "services/authService";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { history } from "utils/history";
+import { IUserNew } from "types/user";
 
 export interface AuthState {
   isLoggedIn?: boolean;
   user?: any | null;
 }
 
-export interface IRegister {
-  userName: string;
-  userEmail: string;
-  userPass: string;
-  // confirmPass: string;
-  userPhone: string;
-  userGender: string;
-  userAdress: string;
-  userRole: string;
-}
 
 export interface ILogin {
   userEmail: string;
@@ -35,11 +26,11 @@ export const register = createAsyncThunk(
       userGender,
       userAdress,
       userRole,
-    }: IRegister,
+    }: IUserNew,
     thunkAPI
   ) => {
     try {
-      const response = await authService.handleRegisterApi({
+      const response = await authService.createUser({
         userName,
         userEmail,
         userPass,
@@ -48,8 +39,8 @@ export const register = createAsyncThunk(
         userAdress,
         userRole,
       });
-      thunkAPI.dispatch(messageActions.setMessage(response.data.message));
-      return response.data;
+      thunkAPI.dispatch(messageActions.setMessage(response?.data.message));
+      return response?.data;
     } catch (error: any) {
       console.log(error, "Register AuthSlice");
     }
@@ -59,7 +50,7 @@ export const register = createAsyncThunk(
 export const login = createAsyncThunk(
   "auth/login",
   async ({ userEmail, userPass }: ILogin, thunkAPI) => {
-    const data = await authService.handleLoginApi(userEmail, userPass);
+    const data = await authService.loginUser(userEmail, userPass);
 
     try {
       // Success Login

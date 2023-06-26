@@ -7,13 +7,13 @@
   border: 0px;
   background: $button-bg;
   @include light {
-    background: $light-component;
+    background: $light-white;
 
     .rc-md-navigation {
-      background: $light-component;
+      background: $light-white;
     }
     .editor-container .sec-md .input {
-      background: $light-component;
+      background: $light-white;
       color: $light-second;
     }
     .custom-html-style {
@@ -27,11 +27,11 @@
   }
   .editor-container .sec-md .input {
     background: $button-bg;
-    color: $light-component;
+    color: $light-white;
     border: 0px;
   }
 
   .custom-html-style {
-    color: $light-component;
+    color: $light-white;
   }
 }

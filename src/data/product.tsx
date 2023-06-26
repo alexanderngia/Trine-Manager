@@ -1,5 +1,5 @@
-import { IProduct } from "services/productService";
-export const productMock: IProduct[] = [
+import { IProduct } from "types/product";
+export const products: IProduct[] = [
   {
     id: 2,
     idItem: "34738358334",

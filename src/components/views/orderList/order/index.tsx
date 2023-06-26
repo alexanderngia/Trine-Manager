@@ -1,25 +1,23 @@
+import { ButtonMain, ButtonSub } from "components/ui/button/button";
+import { CardItem } from "components/ui/card";
+import { Search } from "components/ui/search";
 import { Layout } from "components/views/layout";
 import { Field, Form, Formik } from "formik";
 import { useAppDispatch, useAppSelector } from "hooks/useRedux";
 import React, { useEffect, useState } from "react";
 import { messageActions } from "redux/reducers/messageSlice";
 import postService from "services/postService";
-import styles from "./index.module.scss";
-import { ButtonMain, ButtonSub } from "components/ui/button/button";
-import { history } from "utils/history";
-import { CardItem } from "components/ui/card";
 import productService from "services/productService";
-import { Search } from "components/ui/search";
-import { cartActions } from "redux/reducers/cartSlice";
-import { productMock } from "data/product-mockData";
-import { IProduct } from "services/productService";
+import { IProduct } from "types/product";
+import { history } from "utils/history";
+import styles from "./index.module.scss";
 
 import orderService from "services/orderService";
 
 export interface OrderProps {}
 
 const Order: React.FC<OrderProps> = () => {
-  const [data, setData] = useState([] as IProduct[]);
+  const [data, setData] = useState<IProduct[]>([]);
   const [cart, setCart] = useState<any[]>([]);
   const [totalPrice, setTotalPrice] = useState<number>(0);
 
@@ -46,9 +44,9 @@ const Order: React.FC<OrderProps> = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const data = await productService.getProductBoard();
-        // setData(data);
-        setData(productMock);
+        const data = await productService.getProduct();
+        setData(data);
+
         if (order) {
           setInitialValue({
             id: `${order.id}`,
@@ -128,7 +126,7 @@ const Order: React.FC<OrderProps> = () => {
       descripTagNew,
     } = formValue;
     try {
-      let res = await postService.handleUpdateApi({
+      let res = await postService.updatePost({
         id,
         authorNew,
         urlNew,
@@ -142,8 +140,8 @@ const Order: React.FC<OrderProps> = () => {
         descripTagNew,
       });
 
-      const message = res.data.message;
-      const errMessage = res.data.errMessage;
+      const message = res?.data.message;
+      const errMessage = res?.data.errMessage;
       if (errMessage) {
         dispatch(messageActions.setMessage(errMessage));
       }
@@ -161,9 +159,9 @@ const Order: React.FC<OrderProps> = () => {
         ""
       );
       if (confirmDelete === "DELETE") {
-        let res = await postService.handleDeleteApi(deleteItem.id);
-        const errMessage = res.data.errMessage;
-        const message = res.data.message;
+        let res = await postService.deletePost(deleteItem.id);
+        const errMessage = res?.data.errMessage;
+        const message = res?.data.message;
         if (errMessage) {
           dispatch(messageActions.setMessage(errMessage));
         }

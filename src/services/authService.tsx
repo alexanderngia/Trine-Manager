@@ -1,22 +1,7 @@
 import axios from "axios";
+import { IUserNew } from "types/user";
 
-const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api/auth/`;
-
-export interface IUser {
-  user: any;
-}
-
-export interface RegisterProps {
-  userName: string;
-  userEmail: string;
-  userPass: string;
-  userPhone: string;
-  userGender: string;
-  userAdress: string;
-  userRole: string;
-}
-
-const handleRegisterApi = ({
+const createUser = ({
   userName,
   userEmail,
   userPass,
@@ -24,35 +9,36 @@ const handleRegisterApi = ({
   userGender,
   userAdress,
   userRole,
-}: RegisterProps) => {
-  return axios.post(API_URL + "signup", {
-    fullNameUser: userName,
-    emailUser: userEmail,
-    passwordUser: userPass,
-    phoneUser: userPhone,
-    genderUser: userGender,
-    adressUser: userAdress,
-    typeRole: userRole,
-  });
+}: IUserNew) => {
+  if (process.env.CREATE_AUTHENCTICATION_API)
+    return axios.post(process.env.CREATE_AUTHENCTICATION_API, {
+      fullNameUser: userName,
+      emailUser: userEmail,
+      passwordUser: userPass,
+      phoneUser: userPhone,
+      genderUser: userGender,
+      adressUser: userAdress,
+      typeRole: userRole,
+    });
 };
 
-const handleLoginApi = async (userName: string, userPass: string) => {
-  const res = await axios.post(API_URL + "signin", {
-    emailUser: userName,
-    passwordUser: userPass,
-  });
+const loginUser = async (userName: string, userPass: string) => {
+  if (process.env.LOGIN_AUTHENCTICATION_API) {
+    const res = await axios.post(process.env.LOGIN_AUTHENCTICATION_API, {
+      emailUser: userName,
+      passwordUser: userPass,
+    });
 
-  const { data } = res;
-  if (data.accessToken) {
-    localStorage.setItem("user", JSON.stringify(data));
+    const { data } = res;
+    if (data.accessToken) {
+      localStorage.setItem("user", JSON.stringify(data));
+    }
+    return data;
   }
-  return data;
 };
-
-
 
 const authService = {
-  handleRegisterApi,
-  handleLoginApi,
+  createUser,
+  loginUser,
 };
 export default authService;

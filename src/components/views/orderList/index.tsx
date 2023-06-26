@@ -9,7 +9,6 @@ import orderService from "services/orderService";
 import { orderActions } from "redux/reducers/orderSlice";
 import { history } from "utils/history";
 import { Search } from "components/ui/search";
-import { Add, Download } from "components/ui/icon";
 import FunctionBtn from "components/container/functionBtn";
 export interface OrderListProps {}
 
@@ -28,7 +27,7 @@ const OrderList: React.FC<OrderListProps> = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await orderService.getOrderBoard();
+        const data = await orderService.getOrder();
         setData(data);
       } catch (error: any) {
         console.log(error);

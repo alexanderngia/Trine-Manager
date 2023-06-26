@@ -1,16 +1,18 @@
-import Order from "components/views/orderList/order";
-import Post from "components/views/postList/post";
-import Product from "components/views/productList/product";
+import "./App.scss";
+
 import { menuAdmin } from "data/sidebar";
-import React from "react";
+import React, { lazy } from "react";
 import {
   Route,
   Routes,
   unstable_HistoryRouter as HistoryRouter,
 } from "react-router-dom";
 import { history } from "utils/history";
-import "./App.scss";
-import Authentication from "./components/views/auth";
+const Authentication = lazy(() => import("components/views/auth"));
+
+const Order = lazy(() => import("components/views/orderList/order"));
+const Post = lazy(() => import("components/views/postList/post"));
+const Product = lazy(() => import("components/views/productList/product"));
 
 function App() {
   return (

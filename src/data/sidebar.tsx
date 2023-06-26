@@ -4,7 +4,6 @@ import OrderList from "components/views/orderList";
 import CustomerList from "components/views/customerList";
 import MemberList from "components/views/memberList";
 import PostList from "components/views/postList";
-
 import {
   Dashboard,
   Document,
@@ -13,6 +12,7 @@ import {
   Cart,
   User,
 } from "components/ui/icon";
+
 export const menuAdmin = [
   {
     id: 1,

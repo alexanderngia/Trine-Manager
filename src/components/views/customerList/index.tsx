@@ -1,33 +1,33 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 
-import * as Yup from "yup";
+import FunctionBtn from "components/container/functionBtn";
+import { ButtonSub } from "components/ui/button/button";
+import { CardUserImg } from "components/ui/card";
+import { Modal } from "components/ui/modal/modal";
+import { Layout } from "components/views/layout";
 import { useAppDispatch, useAppSelector } from "hooks/useRedux";
 import { messageActions } from "redux/reducers/messageSlice";
 import customerService from "services/customerService";
-import { ButtonMain, ButtonSub } from "components/ui/button/button";
-import { CardList } from "components/ui/card";
-import { Modal } from "components/ui/modal/modal";
-import { Layout } from "components/views/layout";
+import * as Yup from "yup";
 import styles from "./index.module.scss";
-import { Add, Download } from "components/ui/icon";
-import FunctionBtn from "components/container/functionBtn";
+import { ICustomer, ICustomerNew } from "types/customer";
 
 export interface CustomerListProps {}
 
-const CustomerList: React.FC<CustomerListProps> = (props) => {
+const CustomerList: React.FC<CustomerListProps> = () => {
   const [data, setData] = useState([]);
   const [role, setRole] = useState("");
   const [modal, setModal] = useState(false);
   const [profile, setProfile] = useState(false);
-  const [deleteUser, setDeleteUser] = useState([]);
+  const [deleteUser, setDeleteUser] = useState<ICustomer>();
 
   const { user } = useAppSelector((state) => state.auth);
   const { message } = useAppSelector((state) => state.message);
 
   const dispatch = useAppDispatch();
 
-  const [initialValue, setInitialValue] = useState({
+  const [initialValue, setInitialValue] = useState<ICustomerNew>({
     id: "",
     cusName: "",
     cusEmail: "",
@@ -39,7 +39,7 @@ const CustomerList: React.FC<CustomerListProps> = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await customerService.getCustomerBoard();
+        const data = await customerService.getCustomer();
         setData(data);
       } catch (error: any) {
         console.log(error);
@@ -69,7 +69,7 @@ const CustomerList: React.FC<CustomerListProps> = (props) => {
     localStorage.removeItem("MODAL");
   };
 
-  const openItemModal = async (infoUser: any) => {
+  const openItemModal = async (infoUser: ICustomer) => {
     setProfile(true);
     if (infoUser) {
       setInitialValue({
@@ -81,6 +81,7 @@ const CustomerList: React.FC<CustomerListProps> = (props) => {
         cusAdress: `${infoUser.adressCus}`,
       });
       setDeleteUser(infoUser);
+
       dispatch(messageActions.clearMessage());
     }
   };
@@ -104,9 +105,9 @@ const CustomerList: React.FC<CustomerListProps> = (props) => {
         ""
       );
       if (confirmDelete === "DELETE") {
-        let res = await customerService.handleDeleteApi(userRemove.id);
-        const errMessage = res.data.errMessage;
-        const message = res.data.message;
+        let res = await customerService.deleteCustomer(userRemove.idCus);
+        const errMessage = res?.data.errMessage;
+        const message = res?.data.message;
         if (errMessage) {
           dispatch(messageActions.setMessage(errMessage));
         }
@@ -150,25 +151,25 @@ const CustomerList: React.FC<CustomerListProps> = (props) => {
   const handleRegister = async (formValue: any, { resetForm }: any) => {
     const { cusName, cusEmail, cusPhone, cusGender, cusAdress } = formValue;
     try {
-      let res = await customerService.handleRegisterApi({
+      let res = await customerService.createCustomer({
         cusName,
         cusEmail,
         cusPhone,
         cusGender,
         cusAdress,
       });
-      dispatch(messageActions.setMessage(res.data.message));
+      dispatch(messageActions.setMessage(res?.data.message));
       resetForm({});
 
-      return res.data;
+      return res?.data;
     } catch (error) {
       console.log(error);
     }
   };
-  const handleUpdate = async (formValue: any) => {
+  const handleUpdate = async (formValue: ICustomerNew) => {
     const { id, cusName, cusEmail, cusPhone, cusGender, cusAdress } = formValue;
     try {
-      let res = await customerService.handleUpdateApi({
+      let res = await customerService.updateCustomer({
         id,
         cusName,
         cusEmail,
@@ -177,8 +178,8 @@ const CustomerList: React.FC<CustomerListProps> = (props) => {
         cusAdress,
       });
 
-      const message = res.data.message;
-      const errMessage = res.data.errMessage;
+      const message = res?.data.message;
+      const errMessage = res?.data.errMessage;
       if (errMessage) {
         dispatch(messageActions.setMessage(errMessage));
       }
@@ -195,8 +196,9 @@ const CustomerList: React.FC<CustomerListProps> = (props) => {
     <Layout>
       <div className={styles["root"]}>
         <h1>DANH SÁCH KHÁCH HÀNG</h1>
-        <FunctionBtn />
-
+        <div className={styles["btn-container"]}>
+          <FunctionBtn />
+        </div>
         {modal && (
           <Modal onClick={closeModal}>
             <h1>Thêm Khách Hàng Thân Thiết Nào!</h1>
@@ -329,24 +331,47 @@ const CustomerList: React.FC<CustomerListProps> = (props) => {
             </Formik>
           </Modal>
         )}
-        {data.length > 0 && (
+
+        {data && (
           <>
-            <ul className={styles["card-container"]}>
+            <div className={styles["card-container"]}>
               {React.Children.toArray(
-                data.map((listItems: any) => {
-                  return (
-                    <CardList
-                      className={styles["customer-list"]}
-                      onClick={() => openItemModal(listItems)}
-                      titleCard={listItems.fullNameCus}
-                      qtyCard={listItems.genderCus === 1 ? "Male" : "Female"}
-                      sizeCard={listItems.phoneCus}
-                      priceCard={listItems.emailCus}
-                    />
-                  );
-                })
+                data.map(
+                  ({
+                    idCus,
+                    imgCus,
+                    fullNameCus,
+                    emailCus,
+                    phoneCus,
+                    genderCus,
+                    adressCus,
+                    stateCus,
+                  }: ICustomer) => {
+                    return (
+                      <CardUserImg
+                        onClick={() =>
+                          openItemModal({
+                            idCus,
+                            imgCus,
+                            fullNameCus,
+                            emailCus,
+                            phoneCus,
+                            genderCus,
+                            adressCus,
+                            stateCus,
+                          })
+                        }
+                        imgCard={imgCus}
+                        titleCard={fullNameCus}
+                        textCardTwo={genderCus === "1" ? "Male" : "Female"}
+                        textCardThree={phoneCus}
+                        textCardFour={emailCus}
+                      />
+                    );
+                  }
+                )
               )}
-            </ul>
+            </div>
             {profile && (
               <Modal onClick={closeItemModal}>
                 <h1>THÔNG TIN KHÁCH HÀNG</h1>

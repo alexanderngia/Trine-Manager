@@ -1,68 +1,62 @@
 import axios from "axios";
-const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api/customer?id=ALL`;
+import { ICustomerNew } from "types/customer";
+import { Customers } from "data/customer";
+const getCustomer: () => Promise<any> = async () => {
+  // if (process.env.GET_CUSTOMER_API)
+  //   await axios.get(process.env.GET_CUSTOMER_API).then((res) => {
+  //     return res.data.customers;
+  //   });
 
-export interface RegisterProps {
-  cusName: string;
-  cusEmail: string;
-  cusPhone: string;
-  cusGender: string;
-  cusAdress: string;
-}
-export interface UpdateProps extends RegisterProps {
-  id: number;
-}
-
-
-const getCustomerBoard: () => Promise<any> = async () => {
-  return await axios.get(API_URL).then((res) => {
-    return res.data.customers;
-  });
+  return Customers;
 };
-const handleRegisterApi = ({
+const createCustomer = ({
   cusName,
   cusEmail,
   cusPhone,
   cusGender,
   cusAdress,
-}: RegisterProps) => {
-  return axios.post(API_URL + "/create", {
-    fullNameCus: cusName,
-    emailCus: cusEmail,
-    phoneCus: cusPhone,
-    genderCus: cusGender,
-    adressCus: cusAdress,
-  });
+}: ICustomerNew) => {
+  if (process.env.CREATE_CUSTOMER_API)
+    return axios.post(process.env.CREATE_CUSTOMER_API, {
+      fullNameCus: cusName,
+      emailCus: cusEmail,
+      phoneCus: cusPhone,
+      genderCus: cusGender,
+      adressCus: cusAdress,
+    });
 };
 
-const handleUpdateApi = async ({
+const updateCustomer = async ({
   id,
   cusName,
   cusEmail,
   cusPhone,
   cusGender,
   cusAdress,
-}: UpdateProps) => {
-  return await axios.put(API_URL + "/edit", {
-    id: id,
-    fullNameCus: cusName,
-    emailCus: cusEmail,
-    phoneCus: cusPhone,
-    genderCus: cusGender,
-    adressCus: cusAdress,
-  });
+}: ICustomerNew) => {
+  if (process.env.UPDATE_CUSTOMER_API)
+    return await axios.put(process.env.UPDATE_CUSTOMER_API, {
+      id: id,
+      fullNameCus: cusName,
+      emailCus: cusEmail,
+      phoneCus: cusPhone,
+      genderCus: cusGender,
+      adressCus: cusAdress,
+    });
 };
-const handleDeleteApi = async (userId: any) => {
-  return await axios.delete(API_URL + "/delete", {
-    data: {
-      id: userId,
-    },
-  });
+const deleteCustomer = async (userId: any) => {
+  if (process.env.DELETE_CUSTOMER_API)
+    return await axios.delete(process.env.DELETE_CUSTOMER_API, {
+      data: {
+        id: userId,
+      },
+    });
 };
 
 const customerService = {
-  getCustomerBoard,
-  handleRegisterApi,
-  handleUpdateApi,
-  handleDeleteApi,
+  getCustomer,
+  createCustomer,
+  updateCustomer,
+  deleteCustomer,
 };
 export default customerService;

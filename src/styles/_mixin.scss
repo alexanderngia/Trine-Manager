@@ -1,15 +1,9 @@
 @import "variables";
 
-@mixin flex() {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 @mixin Heading() {
   font-family: $font-head;
-  color: $black-head;
-  line-height: 1.6;
+  color: $black-fade;
+  line-height: 1.4;
   @include light {
     color: $light-second;
   }
@@ -19,15 +13,60 @@
   font-family: $font-p;
   color: $black-p;
   line-height: 1.4;
-  @include light {
-    color: $light-second;
+  @include dark {
+    color: $light-white;
   }
 }
 
-@mixin boxShadow() {
-  box-shadow: 17px 17px 86px 0px rgba($light-black, 0.1);
+@mixin nonBreak() {
+  width: 100%;
+  max-width: 1550px;
+}
+@mixin flex() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@mixin flexCol() {
+  @include flex();
+  flex-direction: column;
+}
+@mixin padding-2() {
+  padding: 2%;
+}
+@mixin padding-2-5() {
+  padding: 2% 5%;
+}
+@mixin padding-x() {
+  padding: 5%;
 }
 
+@mixin boxShadow() {
+  box-shadow: 17px 17px 86px 0px rgba($black, 0.1);
+}
+@mixin shadowColor() {
+  box-shadow: 0px 0px 5px rgb(#000000, 0.2);
+}
+
+@mixin boxShadowLight() {
+  box-shadow: 0px 16px 40px rgba($black-divider, 0.2);
+}
+@mixin boxShadowBtn() {
+  box-shadow: 0px 0px 10px rgba($light-second, 0.1);
+}
+@mixin Transition3() {
+  transition: all 0.3s linear;
+}
+@mixin Transition2() {
+  transition: all 0.2s linear;
+}
+
+@mixin scaleUpHover() {
+  @include Transition3();
+  &:hover {
+    transform: scale(1.2);
+  }
+}
 
 // DARK MODE
 
@@ -51,9 +90,6 @@
   @at-root #{selector-nest(':root[data-theme=dark]', &)} {
     @content;
   }
-}
-@mixin Transition {
-  transition: all 0.2s linear;
 }
 
 @mixin formModal {
@@ -118,14 +154,14 @@
       box-sizing: border-box;
       font-size: 14px;
       font-family: $font-number;
-      color: $light-component;
+      color: $light-white;
 
       @include light {
-        background-color: $light-component;
+        background-color: $light-white;
         color: $light-second;
         @include boxShadow();
         &::placeholder {
-          color: rgba($light-black, 0.3);
+          color: rgba($black, 0.3);
         }
       }
     }
@@ -156,7 +192,7 @@
 
       &:hover {
         transform: scale(1.1);
-        transition: all 0.2s ease;
+        @include Transition2();
         color: $black-p;
         background-color: $white;
       }
@@ -166,8 +202,8 @@
 
         &:hover {
           transform: scale(1.1);
-          transition: all 0.2s ease;
-          color: $light-component;
+          @include Transition2();
+          color: $light-white;
           background-color: $light-primary;
           span {
             p {
@@ -192,7 +228,7 @@
           z-index: 4;
         }
         @include light {
-          background-color: $light-component;
+          background-color: $light-white;
           @include boxShadow();
         }
       }
@@ -214,7 +250,7 @@
 
           &:checked + span {
             p {
-              color: $light-component;
+              color: $light-white;
             }
           }
         }
@@ -239,7 +275,7 @@
       font-family: $font-p;
       text-transform: uppercase;
       outline: 0;
-      background: $black-banner;
+      background: $black;
       width: 45%;
       border: 0;
       padding: 15px;
@@ -249,35 +285,38 @@
       cursor: pointer;
       &:active,
       &:focus {
-        background: $black-head;
+        background: $black-fade;
       }
       &:first-of-type {
         width: 45%;
+        @include Transition3();
+
         @include light {
           background: transparent;
-          border: 1px solid rgba($light-black, 0.3);
-          color: rgba($light-black, 0.3);
+          border: 1px solid rgba($black, 0.3);
+          color: rgba($black, 0.3);
           &:hover {
-            transition: all 0.3s ease;
             transform: scale(1.1);
             background: $warning;
             border: 1px solid $warning;
-            color: $light-component;
+            color: $light-white;
           }
         }
       }
       &[type="submit"] {
         width: 45%;
         @include light {
-          background: $light-black;
-          border: 1px solid $light-black;
-          color: $light-component;
+          background: $black;
+          border: 1px solid $black;
+          color: $light-white;
+          @include Transition3(); 
+
           &:hover {
-            transition: all 0.3s ease;
+
             transform: scale(1.1);
             background: $light-primary;
             border: 1px solid $light-primary;
-            color: $light-component;
+            color: $light-white;
           }
         }
       }

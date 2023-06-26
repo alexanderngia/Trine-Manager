@@ -6,7 +6,7 @@
   .btn {
     border-radius: 10px;
     .icon {
-      fill: $black-head;
+      fill: $black-fade;
       @include dark {
         fill: $body-color;
       }

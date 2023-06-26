@@ -9,7 +9,7 @@
   justify-content: flex-start;
   align-items: flex-start;
   @include light {
-    background-color: $ligth-theme-bg;
+    background-color: $white;
   }
   h1 {
     @include Heading();
@@ -40,7 +40,8 @@
     @include flex();
     justify-content: flex-start;
     flex-wrap: wrap;
-    column-gap: 3%;
+    column-gap: 15px;
+    row-gap: 15px;
     width: 100%;
 
     .product-list {
@@ -86,10 +87,10 @@
   color: $light-second;
   @include light {
     background-color: $light-second;
-    color: $light-component;
+    color: $light-white;
     &:hover {
       background-color: $light-primary;
-      color: $light-component;
+      color: $light-white;
     }
   }
 }

@@ -9,27 +9,27 @@
   font-size: 0.8rem;
   margin-bottom: 15px;
   border-radius: 10px;
-  transition: 0.2s all ease-in;
+  @include Transition2();
   cursor: pointer;
   background-color: $button-bg;
-  color: $light-component;
+  color: $light-white;
   width: 100%;
   list-style: none;
 
   @include light {
-    box-shadow: 0px 0px 10px rgba($light-second, 0.1);
-    background-color: $light-component;
+    @include boxShadowBtn();
+    background-color: $light-white;
     color: $light-second;
     &:hover {
       transform: scale(1.03);
       background-color: $light-primary;
-      color: $light-component;
+      color: $light-white;
     }
   }
   @include dark {
     &:hover {
       transform: scale(1.03);
-      color: $light-component;
+      color: $light-white;
       &:nth-child(2n + 1) {
         background: #ff7551;
       }
@@ -133,7 +133,7 @@
             color: rgba($light-second, 0.6);
             width: 20%;
             @include dark {
-              color: rgba($light-component, 0.6);
+              color: rgba($light-white, 0.6);
             }
           }
         }
@@ -142,7 +142,7 @@
           height: fit-content;
           padding: 2px;
           border-radius: 50px;
-          background-color: rgba($light-component, 0.6);
+          background-color: rgba($light-white, 0.6);
           @include light {
             @include boxShadow();
           }
@@ -157,6 +157,170 @@
         width: 30%;
         text-align: right;
       }
+    }
+  }
+
+  &.userCard,
+  &.userCardImg {
+    margin-bottom: 0;
+    width: 22%;
+    padding: 1%;
+    @include flex();
+    justify-content: space-between;
+    flex-wrap: wrap;
+    row-gap: 5px;
+
+    .title {
+      width: 80%;
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-transform: capitalize;
+    }
+    li {
+      width: auto;
+      font-size: 0.6rem;
+
+      &:nth-of-type(2) {
+        width: 15%;
+      }
+      &:nth-of-type(3) {
+        width: 30%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+    }
+    .img {
+      width: 20%;
+    }
+  }
+  &.userCardImg {
+    padding: 11px;
+    .column {
+      @include flex();
+      justify-content: space-between;
+      width: 70%;
+      flex-wrap: wrap;
+
+      li {
+        width: auto;
+        &:nth-of-type(3) {
+          width: 60%;
+        }
+      }
+      &:first-of-type {
+        width: 25%;
+        .img {
+          @include flex();
+
+          width: 100%;
+          img {
+            border-radius: 45px;
+          }
+        }
+      }
+    }
+  }
+}
+.cardProductItem {
+  @include flex();
+  justify-content: space-between;
+  width: 200px;
+  height: 80px;
+  border-radius: 12px;
+  padding: 12px;
+  background-color: $light-white;
+  @include boxShadowBtn();
+  @include Transition3();
+
+  @include dark {
+    background-color: $button-bg;
+  }
+  &:hover {
+    background-color: $light-primary;
+    @include dark {
+      background-color: $light-primary;
+    }
+    p {
+      color: $light-white;
+    }
+  }
+
+  .thumb {
+    @include flex();
+    position: relative;
+    width: 30%;
+    height: 100%;
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 45px;
+    }
+  }
+  .info {
+    padding: 0 5%;
+    @include flex();
+    justify-content: flex-start;
+    width: 67%;
+    height: 100%;
+    font-weight: 400;
+    color: $black;
+    flex-wrap: wrap;
+    column-gap: 10px;
+
+    p {
+      padding: 0;
+      font-size: 0.7rem;
+      @include dark {
+        color: $light-white;
+      }
+    }
+    .title {
+      font-size: 0.8rem;
+      padding: 0;
+      width: 100%;
+      text-transform: capitalize;
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2; /* number of lines to show */
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    .color {
+      width: 15px;
+      height: 15px;
+      border-radius: 25px;
+      border: 3px solid white;
+      cursor: pointer;
+      position: relative;
+      &:hover:before {
+        transform: scale(1.4);
+      }
+      &:before {
+        content: "";
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        border-radius: 25px;
+        @include shadowColor();
+        @include Transition3();
+        transform: scale(1.3);
+        z-index: 1;
+      }
+    }
+    .size {
+      font-weight: 800;
+      font-family: $font-head;
+    }
+
+    .price {
+      width: 100%;
+      font-weight: 800;
+      font-size: 0.6rem;
     }
   }
 }

@@ -8,19 +8,17 @@
   left: 0;
   width: 70px;
   height: 100%;
-
   z-index: 999999;
   padding: 30px 20px;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
-  font-family: $font-p;
   background-color: $button-bg;
   border-radius: 0 20px 20px 0;
-  @include Transition();
+  @include Transition2();
   @include light {
-    background-color: $ligth-theme-bg;
+    background-color: $white;
     @include boxShadow();
   }
 
@@ -123,39 +121,49 @@
     width: 100%;
 
     li {
+      @include Transition2();
       &:hover {
-        @include Transition();
         .link {
           font-weight: 600;
           color: $light-primary;
           @include dark {
             color: $white;
           }
+
           svg {
             @include light {
               background-color: $light-primary;
-              fill: $light-component;
-            }
-            @include dark {
-              fill: $light-component;
+              fill: $light-white;
             }
           }
+          p {
+            color: $light-primary;
+          }
         }
-
         @include dark {
           &:nth-child(2n + 1) {
             svg {
+              fill: $light-white;
               background-color: #ff7551;
+            }
+            p {
+              color: #ff7551;
             }
           }
           &:nth-child(2n) {
             svg {
               background: #32a7e2;
             }
+            p {
+              color: #32a7e2;
+            }
           }
           &:nth-child(2n + 3) {
             svg {
               background: #6c5ecf;
+            }
+            p {
+              color: #6c5ecf;
             }
           }
         }
@@ -165,8 +173,7 @@
         align-items: center;
         text-decoration: none;
         color: $light-second;
-        @include Transition();
-
+        @include Transition2();
         @include dark {
           color: $body-color;
         }
@@ -184,17 +191,17 @@
             background: #ff7551;
             @include light {
               box-shadow: 0px 0px 15px rgba($light-primary, 0.2);
-              fill: $light-component;
+              fill: $light-white;
               background-color: $light-primary;
             }
             @include dark {
-              fill: $light-component;
+              fill: $light-white;
             }
           }
         }
 
         svg {
-          @include Transition();
+          @include Transition2();
 
           padding: 8px;
           border-radius: 10px;
@@ -204,15 +211,19 @@
           width: 20px;
           height: 20px;
           @include light {
-            background-color: $light-component;
+            background-color: $light-white;
           }
           @include dark {
-            fill: $light-component;
+            fill: $light-white;
           }
         }
 
         p {
+          color: $black-fade;
           width: 85%;
+          @include dark {
+            color: $light-white;
+          }
         }
       }
 

@@ -10,7 +10,7 @@
   justify-content: flex-start;
   align-items: flex-start;
   @include light {
-    background-color: $ligth-theme-bg;
+    background-color: $white;
   }
   h1 {
     @include Heading();
@@ -18,9 +18,9 @@
     font-size: 1.5rem;
     line-height: 50px;
     padding: 2% 0%;
-    color: $light-component;
+    color: $light-white;
     @include light {
-      color: $light-black;
+      color: $black;
     }
   }
 }

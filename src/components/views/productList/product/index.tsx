@@ -13,7 +13,7 @@ import { ButtonSub } from "components/ui/button/button";
 import { history } from "utils/history";
 const { v4 } = require("uuid");
 const MarkdownIt = require("markdown-it");
-const mdParser = new MarkdownIt(/* Markdown-it options */);
+const mdParser = new MarkdownIt();
 
 export interface ProductProps {}
 
@@ -104,7 +104,7 @@ const Product: React.FC<ProductProps> = () => {
       authorItemNew,
     } = formValue;
     try {
-      let res = await productService.handleRegisterApi({
+      let res = await productService.createProduct({
         idItemNew,
         imgItemNew,
         urlItemNew,
@@ -124,8 +124,8 @@ const Product: React.FC<ProductProps> = () => {
 
       resetForm({});
 
-      const message = res.data.message;
-      const errMessage = res.data.errMessage;
+      const message = res?.data.message;
+      const errMessage = res?.data.errMessage;
       if (errMessage) {
         dispatch(messageActions.setMessage(errMessage));
       }
@@ -133,7 +133,7 @@ const Product: React.FC<ProductProps> = () => {
         dispatch(messageActions.setMessage(message));
         alert(`Post ${message}`);
       }
-      return res.data;
+      return res?.data;
     } catch (error) {
       console.log(error);
     }
@@ -158,7 +158,7 @@ const Product: React.FC<ProductProps> = () => {
       authorItemNew,
     } = formValue;
     try {
-      let res = await productService.handleUpdateApi({
+      let res = await productService.updateProduct({
         id,
         idItemNew,
         imgItemNew,
@@ -177,8 +177,8 @@ const Product: React.FC<ProductProps> = () => {
         authorItemNew,
       });
 
-      const message = res.data.message;
-      const errMessage = res.data.errMessage;
+      const message = res?.data.message;
+      const errMessage = res?.data.errMessage;
       if (errMessage) {
         dispatch(messageActions.setMessage(errMessage));
       }
@@ -197,9 +197,9 @@ const Product: React.FC<ProductProps> = () => {
         ""
       );
       if (confirmDelete === "DELETE") {
-        let res = await productService.handleDeleteApi(deleteItem.idItemNew);
-        const errMessage = res.data.errMessage;
-        const message = res.data.message;
+        let res = await productService.deleteProduct(deleteItem.idItemNew);
+        const errMessage = res?.data.errMessage;
+        const message = res?.data.message;
         if (errMessage) {
           dispatch(messageActions.setMessage(errMessage));
         }
@@ -588,6 +588,4 @@ const Product: React.FC<ProductProps> = () => {
 };
 
 export default Product;
-function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-  throw new Error("Function not implemented.");
-}
+

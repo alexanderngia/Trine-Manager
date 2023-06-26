@@ -1,23 +1,21 @@
+import FunctionBtn from "components/container/functionBtn";
 import { ButtonMain } from "components/ui/button/button";
 import { CardList } from "components/ui/card";
+import { Search } from "components/ui/search";
 import { Layout } from "components/views/layout";
 import { useAppDispatch, useAppSelector } from "hooks/useRedux";
 import React, { useEffect, useState } from "react";
-
 import { postActions } from "redux/reducers/postSlice";
-import postService from "services/postService";
+import { IPost } from "types/post";
 import { history } from "utils/history";
+
+import postService from "services/postService";
 import styles from "./index.module.scss";
-import { Search } from "components/ui/search";
-import { IPost } from "services/postService";
-import { postMock } from "data/post-mockData";
-import { Add, Download } from "components/ui/icon";
-import FunctionBtn from "components/container/functionBtn";
 
 export interface PostListProps {}
 
 const PostList: React.FC<PostListProps> = (props) => {
-  const [data, setData] = useState([] as IPost[]);
+  const [data, setData] = useState<IPost[]>([]);
   const [role, setRole] = useState("");
   const [q, setQ] = useState("");
   const [searchParam] = useState(["title", "category"]);
@@ -27,9 +25,8 @@ const PostList: React.FC<PostListProps> = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const data = await postService.getPostBoard();
-        // setData(data);
-        setData(postMock);
+        const data = await postService.getPost();
+        setData(data);
       } catch (error: any) {
         console.log(error);
       }

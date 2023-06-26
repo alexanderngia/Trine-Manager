@@ -1,34 +1,26 @@
 import axios from "axios";
-import { IProduct } from "services/productService";
-const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api/order`;
+import { IOrderNew } from "types/order";
+import { orders } from "data/order";
+const getOrder: () => Promise<any> = async () => {
+  // if (process.env.GET_ORDER_API)
+  //   await axios.get(process.env.GET_ORDER_API).then((res) => {
+  //     return res.data.orders;
+  //   });
 
-export interface IOrder {
-  idOrderNew: string;
-  cusNameNew: string;
-  cusEmailNew: string;
-  cusPhoneNew: string;
-  cusAdressNew: string;
-  orderNoteNew: string;
-  cart: IProduct[];
-}
-
-const getOrderBoard: () => Promise<any> = async () => {
-  return await axios.get(API_URL + "?id=ALL").then((res) => {
-    return res.data.orders;
-  });
+  return orders;
 };
-const createOrder = async (order: IOrder) => {
-  return await axios({
-    method: "post",
-    url: API_URL + "/create",
-    headers: {},
-    data: order,
-  });
-  // console.log(order, "order from service");
+const createOrder = async (order: IOrderNew) => {
+  if (process.env.CREATE_ORDER_API)
+    return await axios({
+      method: "post",
+      url: process.env.CREATE_ORDER_API,
+      headers: {},
+      data: order,
+    });
 };
 
 const orderService = {
-  getOrderBoard,
+  getOrder,
   createOrder,
 };
 export default orderService;

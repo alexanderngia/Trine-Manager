@@ -1,5 +1,5 @@
 import { Layout } from "components/views/layout";
-import { ErrorMessage, Field, Form, Formik, useFormikContext } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useAppDispatch, useAppSelector } from "hooks/useRedux";
 import React, { useEffect, useState } from "react";
 import MdEditor from "react-markdown-editor-lite";
@@ -90,7 +90,7 @@ const Post: React.FC<PostProps> = () => {
       descripTagNew,
     } = formValue;
     try {
-      let res = await postService.handleRegisterApi({
+      let res = await postService.createPost({
         authorNew,
         urlNew,
         titleNew,
@@ -102,8 +102,8 @@ const Post: React.FC<PostProps> = () => {
         titleTagNew,
         descripTagNew,
       });
-      const message = res.data.message;
-      const errMessage = res.data.errMessage;
+      const message = res?.data.message;
+      const errMessage = res?.data.errMessage;
       if (errMessage) {
         dispatch(messageActions.setMessage(errMessage));
       }
@@ -132,7 +132,7 @@ const Post: React.FC<PostProps> = () => {
       descripTagNew,
     } = formValue;
     try {
-      let res = await postService.handleUpdateApi({
+      let res = await postService.updatePost({
         id,
         authorNew,
         urlNew,
@@ -146,8 +146,8 @@ const Post: React.FC<PostProps> = () => {
         descripTagNew,
       });
 
-      const message = res.data.message;
-      const errMessage = res.data.errMessage;
+      const message = res?.data.message;
+      const errMessage = res?.data.errMessage;
       if (errMessage) {
         dispatch(messageActions.setMessage(errMessage));
       }
@@ -165,9 +165,9 @@ const Post: React.FC<PostProps> = () => {
         ""
       );
       if (confirmDelete === "DELETE") {
-        let res = await postService.handleDeleteApi(deleteItem.id);
-        const errMessage = res.data.errMessage;
-        const message = res.data.message;
+        let res = await postService.deletePost(deleteItem.id);
+        const errMessage = res?.data.errMessage;
+        const message = res?.data.message;
         if (errMessage) {
           dispatch(messageActions.setMessage(errMessage));
         }
@@ -408,6 +408,4 @@ const Post: React.FC<PostProps> = () => {
 };
 
 export default Post;
-function setFieldValue(arg0: string, value: string) {
-  throw new Error("Function not implemented.");
-}
+

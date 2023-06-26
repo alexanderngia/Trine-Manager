@@ -23,8 +23,8 @@
     background-position: 96%;
     color: $white;
     @include light {
-      box-shadow: 0px 0px 10px rgba($light-second, 0.1);
-      background-color: $light-component;
+      @include boxShadowBtn();
+      background-color: $light-white;
       color: $light-second;
     }
   }

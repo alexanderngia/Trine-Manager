@@ -1,17 +1,15 @@
+import FunctionBtn from "components/container/functionBtn";
 import { ButtonMain } from "components/ui/button/button";
-import { CardItem } from "components/ui/card";
+import { CardItem, CardProductItem } from "components/ui/card";
 import { Search } from "components/ui/search";
 import { Layout } from "components/views/layout";
 import { useAppDispatch, useAppSelector } from "hooks/useRedux";
 import React, { useEffect, useState } from "react";
 import { productActions } from "redux/reducers/productSlice";
 import productService from "services/productService";
+import { IProduct } from "types/product";
 import { history } from "utils/history";
 import styles from "./index.module.scss";
-import { productMock } from "data/product-mockData";
-import { IProduct } from "services/productService";
-import { Add, Download } from "components/ui/icon";
-import FunctionBtn from "components/container/functionBtn";
 
 export interface ProductListProps {}
 
@@ -28,9 +26,8 @@ const ProductList: React.FC<ProductListProps> = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const data = await productService.getProductBoard();
-        // setData(data);
-        setData(productMock);
+        const data = await productService.getProduct();
+        setData(data);
       } catch (error: any) {
         console.log(error);
       }
@@ -94,12 +91,11 @@ const ProductList: React.FC<ProductListProps> = () => {
               {React.Children.toArray(
                 search(data).map((listItems: any) => {
                   return (
-                    <CardItem
+                    <CardProductItem
                       onClick={() => openProduct(listItems)}
-                      className={styles["product-list"]}
+                      // classCustom={styles["product-list"]}
                       titleCard={listItems.nameItem}
                       imgCard={listItems.imgItem}
-                      qtyCard={listItems.qualityItem}
                       colorCard={listItems.colorItem}
                       sizeCard={listItems.sizeItem}
                       priceCard={listItems.priceItem}

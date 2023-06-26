@@ -1,13 +1,118 @@
-@import "./styles/responsive";
-@import "./styles/variables";
-@import "./styles/mixin";
+@import "styles/default";
+@import "styles/mixin";
+@import "styles/variables";
+@import "styles/responsive";
 
-#root {
-  @include flex();
-  width: 100%;
-  background-color: $ligth-theme-bg;
-  font-family: $font-p;
-  @include dark {
-    background-color: $theme-bg;
+// FONT SIZE
+html,
+body {
+  font-size: 10px;
+
+  @include desktop {
+    font-size: 12px;
   }
+  @include desktop-l {
+    font-size: 14px;
+  }
+}
+a {
+  cursor: pointer;
+}
+h1 {
+  @include Heading();
+  font-size: 2rem;
+  letter-spacing: 0.1rem;
+  @include padding-x();
+  @include desktop {
+    font-size: 3rem;
+  }
+}
+h2 {
+  @include Heading();
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.4rem;
+
+  @include desktop {
+    font-size: 2.5rem;
+  }
+}
+h3 {
+  @include Heading();
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: 0.2rem;
+  @include tablet {
+    font-size: 2rem;
+  }
+  @include desktop {
+    font-size: 2rem;
+  }
+}
+h4 {
+  @include Heading();
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 0.1rem;
+
+  @include tablet {
+    font-size: 1rem;
+  }
+  @include desktop {
+    font-size: 1rem;
+  }
+}
+p {
+  @include Text();
+  font-size: 1rem;
+  line-height: 1.6;
+  padding: 4% 0;
+  line-break: loose;
+  @include desktop {
+    line-height: 1.4;
+  }
+}
+
+a {
+  @include Text();
+  font-weight: 600;
+  @include Transition3();
+}
+
+hr {
+  width: 90%;
+  border-top: 1px solid rgba($black-fade, 0.3);
+}
+.right-arrow-white {
+  position: relative;
+  width: 30%;
+  border-top: 1px solid rgba($black-fade, 0.3);
+  &::before {
+    content: "";
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border: solid rgba($black-fade, 0.3);
+    border-width: 0 1px 1px 0;
+    top: 0;
+    left: 0;
+  }
+}
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

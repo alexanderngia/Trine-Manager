@@ -1,24 +1,24 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 
-import * as Yup from "yup";
+import FunctionBtn from "components/container/functionBtn";
+import { ButtonSub } from "components/ui/button/button";
+import { CardList, CardUser } from "components/ui/card";
+import { Modal } from "components/ui/modal/modal";
+import { Layout } from "components/views/layout";
 import { useAppDispatch, useAppSelector } from "hooks/useRedux";
 import { register } from "redux/reducers/authSlice";
 import { messageActions } from "redux/reducers/messageSlice";
 import userService from "services/userService";
-import { ButtonMain, ButtonSub } from "components/ui/button/button";
-import { CardList } from "components/ui/card";
-import { Modal } from "components/ui/modal/modal";
-import { Layout } from "components/views/layout";
+import * as Yup from "yup";
 import styles from "./index.module.scss";
-import { Add, Download } from "components/ui/icon";
-import FunctionBtn from "components/container/functionBtn";
+import { IUser, IUserNew } from "types/user";
 
 export interface MemberListProps {}
 
-const MemberList: React.FC<MemberListProps> = (props) => {
-  const [deleteUser, setDeleteUser] = useState([]);
-  const [data, setData] = useState([]);
+const MemberList: React.FC<MemberListProps> = () => {
+  const [deleteUser, setDeleteUser] = useState<IUser>();
+  const [data, setData] = useState<IUser[]>([]);
 
   const [role, setRole] = useState("");
   const [modal, setModal] = useState(false);
@@ -43,7 +43,7 @@ const MemberList: React.FC<MemberListProps> = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await userService.getUserBoard();
+        const data = await userService.getUser();
         setData(data);
       } catch (error: any) {
         console.log(error);
@@ -73,23 +73,32 @@ const MemberList: React.FC<MemberListProps> = (props) => {
     localStorage.removeItem("MODAL");
   };
 
-  const openItemModal = async (infoUser: any) => {
+  const openItemModal = async ({
+    id,
+    fullNameUser,
+    genderUser,
+    phoneUser,
+    emailUser,
+    adressUser,
+    typeRole,
+  }: IUser) => {
     setProfile(true);
-    if (infoUser) {
-      setInitialValue({
-        ...initialValue,
-        id: `${infoUser.id}`,
-        userName: `${infoUser.fullNameUser}`,
-        userEmail: `${infoUser.emailUser}`,
-        // userPass: `${infoUser.passwordUser}`,
-        userPhone: `${infoUser.phoneUser}`,
-        userGender: `${infoUser.genderUser}`,
-        userAdress: `${infoUser.adressUser}`,
-        userRole: `${infoUser.typeRole}`,
-      });
-      setDeleteUser(infoUser);
-      dispatch(messageActions.clearMessage());
-    }
+    setInitialValue({
+      ...initialValue,
+      id: `${id}`,
+      userName: `${fullNameUser}`,
+      userEmail: `${emailUser}`,
+      // userPass: `${infoUser.passwordUser}`,
+      userPhone: `${phoneUser}`,
+      userGender: `${genderUser}`,
+      userAdress: `${adressUser}`,
+      userRole: `${typeRole}`,
+    });
+    setDeleteUser({
+      id,
+      fullNameUser,
+    });
+    dispatch(messageActions.clearMessage());
   };
 
   const closeItemModal = () => {
@@ -106,31 +115,27 @@ const MemberList: React.FC<MemberListProps> = (props) => {
     });
   };
 
-  const deleteItem = async (userRemove: any) => {
+  const deleteItem = async ({ id, fullNameUser }: IUser) => {
     try {
       let confirmDelete = prompt(
-        `Nhập DELETE vào ô để xác nhận xóa ${userRemove.fullNameUser}!`,
+        `Nhập DELETE vào ô để xác nhận xóa ${fullNameUser}!`,
         ""
       );
       if (confirmDelete === "DELETE") {
-        let res = await userService.handleDeleteApi(userRemove.id);
-        const errMessage = res.data.errMessage;
-        const message = res.data.message;
+        let res = await userService.deleteUser(id);
+        const errMessage = res?.data.errMessage;
+        const message = res?.data.message;
         if (errMessage) {
           dispatch(messageActions.setMessage(errMessage));
         }
         if (message) {
           dispatch(messageActions.clearMessage());
-          alert(userRemove.fullNameUser + message);
+          alert(fullNameUser + message);
           setProfile(false);
         }
       }
       if (confirmDelete === "" || null) {
-        dispatch(
-          messageActions.setMessage(
-            `Fail to remove ${userRemove.fullNameUser}!`
-          )
-        );
+        dispatch(messageActions.setMessage(`Fail to remove ${fullNameUser}!`));
       }
     } catch (error) {
       console.log(error);
@@ -160,7 +165,7 @@ const MemberList: React.FC<MemberListProps> = (props) => {
     userRole: Yup.string().required("Required!"),
   });
 
-  const handleRegister = (formValue: any, { resetForm }: any) => {
+  const handleRegister = (formValue: IUserNew, { resetForm }: any) => {
     const {
       userName,
       userEmail,
@@ -192,26 +197,24 @@ const MemberList: React.FC<MemberListProps> = (props) => {
       id,
       userName,
       userEmail,
-      // userPass,
       userPhone,
       userGender,
       userAdress,
       userRole,
     } = formValue;
     try {
-      let res = await userService.handleUpdateApi({
+      let res = await userService.updateUser({
         id,
         userName,
         userEmail,
-        // userPass,
         userPhone,
         userGender,
         userAdress,
         userRole,
       });
 
-      const message = res.data.message;
-      const errMessage = res.data.errMessage;
+      const message = res?.data.message;
+      const errMessage = res?.data.errMessage;
       if (errMessage) {
         dispatch(messageActions.setMessage(errMessage));
       }
@@ -249,9 +252,9 @@ const MemberList: React.FC<MemberListProps> = (props) => {
     <Layout>
       <div className={styles["root"]}>
         <h1>DANH SÁCH THÀNH VIÊN</h1>
-        <FunctionBtn />
-
-
+        <div className={styles["btn-container"]}>
+          <FunctionBtn />
+        </div>
         {modal && (
           <Modal onClick={closeModal}>
             <h1>Let's signup!</h1>
@@ -436,22 +439,41 @@ const MemberList: React.FC<MemberListProps> = (props) => {
             </Formik>
           </Modal>
         )}
-        {data.length > 0 && (
+        {data && (
           <>
             <ul className={styles["card-container"]}>
               {React.Children.toArray(
-                data.map((listItems: any) => {
-                  return (
-                    <CardList
-                      className={styles["member-list"]}
-                      onClick={() => openItemModal(listItems)}
-                      titleCard={listItems.fullNameUser}
-                      qtyCard={listItems.genderUser === 1 ? "Male" : "Female"}
-                      sizeCard={listItems.phoneUser}
-                      priceCard={listItems.emailUser}
-                    />
-                  );
-                })
+                data.map(
+                  ({
+                    id,
+                    fullNameUser,
+                    genderUser,
+                    phoneUser,
+                    emailUser,
+                    adressUser,
+                    typeRole,
+                  }: IUser) => {
+                    return (
+                      <CardUser
+                        onClick={() =>
+                          openItemModal({
+                            id,
+                            fullNameUser,
+                            genderUser,
+                            phoneUser,
+                            emailUser,
+                            adressUser,
+                            typeRole,
+                          })
+                        }
+                        titleCard={fullNameUser}
+                        textCardTwo={typeRole}
+                        textCardThree={phoneUser}
+                        textCardFour={emailUser}
+                      />
+                    );
+                  }
+                )
               )}
             </ul>
             {profile && (
@@ -647,7 +669,7 @@ const MemberList: React.FC<MemberListProps> = (props) => {
                       <div className={styles["button-container"]}>
                         <ButtonSub
                           type="button"
-                          onClick={() => deleteItem(deleteUser)}
+                          // onClick={() => deleteItem({ id, fullNameUser })}
                         >
                           Xóa Thành Viên
                         </ButtonSub>

@@ -2,11 +2,15 @@ import React from "react";
 import styles from "./index.module.scss";
 import classNames from "classnames";
 import Image from "components/ui/image";
+import classnames from "classnames";
 export interface CardProps {
   className?: string;
+  classCustom?: string;
+  classThumb?: string;
   onClick?: any;
+  href?: string;
   imgCard?: string;
-  titleCard: string;
+  titleCard?: string;
   qtyCard?: string;
   colorCard?: string;
   sizeCard?: string;
@@ -16,6 +20,7 @@ export interface CardProps {
   textCardThree?: string;
   textCardFour?: string;
 }
+
 export const CardList: React.FC<CardProps> = ({
   className,
   onClick,
@@ -163,5 +168,152 @@ export const CardItem: React.FC<CardProps> = ({
         {textCardFour && <li>{textCardFour}</li>}
       </ul>
     </li>
+  );
+};
+
+export const CardUser: React.FC<CardProps> = ({
+  onClick,
+  classCustom,
+  imgCard,
+  titleCard,
+  textCardOne,
+  textCardTwo,
+  textCardThree,
+  textCardFour,
+}) => {
+  return (
+    <ul
+      onClick={onClick}
+      className={classNames(styles["root"], styles["userCard"], classCustom)}
+    >
+      {imgCard && (
+        <li className={styles["img"]}>
+          <Image alt={imgCard} src={imgCard} />
+        </li>
+      )}
+      {titleCard && (
+        <li className={styles["title"]}>
+          <p>{titleCard}</p>
+        </li>
+      )}
+
+      {textCardOne && (
+        <li>
+          <p>{textCardOne}</p>
+        </li>
+      )}
+      {textCardTwo && (
+        <li>
+          <p>{textCardTwo}</p>
+        </li>
+      )}
+      {textCardThree && (
+        <li>
+          <p>{textCardThree}</p>
+        </li>
+      )}
+      {textCardFour && (
+        <li>
+          <p>{textCardFour}</p>
+        </li>
+      )}
+    </ul>
+  );
+};
+export const CardUserImg: React.FC<CardProps> = ({
+  onClick,
+  classCustom,
+  imgCard,
+  titleCard,
+  textCardOne,
+  textCardTwo,
+  textCardThree,
+  textCardFour,
+}) => {
+  return (
+    <ul
+      onClick={onClick}
+      className={classNames(styles["root"], styles["userCardImg"])}
+    >
+      <span className={styles["column"]}>
+        {imgCard && (
+          <li className={styles["img"]}>
+            <Image alt={imgCard} src={imgCard} />
+          </li>
+        )}
+      </span>
+      <span className={styles["column"]}>
+        {titleCard && (
+          <li className={styles["title"]}>
+            <p>{titleCard}</p>
+          </li>
+        )}
+
+        {textCardOne && (
+          <li>
+            <p>{textCardOne}</p>
+          </li>
+        )}
+        {textCardTwo && (
+          <li>
+            <p>{textCardTwo}</p>
+          </li>
+        )}
+        {textCardThree && (
+          <li>
+            <p>{textCardThree}</p>
+          </li>
+        )}
+        {textCardFour && (
+          <li>
+            <p>{textCardFour}</p>
+          </li>
+        )}
+      </span>
+    </ul>
+  );
+};
+
+export const CardProductItem: React.FC<CardProps> = ({
+  titleCard,
+  imgCard,
+  priceCard,
+  href,
+  sizeCard,
+  colorCard,
+  classCustom,
+  classThumb,
+  ...props
+}) => {
+  return (
+    <a href={href}>
+      <div
+        className={classnames(styles["cardProductItem"], classCustom)}
+        {...props}
+      >
+        {imgCard && (
+          <div className={classnames(styles["thumb"], classThumb)}>
+            <Image alt={imgCard} src={imgCard} />
+          </div>
+        )}
+
+        <div className={classnames(styles["info"], classCustom)}>
+          <p className={styles["title"]}>{titleCard}</p>
+
+          {colorCard && (
+            <span
+              className={styles["color"]}
+              style={{ backgroundColor: `${colorCard}` }}
+            ></span>
+          )}
+          {sizeCard && <p className={styles["size"]}>{sizeCard}</p>}
+          {priceCard && (
+            <p className={styles["price"]}>
+              {priceCard?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} VND
+            </p>
+          )}
+        </div>
+      </div>
+    </a>
   );
 };
