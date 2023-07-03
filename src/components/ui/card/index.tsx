@@ -221,8 +221,8 @@ export const CardUser: React.FC<CardProps> = ({
   );
 };
 export const CardUserImg: React.FC<CardProps> = ({
-  onClick,
   classCustom,
+  onClick,
   imgCard,
   titleCard,
   textCardOne,
@@ -233,7 +233,7 @@ export const CardUserImg: React.FC<CardProps> = ({
   return (
     <ul
       onClick={onClick}
-      className={classNames(styles["root"], styles["userCardImg"])}
+      className={classNames(styles["root"], styles["userCardImg"], classCustom)}
     >
       <span className={styles["column"]}>
         {imgCard && (

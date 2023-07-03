@@ -1,18 +1,18 @@
 import "./App.scss";
 
 import { menuAdmin } from "data/sidebar";
-import React, { lazy } from "react";
+import React from "react";
 import {
   Route,
   Routes,
   unstable_HistoryRouter as HistoryRouter,
 } from "react-router-dom";
 import { history } from "utils/history";
-const Authentication = lazy(() => import("components/views/auth"));
 
-const Order = lazy(() => import("components/views/orderList/order"));
-const Post = lazy(() => import("components/views/postList/post"));
-const Product = lazy(() => import("components/views/productList/product"));
+import Authentication from "components/views/auth";
+import Order from "components/views/orderList/order";
+import Post from "components/views/postList/post";
+import Product from "components/views/productList/product";
 
 function App() {
   return (
@@ -23,7 +23,7 @@ function App() {
             return <Route path={route.path} element={route?.page} />;
           })
         )}
-        <Route path="/" element={<Authentication />} />
+        <Route path="/login" element={<Authentication />} />
         <Route path="/post" element={<Post />} />
         <Route path="/product" element={<Product />} />
         <Route path="/order" element={<Order />} />

@@ -1,6 +1,6 @@
 import FunctionBtn from "components/container/functionBtn";
 import { ButtonMain } from "components/ui/button/button";
-import { CardList } from "components/ui/card";
+import { CardList, CardUserImg } from "components/ui/card";
 import { Search } from "components/ui/search";
 import { Layout } from "components/views/layout";
 import { useAppDispatch, useAppSelector } from "hooks/useRedux";
@@ -83,24 +83,24 @@ const PostList: React.FC<PostListProps> = (props) => {
           </div>
           <FunctionBtn />
         </div>
-        {data.length > 0 && (
+        {data && (
           <>
-            <ul className={styles["card-container"]}>
+            <div className={styles["card-container"]}>
               {React.Children.toArray(
                 search(data).map((listItems: any) => {
                   return (
-                    <CardList
+                    <CardUserImg
+                    classCustom={styles["card"]}
                       onClick={() => openPost(listItems)}
-                      className={styles["post-list"]}
                       titleCard={listItems.title}
                       imgCard={listItems.featureImg}
-                      textCardOne={listItems.author}
-                      textCardTwo={listItems.category}
+                      textCardOne={listItems.category}
+                      textCardTwo={listItems.author}
                     />
                   );
                 })
               )}
-            </ul>
+            </div>
           </>
         )}
       </div>

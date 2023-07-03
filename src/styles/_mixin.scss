@@ -139,6 +139,9 @@
       font-size: 0.8rem;
       font-family: $font-p;
       margin-bottom: 10px;
+      @include dark {
+        color: $light-white;
+      }
     }
 
     .input,
@@ -309,10 +312,9 @@
           background: $black;
           border: 1px solid $black;
           color: $light-white;
-          @include Transition3(); 
+          @include Transition3();
 
           &:hover {
-
             transform: scale(1.1);
             background: $light-primary;
             border: 1px solid $light-primary;

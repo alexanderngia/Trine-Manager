@@ -172,9 +172,11 @@
 
     .title {
       width: 80%;
-      font-size: 1.2rem;
+      font-size: 0.9rem;
       font-weight: 700;
-      text-transform: capitalize;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
     }
     li {
       width: auto;
@@ -205,7 +207,7 @@
       li {
         width: auto;
         &:nth-of-type(3) {
-          width: 60%;
+          width: 100%;
         }
       }
       &:first-of-type {

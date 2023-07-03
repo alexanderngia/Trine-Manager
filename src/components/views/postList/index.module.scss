@@ -41,21 +41,15 @@
     justify-content: flex-start;
     width: 100%;
     flex-wrap: wrap;
-    column-gap: 1%;
-    .post-list {
-      width: 32%;
-      ul {
-        li {
-          display: flex;
-          width: 15%;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-
-          &:nth-of-type(2) {
-            width: 40%;
-            font-weight: 700;
-            text-transform: capitalize;
+    column-gap: 15px;
+    row-gap: 15px;
+    .card {
+      span {
+        &:last-of-type {
+          li {
+            &:first-of-type {
+              width: 100%;
+            }
           }
         }
       }

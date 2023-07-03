@@ -31,7 +31,7 @@ const Header: React.FC<HeaderProps> = (props) => {
   };
 
   // if (!user) {
-  //   return <Navigate to="/" />;
+  //   return <Navigate to="/login" />;
   // }
   return (
     <div className={styles["root"]}>

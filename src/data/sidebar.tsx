@@ -17,7 +17,7 @@ export const menuAdmin = [
   {
     id: 1,
     title: "Tổng quan",
-    path: "/dashboard",
+    path: "/",
     page: <DashBoard />,
     icon: <Dashboard />,
   },

@@ -39,7 +39,8 @@ const Product: React.FC<ProductProps> = () => {
     keywordTagItemNew: "",
     titleTagItemNew: "",
     descripTagItemNew: "",
-    authorItemNew: `${user.fullNameUser}`,
+    // authorItemNew: `${user.fullNameUser}`,
+    authorItemNew: ``,
   });
 
   useEffect(() => {
@@ -588,4 +589,3 @@ const Product: React.FC<ProductProps> = () => {
 };
 
 export default Product;
-

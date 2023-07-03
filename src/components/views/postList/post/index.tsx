@@ -25,7 +25,8 @@ const Post: React.FC<PostProps> = () => {
 
   const [initialValue, setInitialValue] = useState({
     id: "",
-    authorNew: `${user.fullNameUser}`,
+    // authorNew: `${user.fullNameUser}`,
+    authorNew: ``,
     urlNew: "",
     titleNew: "",
     bodyNew: "",
@@ -408,4 +409,3 @@ const Post: React.FC<PostProps> = () => {
 };
 
 export default Post;
-
