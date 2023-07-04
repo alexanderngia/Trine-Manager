@@ -16,7 +16,7 @@ export const Modal: React.FC<ModalProps> = ({
   return (
     <div className={classNames(styles["root"], className)}>
       <div className={styles["container"]}>
-        <Close onClick={onClick} customClass="close" />
+        <Close onClick={onClick} customClass={styles["close"]} />
         {children}
       </div>
     </div>

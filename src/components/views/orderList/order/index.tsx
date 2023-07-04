@@ -253,7 +253,7 @@ const Order: React.FC<OrderProps> = () => {
                 </ButtonMain>
                 <ButtonMain
                   onClick={() => filter("dress")}
-                  className={styles["last-button"]}
+                  classCustom={styles["last-button"]}
                 >
                   DRESS
                 </ButtonMain>

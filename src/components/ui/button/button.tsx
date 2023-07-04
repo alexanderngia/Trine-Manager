@@ -1,17 +1,17 @@
 import React from "react";
 import styles from "./button.module.scss";
-import classNames from "classnames";
+import classnames from "classnames";
 export interface ButtonProps {
   children: any;
   onClick?: any;
-  className?: string;
+  classCustom?: string;
   type?: any;
   disabled?: boolean;
 }
 export const ButtonMain: React.FC<ButtonProps> = ({
   children,
   onClick,
-  className,
+  classCustom,
   type,
   disabled,
 }) => {
@@ -19,7 +19,7 @@ export const ButtonMain: React.FC<ButtonProps> = ({
     <button
       type={type}
       onClick={onClick}
-      className={classNames(styles["root"], className)}
+      className={classnames(styles["root"], classCustom)}
       disabled={disabled}
     >
       {children}
@@ -30,7 +30,7 @@ export const ButtonMain: React.FC<ButtonProps> = ({
 export const ButtonSub: React.FC<ButtonProps> = ({
   children,
   onClick,
-  className,
+  classCustom,
   type,
   disabled,
 }) => {
@@ -38,7 +38,7 @@ export const ButtonSub: React.FC<ButtonProps> = ({
     <button
       type={type}
       onClick={onClick}
-      className={classNames(styles["root subBtn"], className)}
+      className={classnames(styles["root"], styles["sub"], classCustom)}
       disabled={disabled}
     >
       {children}

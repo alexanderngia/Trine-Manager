@@ -9,6 +9,7 @@
   width: 100%;
   height: 100vh;
   overflow-y: auto;
+  background-color: $white;
   @include dark {
     background-color: $theme-bg;
   }
@@ -93,21 +94,7 @@ hr {
   width: 90%;
   border-top: 1px solid rgba($black-fade, 0.3);
 }
-.right-arrow-white {
-  position: relative;
-  width: 30%;
-  border-top: 1px solid rgba($black-fade, 0.3);
-  &::before {
-    content: "";
-    position: absolute;
-    width: 3px;
-    height: 3px;
-    border: solid rgba($black-fade, 0.3);
-    border-width: 0 1px 1px 0;
-    top: 0;
-    left: 0;
-  }
-}
+
 ::-webkit-scrollbar {
   width: 5px;
 }

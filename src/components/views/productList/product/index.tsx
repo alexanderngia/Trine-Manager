@@ -9,7 +9,7 @@ import productService from "services/productService";
 import PreviewImg from "../../../ui/image/previewImg";
 import styles from "./index.module.scss";
 import "./index.scss";
-import { ButtonSub } from "components/ui/button/button";
+import { ButtonMain, ButtonSub } from "components/ui/button/button";
 import { history } from "utils/history";
 const { v4 } = require("uuid");
 const MarkdownIt = require("markdown-it");
@@ -570,13 +570,15 @@ const Product: React.FC<ProductProps> = () => {
                     />
                   </span>
                   <div className={styles["button-container"]}>
+                    <ButtonMain type="submit">
+                      {product ? "UPDATE" : "ADD"}
+                    </ButtonMain>
                     <ButtonSub
                       type="button"
                       onClick={() => handleDeleteItem(values)}
                     >
                       Delete
                     </ButtonSub>
-                    <button type="submit">{product ? "UPDATE" : "ADD"}</button>
                   </div>
                 </span>
               </div>

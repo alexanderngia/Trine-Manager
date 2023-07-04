@@ -1,11 +1,11 @@
 @import "styles/variables";
 @import "styles/responsive";
 @import "styles/mixin";
+@import "styles/global";
 .root {
   width: 100%;
   @include flex();
   align-items: baseline;
-
 }
 
 .summary {

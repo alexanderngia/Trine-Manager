@@ -1,6 +1,7 @@
 @import "styles/variables";
 @import "styles/responsive";
 @import "styles/mixin";
+@import "styles/global";
 
 .root {
   width: 38px;
@@ -31,7 +32,6 @@
     width: 10px;
     height: 10px;
     fill: $white;
- 
   }
 }
 

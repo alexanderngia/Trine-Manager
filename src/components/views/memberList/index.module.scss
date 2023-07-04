@@ -1,6 +1,7 @@
 @import "styles/variables";
 @import "styles/responsive";
 @import "styles/mixin";
+@import "styles/global";
 .root {
   width: 100%;
   @include flex();
@@ -33,9 +34,23 @@
     flex-wrap: wrap;
     justify-content: flex-start;
     column-gap: 15px;
+    .card {
+      &:hover {
+        p {
+          color: $light-white;
+        }
+      }
+    }
   }
 }
-
 .form {
-  @include formModal();
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  .container {
+    column-gap: 7%;
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+  }
 }

@@ -14,11 +14,11 @@ const FunctionBtn: React.FC<FunctionBtnProps> = ({
 }) => {
   return (
     <div className={styles["root"]}>
-      <ButtonMain className={styles["btn"]}>
-        <Add onClick={onClickAdd} customClass={styles["icon"]} />
+      <ButtonMain onClick={onClickAdd} classCustom={styles["btn"]}>
+        <Add customClass={styles["icon"]} />
       </ButtonMain>
-      <ButtonMain className={styles["btn"]}>
-        <Download onClick={onClickDownload} customClass={styles["icon"]} />
+      <ButtonMain onClick={onClickDownload} classCustom={styles["btn"]}>
+        <Download customClass={styles["icon"]} />
       </ButtonMain>
     </div>
   );

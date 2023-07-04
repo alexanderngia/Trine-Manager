@@ -16,4 +16,5 @@ export interface ICustomerNew {
   cusPhone: string;
   cusGender: string;
   cusAdress: string;
+  cusNote: string;
 }

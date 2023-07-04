@@ -1,6 +1,7 @@
 @import "styles/variables";
 @import "styles/responsive";
 @import "styles/mixin";
+@import "styles/global";
 
 .root {
   background-color: $theme-bg;
@@ -19,20 +20,19 @@
     // box-shadow: 0 0 10px rgba($light-second, 0.8);
     background-color: rgba($black, 0.8);
   }
-  svg {
+  .close {
     position: absolute;
     top: 3%;
     right: 3%;
-    color: $white;
+    fill: $light-second;
     font-size: 25px;
     z-index: 1000000;
     cursor: pointer;
     @include Transition2();
-    @include light {
-      color: $light-second;
+    @include dark {
+      fill: $light-white;
     }
     &:hover {
-
       transform: scale(1.3);
     }
   }

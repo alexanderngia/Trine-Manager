@@ -9,8 +9,9 @@ import postService from "services/postService";
 import PreviewImg from "components/ui/image/previewImg";
 import styles from "./index.module.scss";
 import "./index.scss";
-import { ButtonSub } from "components/ui/button/button";
+import { ButtonMain, ButtonSub } from "components/ui/button/button";
 import { history } from "utils/history";
+import { Input } from "components/ui/form/input";
 
 const MarkdownIt = require("markdown-it");
 const mdParser = new MarkdownIt(/* Markdown-it options */);
@@ -216,9 +217,6 @@ const Post: React.FC<PostProps> = () => {
           initialValues={initialValue}
           validateOnChange={true}
           onSubmit={post ? handleUpdate : handleRegister}
-          // onSubmit={(values) => {
-          //   console.log(values);
-          // }}
           enableReinitialize={true}
         >
           {({ values, setFieldValue, handleChange }: any) => (
@@ -226,6 +224,7 @@ const Post: React.FC<PostProps> = () => {
               <div className={styles["container"]}>
                 <span className={styles["column"]}>
                   <span className={styles["box"]}>
+                    <Input onChange={(e)=> handleChange(e)} value={values.id} type="text" name="id" hidden/>
                     <Field
                       className={styles["input"]}
                       type="text"
@@ -389,13 +388,15 @@ const Post: React.FC<PostProps> = () => {
                     />
                   </span>
                   <div className={styles["button-container"]}>
+                    <ButtonMain type="submit">
+                      {post ? "Update" : "Save"}
+                    </ButtonMain>
                     <ButtonSub
                       type="button"
                       onClick={() => handleDeleteItem(values)}
                     >
                       Delete
                     </ButtonSub>
-                    <button type="submit">{post ? "Update" : "Save"}</button>
                   </div>
                 </span>
               </div>

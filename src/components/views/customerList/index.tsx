@@ -2,7 +2,7 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 
 import FunctionBtn from "components/container/functionBtn";
-import { ButtonSub } from "components/ui/button/button";
+import { ButtonSub, ButtonMain } from "components/ui/button/button";
 import { CardUserImg } from "components/ui/card";
 import { Modal } from "components/ui/modal/modal";
 import { Layout } from "components/views/layout";
@@ -12,6 +12,10 @@ import customerService from "services/customerService";
 import * as Yup from "yup";
 import styles from "./index.module.scss";
 import { ICustomer, ICustomerNew } from "types/customer";
+import { Input } from "components/ui/form/input";
+import { RadioInput } from "components/ui/form/radio";
+import classnames from "classnames";
+import { Textarea } from "components/ui/form/textarea";
 
 export interface CustomerListProps {}
 
@@ -20,7 +24,7 @@ const CustomerList: React.FC<CustomerListProps> = () => {
   const [role, setRole] = useState("");
   const [modal, setModal] = useState(false);
   const [profile, setProfile] = useState(false);
-  const [deleteUser, setDeleteUser] = useState<ICustomer>();
+  const [deleteUser, setDeleteUser] = useState<ICustomer | null>(null);
 
   const { user } = useAppSelector((state) => state.auth);
   const { message } = useAppSelector((state) => state.message);
@@ -34,6 +38,7 @@ const CustomerList: React.FC<CustomerListProps> = () => {
     cusPhone: "",
     cusGender: "",
     cusAdress: "",
+    cusNote: "",
   });
 
   useEffect(() => {
@@ -58,19 +63,10 @@ const CustomerList: React.FC<CustomerListProps> = () => {
     }
   }, [user]);
 
-  const openModal = () => {
+  const openModal = async (infoUser: ICustomer | null) => {
     setModal(true);
     localStorage.setItem("MODAL", "TRUE");
-    dispatch(messageActions.clearMessage());
-  };
 
-  const closeModal = () => {
-    setModal(false);
-    localStorage.removeItem("MODAL");
-  };
-
-  const openItemModal = async (infoUser: ICustomer) => {
-    setProfile(true);
     if (infoUser) {
       setInitialValue({
         id: `${infoUser.id}`,
@@ -79,6 +75,7 @@ const CustomerList: React.FC<CustomerListProps> = () => {
         cusPhone: `${infoUser.phoneCus}`,
         cusGender: `${infoUser.genderCus}`,
         cusAdress: `${infoUser.adressCus}`,
+        cusNote: ``,
       });
       setDeleteUser(infoUser);
 
@@ -86,8 +83,9 @@ const CustomerList: React.FC<CustomerListProps> = () => {
     }
   };
 
-  const closeItemModal = () => {
-    setProfile(false);
+  const closeModal = () => {
+    setModal(false);
+    localStorage.removeItem("MODAL");
     setInitialValue({
       id: "",
       cusName: "",
@@ -95,32 +93,38 @@ const CustomerList: React.FC<CustomerListProps> = () => {
       cusPhone: "",
       cusGender: "",
       cusAdress: "",
+      cusNote: "",
     });
+    setDeleteUser(null);
   };
 
-  const deleteItem = async (userRemove: any) => {
+  const deleteItem = async (userRemove: ICustomer | null) => {
     try {
-      let confirmDelete = prompt(
-        `Nhập DELETE vào ô để xác nhận xóa ${userRemove.fullNameCus}!`,
-        ""
-      );
-      if (confirmDelete === "DELETE") {
-        let res = await customerService.deleteCustomer(userRemove.idCus);
-        const errMessage = res?.data.errMessage;
-        const message = res?.data.message;
-        if (errMessage) {
-          dispatch(messageActions.setMessage(errMessage));
-        }
-        if (message) {
-          dispatch(messageActions.clearMessage());
-          alert(userRemove.fullNameCus + message);
-          setProfile(false);
-        }
-      }
-      if (confirmDelete === "" || null) {
-        dispatch(
-          messageActions.setMessage(`Fail to remove ${userRemove.fullNameCus}!`)
+      if (userRemove) {
+        let confirmDelete = prompt(
+          `Nhập DELETE vào ô để xác nhận xóa ${userRemove?.fullNameCus}!`,
+          ""
         );
+        if (confirmDelete === "DELETE") {
+          let res = await customerService.deleteCustomer(userRemove?.idCus);
+          const errMessage = res?.data.errMessage;
+          const message = res?.data.message;
+          if (errMessage) {
+            dispatch(messageActions.setMessage(errMessage));
+          }
+          if (message) {
+            dispatch(messageActions.clearMessage());
+            alert(userRemove?.fullNameCus + message);
+            setProfile(false);
+          }
+        }
+        if (confirmDelete === "" || null) {
+          dispatch(
+            messageActions.setMessage(
+              `Fail to remove ${userRemove?.fullNameCus}!`
+            )
+          );
+        }
       }
     } catch (error) {
       console.log(error);
@@ -130,26 +134,24 @@ const CustomerList: React.FC<CustomerListProps> = () => {
   const validationSchema = Yup.object().shape({
     cusName: Yup.string()
       .min(4, "Tối thiểu 4 ký tự hoặc hơn")
-      .required("Required!"),
+      .required("Bắt buộc!"),
 
     cusEmail: Yup.string()
-      .required("Required!")
-      .matches(
-        /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
-        "Please enter a valid email address!"
-      ),
+      .required("Bắt buộc!")
+      .matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/, "Email chưa hợp lệ !"),
     cusPhone: Yup.string()
-      .required("Required!")
+      .required("Bắt buộc!")
       .matches(
         /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/,
-        "Please enter a valid phone number!"
+        "Số điện thoại chưa hợp lệ !"
       ),
-    cusGender: Yup.string().required("Required!"),
-    cusAdress: Yup.string().required("Required!"),
+    cusGender: Yup.string().required("Bắt buộc!"),
+    cusAdress: Yup.string().required("Bắt buộc!"),
   });
 
   const handleRegister = async (formValue: any, { resetForm }: any) => {
-    const { cusName, cusEmail, cusPhone, cusGender, cusAdress } = formValue;
+    const { cusName, cusEmail, cusPhone, cusGender, cusAdress, cusNote } =
+      formValue;
     try {
       let res = await customerService.createCustomer({
         cusName,
@@ -157,6 +159,7 @@ const CustomerList: React.FC<CustomerListProps> = () => {
         cusPhone,
         cusGender,
         cusAdress,
+        cusNote,
       });
       dispatch(messageActions.setMessage(res?.data.message));
       resetForm({});
@@ -167,7 +170,9 @@ const CustomerList: React.FC<CustomerListProps> = () => {
     }
   };
   const handleUpdate = async (formValue: ICustomerNew) => {
-    const { id, cusName, cusEmail, cusPhone, cusGender, cusAdress } = formValue;
+    const { id, cusName, cusEmail, cusPhone, cusGender, cusAdress, cusNote } =
+      formValue;
+
     try {
       let res = await customerService.updateCustomer({
         id,
@@ -176,6 +181,7 @@ const CustomerList: React.FC<CustomerListProps> = () => {
         cusPhone,
         cusGender,
         cusAdress,
+        cusNote,
       });
 
       const message = res?.data.message;
@@ -197,126 +203,97 @@ const CustomerList: React.FC<CustomerListProps> = () => {
       <div className={styles["root"]}>
         <h1>DANH SÁCH KHÁCH HÀNG</h1>
         <div className={styles["btn-container"]}>
-          <FunctionBtn />
+          <FunctionBtn onClickAdd={() => openModal(null)} />
         </div>
         {modal && (
           <Modal onClick={closeModal}>
-            <h1>Thêm Khách Hàng Thân Thiết Nào!</h1>
+            <h1>
+              {!initialValue.id
+                ? "THÊM KHÁCH HÀNG NÀO!"
+                : `THÔNG TIN CỦA ${initialValue.cusName} `}
+            </h1>
             <Formik
               initialValues={initialValue}
               validationSchema={validationSchema}
-              onSubmit={handleRegister}
+              onSubmit={handleUpdate}
             >
               {({ values, handleChange }: any) => (
                 <Form className={styles["form"]}>
                   <div className={styles["container"]}>
-                    <span className={styles["box"]}>
-                      <label htmlFor="cusName" className={styles["label"]}>
-                        Full Name
-                      </label>
-                      <Field
-                        id="cusName"
-                        className={styles["input"]}
-                        type="text"
-                        placeholder="Nguyễn Văn A"
-                        name="cusName"
-                        value={values.cusName}
-                        onChange={(e: any) => handleChange(e)}
-                      />
-                      <ErrorMessage
-                        className={styles["errMess"]}
-                        name="cusName"
-                        component="div"
-                      />
-                    </span>
-                    <span className={styles["box"]}>
-                      <label htmlFor="cusEmail" className={styles["label"]}>
-                        Email
-                      </label>
-
-                      <Field
-                        className={styles["input"]}
-                        type="email"
-                        placeholder="nguyenvana@gmail.com"
-                        name="cusEmail"
-                        id="cusEmail"
-                        value={values.cusEmail}
-                        onChange={(e: any) => handleChange(e)}
-                      />
-                      <ErrorMessage
-                        className={styles["errMess"]}
-                        name="cusEmail"
-                        component="div"
-                      />
-                    </span>
-                    <span className={styles["box"]}>
-                      <label htmlFor="cusPhone" className={styles["label"]}>
-                        Phone
-                      </label>
-
-                      <Field
-                        className={styles["input"]}
-                        type="phone"
-                        placeholder="0988379379"
-                        name="cusPhone"
-                        id="cusPhone"
-                        value={values.cusPhone}
-                        onChange={(e: any) => handleChange(e)}
-                      />
-                      <ErrorMessage
-                        className={styles["errMess"]}
-                        name="cusPhone"
-                        component="div"
-                      />
-                    </span>
-                    <span className={styles["box"]}>
-                      <label htmlFor="cusAdress" className={styles["label"]}>
-                        Địa Chỉ
-                      </label>
-                      <Field
-                        className={styles["input"]}
-                        type="text"
-                        placeholder="100C Hậu Giang Quận 6 TP.HCM"
-                        name="cusAdress"
-                        id="cusAdress"
-                        value={values.cusAdress}
-                        onChange={(e: any) => handleChange(e)}
-                      />
-                      <ErrorMessage
-                        className={styles["errMess"]}
-                        name="cusAdress"
-                        component="div"
-                      />
-                    </span>
-                    <span className={styles["box"]}>
+                    <Input
+                      type="text"
+                      name="id"
+                      value={values.id}
+                      onChange={(e) => handleChange(e)}
+                      hidden
+                    />
+                    <Input
+                      customClass={styles["col-3"]}
+                      id="cusNameUpdate"
+                      type="text"
+                      title="Full Name"
+                      name="cusName"
+                      placeholder="Nguyễn Văn A"
+                      value={values.cusName}
+                      onChange={(e) => handleChange(e)}
+                    />
+                    <Input
+                      customClass={styles["col-3"]}
+                      id="cusEmailUpdate"
+                      type="email"
+                      title="Email"
+                      name="cusEmail"
+                      placeholder="nguyenvana@gmail.com"
+                      value={values.cusEmail}
+                      onChange={(e) => handleChange(e)}
+                    />
+                    <Input
+                      customClass={styles["col-3"]}
+                      id="cusPhoneUpdate"
+                      type="text"
+                      title="Phone"
+                      name="cusPhone"
+                      placeholder="0988379379"
+                      value={values.cusPhone}
+                      onChange={(e) => handleChange(e)}
+                    />
+                    <Input
+                      customClass={styles["col-3"]}
+                      id="cusAdressUpdate"
+                      type="text"
+                      title="Địa Chỉ"
+                      name="cusAdress"
+                      placeholder="100C Hậu Giang Quận 6 TP.HCM"
+                      value={values.cusAdress}
+                      onChange={(e) => handleChange(e)}
+                    />
+                    <Textarea
+                      customClass={styles["col-3"]}
+                      id="cusNoteUpdate"
+                      type="text"
+                      title="Ghi chú"
+                      name="cusNote"
+                      value={values.cusNote}
+                      onChange={(e) => handleChange(e)}
+                    />
+                    <span
+                      className={classnames(styles["col-3"], styles["gender"])}
+                    >
                       <p>Giới Tính</p>
-                      <div className={styles["container-checkbox"]}>
-                        <label htmlFor="Male" className={styles["checkbox"]}>
-                          <Field
-                            type="radio"
-                            id="Male"
-                            name="cusGender"
-                            value="1"
-                          ></Field>
-                          <span>
-                            <p>Male</p>
-                          </span>
-                        </label>
-                        <label htmlFor="Female" className={styles["checkbox"]}>
-                          <Field
-                            type="radio"
-                            id="Female"
-                            name="cusGender"
-                            value="0"
-                          ></Field>
-                          <span>
-                            <p>Female</p>
-                          </span>
-                        </label>
-                        <ErrorMessage
-                          className={styles["errMess"]}
+                      <div className={styles["container"]}>
+                        <RadioInput
                           name="cusGender"
-                          component="div"
+                          id="MaleUpdate"
+                          value="1"
+                          title="Male"
+                          onChange={(e) => handleChange(e)}
+                        />
+                        <RadioInput
+                          name="cusGender"
+                          id="FemaleUpdate"
+                          value="0"
+                          title="Female"
+                          onChange={(e) => handleChange(e)}
                         />
                       </div>
                     </span>
@@ -324,14 +301,23 @@ const CustomerList: React.FC<CustomerListProps> = () => {
                   <p className={styles["message"]}>{message}</p>
 
                   <div className={styles["button-container"]}>
-                    <button type="submit">Thêm Khách Hàng</button>
+                    <ButtonMain type="submit">
+                      {!initialValue.id ? "Thêm Khách Hàng" : "Cập Nhật"}
+                    </ButtonMain>
+                    <ButtonSub
+                      type="button"
+                      onClick={() =>
+                        deleteItem(!initialValue.id ? null : deleteUser)
+                      }
+                    >
+                      Xóa Khách Hàng
+                    </ButtonSub>
                   </div>
                 </Form>
               )}
             </Formik>
           </Modal>
         )}
-
         {data && (
           <>
             <div className={styles["card-container"]}>
@@ -350,7 +336,7 @@ const CustomerList: React.FC<CustomerListProps> = () => {
                     return (
                       <CardUserImg
                         onClick={() =>
-                          openItemModal({
+                          openModal({
                             idCus,
                             imgCus,
                             fullNameCus,
@@ -362,6 +348,7 @@ const CustomerList: React.FC<CustomerListProps> = () => {
                           })
                         }
                         imgCard={imgCus}
+                        classCustom={styles["card"]}
                         titleCard={fullNameCus}
                         textCardTwo={genderCus === "1" ? "Male" : "Female"}
                         textCardThree={phoneCus}
@@ -372,171 +359,6 @@ const CustomerList: React.FC<CustomerListProps> = () => {
                 )
               )}
             </div>
-            {profile && (
-              <Modal onClick={closeItemModal}>
-                <h1>THÔNG TIN KHÁCH HÀNG</h1>
-                <Formik
-                  initialValues={initialValue}
-                  validationSchema={validationSchema}
-                  onSubmit={handleUpdate}
-                >
-                  {({ values, handleChange }: any) => (
-                    <Form className={styles["form"]}>
-                      <div className={styles["container"]}>
-                        <span className={styles["box"]}>
-                          <Field
-                            className={styles["input"]}
-                            type="text"
-                            name="id"
-                            value={values.id}
-                            onChange={(e: any) => handleChange(e)}
-                            hidden
-                          />
-                          <label
-                            htmlFor="cusNameUpdate"
-                            className={styles["label"]}
-                          >
-                            Full Name
-                          </label>
-
-                          <Field
-                            id="cusNameUpdate"
-                            className={styles["input"]}
-                            type="text"
-                            placeholder="Nguyễn Văn A"
-                            name="cusName"
-                            value={values.cusName}
-                            onChange={(e: any) => handleChange(e)}
-                          />
-                          <ErrorMessage
-                            className={styles["errMess"]}
-                            name="cusName"
-                            component="div"
-                          />
-                        </span>
-                        <span className={styles["box"]}>
-                          <label
-                            htmlFor="cusEmailUpdate"
-                            className={styles["label"]}
-                          >
-                            Email
-                          </label>
-
-                          <Field
-                            className={styles["input"]}
-                            type="email"
-                            placeholder="nguyenvana@gmail.com"
-                            name="cusEmail"
-                            id="cusEmailUpdate"
-                            value={values.cusEmail}
-                            onChange={(e: any) => handleChange(e)}
-                          />
-                          <ErrorMessage
-                            className={styles["errMess"]}
-                            name="cusEmail"
-                            component="div"
-                          />
-                        </span>
-                        <span className={styles["box"]}>
-                          <label
-                            htmlFor="cusPhoneUpdate"
-                            className={styles["label"]}
-                          >
-                            Phone
-                          </label>
-
-                          <Field
-                            className={styles["input"]}
-                            type="phone"
-                            placeholder="0988379379"
-                            name="cusPhone"
-                            id="cusPhoneUpdate"
-                            value={values.cusPhone}
-                            onChange={(e: any) => handleChange(e)}
-                          />
-                          <ErrorMessage
-                            className={styles["errMess"]}
-                            name="cusPhone"
-                            component="div"
-                          />
-                        </span>
-                        <span className={styles["box"]}>
-                          <label
-                            htmlFor="cusAdressUpdate"
-                            className={styles["label"]}
-                          >
-                            Địa Chỉ
-                          </label>
-                          <Field
-                            className={styles["input"]}
-                            type="text"
-                            placeholder="100C Hậu Giang Quận 6 TP.HCM"
-                            name="cusAdress"
-                            id="cusAdressUpdate"
-                            value={values.cusAdress}
-                            onChange={(e: any) => handleChange(e)}
-                          />
-                          <ErrorMessage
-                            className={styles["errMess"]}
-                            name="cusAdress"
-                            component="div"
-                          />
-                        </span>
-                        <span className={styles["box"]}>
-                          <p>Giới Tính</p>
-                          <div className={styles["container-checkbox"]}>
-                            <label
-                              htmlFor="MaleUpdate"
-                              className={styles["checkbox"]}
-                            >
-                              <Field
-                                type="radio"
-                                id="MaleUpdate"
-                                name="cusGender"
-                                value="1"
-                              ></Field>
-                              <span>
-                                <p>Male</p>
-                              </span>
-                            </label>
-                            <label
-                              htmlFor="FemaleUpdate"
-                              className={styles["checkbox"]}
-                            >
-                              <Field
-                                type="radio"
-                                id="FemaleUpdate"
-                                name="cusGender"
-                                value="0"
-                              ></Field>
-                              <span>
-                                <p>Female</p>
-                              </span>
-                            </label>
-                            <ErrorMessage
-                              className={styles["errMess"]}
-                              name="cusGender"
-                              component="div"
-                            />
-                          </div>
-                        </span>
-                      </div>
-                      <p className={styles["message"]}>{message}</p>
-
-                      <div className={styles["button-container"]}>
-                        <ButtonSub
-                          type="button"
-                          onClick={() => deleteItem(deleteUser)}
-                        >
-                          Xóa Khách Hàng
-                        </ButtonSub>
-                        <button type="submit">Cập Nhật</button>
-                      </div>
-                    </Form>
-                  )}
-                </Formik>
-              </Modal>
-            )}
           </>
         )}
       </div>

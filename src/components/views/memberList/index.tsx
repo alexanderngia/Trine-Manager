@@ -466,6 +466,7 @@ const MemberList: React.FC<MemberListProps> = () => {
                             typeRole,
                           })
                         }
+                        classCustom={styles["card"]}
                         titleCard={fullNameUser}
                         textCardTwo={typeRole}
                         textCardThree={phoneUser}

@@ -1,6 +1,7 @@
 @import "styles/variables";
 @import "styles/responsive";
 @import "styles/mixin";
+@import "styles/global";
 .root {
   width: 100%;
   @include flex();
@@ -44,6 +45,11 @@
     column-gap: 15px;
     row-gap: 15px;
     .card {
+      &:hover {
+        p {
+          color: $light-white;
+        }
+      }
       span {
         &:last-of-type {
           li {

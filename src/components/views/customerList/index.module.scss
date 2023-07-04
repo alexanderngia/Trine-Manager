@@ -1,13 +1,15 @@
 @import "styles/variables";
 @import "styles/responsive";
 @import "styles/mixin";
+@import "styles/global";
+
 .root {
   width: 100%;
   @include flex();
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
- 
+
   h1 {
     @include Heading();
     color: $white;
@@ -15,6 +17,7 @@
     font-size: 1.5rem;
     line-height: 50px;
     padding: 2% 0%;
+    text-transform: uppercase;
   }
 
   .btn-container {
@@ -29,8 +32,96 @@
     @include flex();
     justify-content: flex-start;
     column-gap: 15px;
+    .card {
+      &:hover {
+        p {
+          color: $light-white;
+        }
+      }
+    }
   }
-  .form {
-    @include formModal();
+}
+.form {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  @include flexCol();
+  align-items: flex-end;
+  row-gap: 20px;
+  .container {
+    @include flex();
+    justify-content: space-between;
+    width: 100%;
+    flex-wrap: wrap;
+    row-gap: 20px;
   }
+}
+.gender {
+  @include flexCol();
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 65px;
+  p {
+    font-size: 0.7rem;
+  }
+  .container {
+    width: 100%;
+    @include flex();
+    justify-content: flex-start;
+    column-gap: 4%;
+  }
+}
+.button-container {
+  @include flex();
+  justify-content: flex-end;
+  column-gap: 15px;
+  // button {
+  //   font-family: $font-p;
+  //   text-transform: uppercase;
+  //   outline: 0;
+  //   background: $black;
+  //   width: 45%;
+  //   border: 0;
+  //   padding: 15px;
+  //   color: $white;
+  //   font-size: 14px;
+  //   font-weight: 600;
+  //   cursor: pointer;
+  //   &:active,
+  //   &:focus {
+  //     background: $black-fade;
+  //   }
+  //   &:first-of-type {
+  //     width: 45%;
+  //     @include Transition3();
+
+  //     @include light {
+  //       background: transparent;
+  //       border: 1px solid rgba($black, 0.3);
+  //       color: rgba($black, 0.3);
+  //       &:hover {
+  //         transform: scale(1.1);
+  //         background: $warning;
+  //         border: 1px solid $warning;
+  //         color: $light-white;
+  //       }
+  //     }
+  //   }
+  //   &[type="submit"] {
+  //     width: 45%;
+  //     @include light {
+  //       background: $black;
+  //       border: 1px solid $black;
+  //       color: $light-white;
+  //       @include Transition3();
+
+  //       &:hover {
+  //         transform: scale(1.1);
+  //         background: $light-primary;
+  //         border: 1px solid $light-primary;
+  //         color: $light-white;
+  //       }
+  //     }
+  //   }
+  // }
 }

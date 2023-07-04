@@ -1,6 +1,7 @@
 @import "styles/variables";
 @import "styles/responsive";
 @import "styles/mixin";
+@import "styles/global";
 .root {
   width: 100%;
   @include flex();
@@ -22,10 +23,16 @@
   padding: 45px;
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-  @include formModal();
-  .box {
+
+  .container {
+    column-gap: 7%;
+    display: flex;
     width: 100%;
+    flex-wrap: wrap;
   }
+}
+.box {
+  width: 100%;
 }
 
 //

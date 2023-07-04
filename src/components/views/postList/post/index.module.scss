@@ -1,6 +1,7 @@
 @import "styles/variables";
 @import "styles/responsive";
 @import "styles/mixin";
+@import "styles/global";
 .root {
   width: 100%;
   @include flex();
@@ -25,7 +26,6 @@
 }
 .form {
   width: 100%;
-  @include formModal();
   .container {
     flex-wrap: nowrap;
     column-gap: 3%;

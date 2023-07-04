@@ -56,7 +56,7 @@ const PreviewImg: React.FC<PreviewImgProps> = () => {
         />
         <ButtonMain
           type="button"
-          className={styles["upload-btn"]}
+          classCustom={styles["upload-btn"]}
           onClick={uploadImage}
         >
           Upload Ảnh
