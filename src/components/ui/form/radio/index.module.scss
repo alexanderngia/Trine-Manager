@@ -28,17 +28,12 @@
   }
 
   @include dark {
-    background-color: transparent;
+    box-shadow: unset;
+    background-color: $button-bg;
+    color: $light-white;
 
     &:hover {
-      @include Transition2();
-      color: $light-white;
       background-color: $light-primary;
-      span {
-        p {
-          color: $light-primary;
-        }
-      }
     }
   }
 }
@@ -46,6 +41,9 @@ input[type="radio"] {
   &:checked ~ label {
     background-color: $light-primary;
     color: $light-white;
+    @include dark {
+      background-color: $light-primary;
+    }
   }
 }
 .input {

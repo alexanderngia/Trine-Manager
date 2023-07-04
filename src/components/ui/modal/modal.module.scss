@@ -4,7 +4,7 @@
 @import "styles/global";
 
 .root {
-  background-color: $theme-bg;
+  background-color: rgba($black, 0.9);
   font-family: $font-p;
   font-weight: 700;
   color: $body-color;
@@ -17,7 +17,6 @@
   z-index: 999999;
   @include flex();
   @include light {
-    // box-shadow: 0 0 10px rgba($light-second, 0.8);
     background-color: rgba($black, 0.8);
   }
   .close {

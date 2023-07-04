@@ -22,6 +22,9 @@
   left: 16px;
   z-index: 1;
   @include Transition3();
+  @include dark {
+    color: $light-white;
+  }
 }
 .input {
   width: 100%;
@@ -44,6 +47,18 @@
   &:focus,
   &:active {
     border: 1px solid $black;
+  }
+  @include dark {
+    box-shadow: unset;
+    background-color: $button-bg;
+    color: $light-white;
+    &::placeholder {
+      color: rgba($light-white, 0.2);
+    }
+    &:focus,
+    &:active {
+      border: 1px solid $light-white;
+    }
   }
 }
 .input ~ div {
