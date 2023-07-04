@@ -23,6 +23,7 @@
     .wrapper {
       max-width: 1500px;
       min-width: 1000px;
+      padding-bottom: 70px;
       width: 70%;
       @include flex();
     }

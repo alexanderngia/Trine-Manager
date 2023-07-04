@@ -223,47 +223,45 @@ const Post: React.FC<PostProps> = () => {
             <Form className={styles["form"]}>
               <div className={styles["container"]}>
                 <span className={styles["column"]}>
-                  <span className={styles["box"]}>
-                    <Input onChange={(e)=> handleChange(e)} value={values.id} type="text" name="id" hidden/>
-                    <Field
-                      className={styles["input"]}
-                      type="text"
-                      name="id"
-                      hidden
-                    />
-                    <Field
-                      hidden
-                      className={styles["input"]}
-                      type="text"
-                      name="authorNew"
-                      onChange={() =>
-                        setFieldValue("authorNew", `${post.author}`)
-                      }
-                    />
-                    <Field
-                      className={styles["input"]}
-                      type="text"
-                      placeholder="TIÊU ĐỀ"
-                      name="titleNew"
+                  <Input
+                    onChange={(e) => handleChange(e)}
+                    value={values.id}
+                    type="text"
+                    name="id"
+                    hidden
+                  />
+                  <Input
+                    onChange={() =>
+                      setFieldValue("authorNew", `${post.author}`)
+                    }
+                    value={values.id}
+                    type="text"
+                    name="authorNew"
+                    hidden
+                  />
+                  <Input
+                    customClass={styles["col-1"]}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      handleChange(e);
+                      customOnchange(e, setFieldValue);
+                    }}
+                    value={values.titleNew}
+                    type="text"
+                    name="titleNew"
+                    title="TIÊU ĐỀ"
+                    placeholder="TIÊU ĐỀ"
+                  />
+
+                  <span className={styles["permalink"]}>
+                    <label htmlFor="urlNew" className={styles["label"]}>
+                      Permalink
+                    </label>
+                    <Input
+                      customClass={styles["link"]}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         handleChange(e);
                         customOnchange(e, setFieldValue);
                       }}
-                    />
-                    <ErrorMessage
-                      className={styles["errMess"]}
-                      name="titleNew"
-                      component="div"
-                    />
-                  </span>
-                  <span className={styles["box"]}>
-                    <label htmlFor="urlNew" className={styles["label"]}>
-                      Permalink
-                    </label>
-                    <Field
-                      className={styles["input"]}
-                      type="text"
-                      name="urlNew"
                       value={values.titleNew
                         .replaceAll(" ", "-")
                         .replaceAll(",", "")
@@ -277,9 +275,12 @@ const Post: React.FC<PostProps> = () => {
                         .replace(/Đ/g, "D")
                         .toLowerCase()}
                       id="urlNew"
+                      type="text"
+                      name="urlNew"
+                      placeholder="TIÊU ĐỀ"
                     />
                   </span>
-                  <span className={styles["box"]}>
+                  <span className={styles["col-1"]}>
                     <MdEditor
                       style={{ height: "500px" }}
                       name="bodyNew"
@@ -291,102 +292,72 @@ const Post: React.FC<PostProps> = () => {
                       }}
                     />
                   </span>
-                  <span className={styles["box"]}>
-                    <label htmlFor="titleTagNew" className={styles["label"]}>
-                      Tiêu Đề SEO
-                    </label>
-
-                    <Field
-                      className={styles["input"]}
-                      type="text"
-                      placeholder="lingerie, đồ bơi,..."
-                      name="titleTagNew"
-                      id="titleTagNew"
-                    />
-                    <ErrorMessage
-                      className={styles["errMess"]}
-                      name="titleTagNew"
-                      component="div"
-                    />
-                  </span>
-                  <span className={styles["box"]}>
-                    <label htmlFor="descripTagNew" className={styles["label"]}>
-                      Description SEO
-                    </label>
-
-                    <Field
-                      className={styles["input"]}
-                      type="text"
-                      placeholder="lingerie, đồ bơi,..."
-                      name="descripTagNew"
-                      id="descripTagNew"
-                    />
-                    <ErrorMessage
-                      className={styles["errMess"]}
-                      name="descripTagNew"
-                      component="div"
-                    />
-                  </span>
+                  <Input
+                    customClass={styles["col-1"]}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      handleChange(e);
+                    }}
+                    value={values.titleTagNew}
+                    type="text"
+                    id="titleTagNew"
+                    name="titleTagNew"
+                    title="Tiêu Đề SEO"
+                    placeholder="lingerie, đồ bơi,..."
+                  />
+                  <Input
+                    customClass={styles["col-1"]}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      handleChange(e);
+                    }}
+                    value={values.descripTagNew}
+                    type="text"
+                    id="descripTagNew"
+                    name="descripTagNew"
+                    title="Description SEO"
+                    placeholder="lingerie, đồ bơi,..."
+                  />
                 </span>
 
                 <span className={styles["column"]}>
-                  <span className={styles["box"]}>
+                  <span className={styles["col-1"]}>
                     <PreviewImg />
                   </span>
-                  <span className={styles["box"]}>
-                    <label htmlFor="featureImgNew" className={styles["label"]}>
-                      Ảnh Bài Viết
-                    </label>
-
-                    <Field
-                      className={styles["input"]}
-                      type="text"
-                      placeholder="http://firebase.com/image"
-                      name="featureImgNew"
-                      id="featureImgNew"
-                    />
-                    <ErrorMessage
-                      className={styles["errMess"]}
-                      name="featureImgNew"
-                      component="div"
-                    />
-                  </span>
-                  <span className={styles["box"]}>
-                    <label htmlFor="keywordTagNew" className={styles["label"]}>
-                      Từ Khóa
-                    </label>
-
-                    <Field
-                      className={styles["input"]}
-                      type="text"
-                      placeholder="lingerie, đồ bơi,..."
-                      name="keywordTagNew"
-                      id="keywordTagNew"
-                    />
-                    <ErrorMessage
-                      className={styles["errMess"]}
-                      name="keywordTagNew"
-                      component="div"
-                    />
-                  </span>
-                  <span className={styles["box"]}>
-                    <label htmlFor="categoryNew" className={styles["label"]}>
-                      Thể Loại
-                    </label>
-
-                    <Field
-                      className={styles["input"]}
-                      type="text"
-                      placeholder="Lingerie"
-                      name="categoryNew"
-                      id="categoryNew"
-                    />
-                    <ErrorMessage
-                      className={styles["errMess"]}
-                      name="categoryNew"
-                      component="div"
-                    />
-                  </span>
+                  <Input
+                    customClass={styles["col-1"]}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      handleChange(e);
+                    }}
+                    value={values.featureImgNew}
+                    type="text"
+                    id="featureImgNew"
+                    name="featureImgNew"
+                    title="Ảnh Bài Viết"
+                    placeholder="http://firebase.com/image"
+                  />
+                  <Input
+                    customClass={styles["col-1"]}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      handleChange(e);
+                    }}
+                    value={values.keywordTagNew}
+                    type="text"
+                    id="keywordTagNew"
+                    name="keywordTagNew"
+                    title="Từ Khóa"
+                    placeholder="lingerie, đồ bơi,..."
+                  />
+                  <Input
+                    customClass={styles["col-1"]}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      handleChange(e);
+                    }}
+                    value={values.categoryNew}
+                    type="text"
+                    id="categoryNew"
+                    name="categoryNew"
+                    title="Thể Loại"
+                    placeholder="Lingerie"
+                  />
                   <div className={styles["button-container"]}>
                     <ButtonMain type="submit">
                       {post ? "Update" : "Save"}
