@@ -6,11 +6,14 @@ import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
 import { messageActions } from "redux/reducers/messageSlice";
 import productService from "services/productService";
-import PreviewImg from "../../../ui/image/previewImg";
+import PreviewImg from "components/ui/image/previewImg";
+import { Input } from "components/ui/form/input";
 import styles from "./index.module.scss";
 import "./index.scss";
 import { ButtonMain, ButtonSub } from "components/ui/button/button";
 import { history } from "utils/history";
+import { RadioInput } from "components/ui/form/radio";
+import classnames from "classnames";
 const { v4 } = require("uuid");
 const MarkdownIt = require("markdown-it");
 const mdParser = new MarkdownIt();
@@ -255,321 +258,226 @@ const Product: React.FC<ProductProps> = () => {
             <Form className={styles["form"]}>
               <div className={styles["container"]}>
                 <span className={styles["column"]}>
-                  <div className={styles["row"]}>
-                    <span className={styles["box"]}>
-                      <Field
-                        className={styles["input"]}
-                        type="text"
-                        name="id"
-                        hidden
-                      />
-                      <Field
-                        className={styles["input"]}
-                        type="text"
-                        name="idItemNew"
-                        hidden
-                      />
-                      <Field
-                        hidden
-                        className={styles["input"]}
-                        type="text"
-                        name="authorItemNew"
-                        onChange={() =>
-                          setFieldValue(
-                            "authorItemNew",
-                            `${product.authorItem}`
-                          )
-                        }
-                      />
-                      <Field
-                        className={styles["input"]}
-                        type="text"
-                        placeholder="TÊN SẢN PHẨM"
-                        name="nameItemNew"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          handleChange(e);
-                          customOnchange(e, setFieldValue);
-                        }}
-                      />
-                      <ErrorMessage
-                        className={styles["errMess"]}
-                        name="nameItemNew"
-                        component="div"
-                      />
-                    </span>
-                    <span className={styles["box"]}>
-                      <label htmlFor="urlItemNew" className={styles["label"]}>
-                        Permalink
-                      </label>
-                      <Field
-                        className={styles["input"]}
-                        type="text"
-                        name="urlItemNew"
-                        value={values.nameItemNew
-                          .replaceAll(" ", "-")
-                          .replaceAll(",", "")
-                          .replaceAll(".", "")
-                          .replaceAll("?", "")
-                          .replaceAll("!", "")
-                          .replaceAll(":", "")
-                          .normalize("NFD")
-                          .replace(/[\u0300-\u036f]/g, "")
-                          .replace(/đ/g, "d")
-                          .replace(/Đ/g, "D")
-                          .toLowerCase()}
-                        id="urlItemNew"
-                      />
-                    </span>
-                    <span className={styles["box"]}>
-                      <MdEditor
-                        style={{ height: "500px" }}
-                        name="bodyItemNew"
-                        value={`${values.bodyItemNew}`}
-                        renderHTML={(text) => mdParser.render(text)}
-                        onChange={(e) => {
-                          setFieldValue("bodyItemNew", `${e.text}`);
-                          setFieldValue("bodyHtmlItemNew", `${e.html}`);
-                        }}
-                      />
-                    </span>
-                  </div>
-                  <div className={styles["row"]}>
-                    <span className={styles["box"]}>
-                      <label
-                        htmlFor="qualityItemNew"
-                        className={styles["label"]}
-                      >
-                        Số Lượng
-                      </label>
+                  <Input
+                    customClass={styles["col-1"]}
+                    type="text"
+                    name="id"
+                    hidden
+                  />
+                  <Input
+                    customClass={styles["col-1"]}
+                    type="text"
+                    name="idItemNew"
+                    hidden
+                  />
+                  <Input
+                    onChange={() =>
+                      setFieldValue("authorItemNew", `${product.authorItem}`)
+                    }
+                    type="text"
+                    name="authorItemNew"
+                    hidden
+                  />
+                  <Input
+                    customClass={styles["col-1"]}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      handleChange(e);
+                      customOnchange(e, setFieldValue);
+                    }}
+                    value={values.nameItemNew}
+                    placeholder="Tên Sản Phẩm"
+                    title="Tên Sản Phẩm"
+                    type="text"
+                    name="nameItemNew"
+                  />
 
-                      <Field
-                        className={styles["input"]}
-                        type="number"
-                        placeholder="10"
-                        name="qualityItemNew"
-                        id="qualityItemNew"
-                      />
-                      <ErrorMessage
-                        className={styles["errMess"]}
-                        name="qualityItemNew"
-                        component="div"
-                      />
-                    </span>
-                    <span className={styles["box"]}>
-                      <label htmlFor="colorItemNew" className={styles["label"]}>
-                        Màu Sắc
-                      </label>
+                  <span className={styles["permalink"]}>
+                    <label htmlFor="urlItemNew" className={styles["label"]}>
+                      Permalink
+                    </label>
+                    <Input
+                      customClass={styles["link"]}
+                      type="text"
+                      name="urlItemNew"
+                      value={values.nameItemNew
+                        .replaceAll(" ", "-")
+                        .replaceAll(",", "")
+                        .replaceAll(".", "")
+                        .replaceAll("?", "")
+                        .replaceAll("!", "")
+                        .replaceAll(":", "")
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "")
+                        .replace(/đ/g, "d")
+                        .replace(/Đ/g, "D")
+                        .toLowerCase()}
+                      id="urlItemNew"
+                    />
+                  </span>
+                  <MdEditor
+                    style={{ height: "500px" }}
+                    name="bodyItemNew"
+                    value={`${values.bodyItemNew}`}
+                    renderHTML={(text) => mdParser.render(text)}
+                    onChange={(e) => {
+                      setFieldValue("bodyItemNew", `${e.text}`);
+                      setFieldValue("bodyHtmlItemNew", `${e.html}`);
+                    }}
+                  />
 
-                      <Field
-                        className={styles["input"]}
-                        type="color"
-                        name="colorItemNew"
-                        id="colorItemNew"
-                      />
-                      <ErrorMessage
-                        className={styles["errMess"]}
-                        name="colorItemNew"
-                        component="div"
-                      />
-                    </span>
-                    <span className={styles["box"]}>
-                      <label htmlFor="sizeItemNew" className={styles["label"]}>
-                        Size
-                      </label>
-                      <div className={styles["container-checkbox"]}>
-                        <label htmlFor="S" className={styles["checkbox"]}>
-                          <Field
-                            type="radio"
-                            id="S"
-                            name="sizeItemNew"
-                            value="S"
-                          ></Field>
-                          <span>
-                            <p>S</p>
-                          </span>
-                        </label>
-                        <label htmlFor="M" className={styles["checkbox"]}>
-                          <Field
-                            type="radio"
-                            id="M"
-                            name="sizeItemNew"
-                            value="M"
-                          ></Field>
-                          <span>
-                            <p>M</p>
-                          </span>
-                        </label>
-                        <label htmlFor="L" className={styles["checkbox"]}>
-                          <Field
-                            type="radio"
-                            id="L"
-                            name="sizeItemNew"
-                            value="L"
-                          ></Field>
-                          <span>
-                            <p>L</p>
-                          </span>
-                        </label>
-                        <label htmlFor="XL" className={styles["checkbox"]}>
-                          <Field
-                            type="radio"
-                            id="XL"
-                            name="sizeItemNew"
-                            value="XL"
-                          ></Field>
-                          <span>
-                            <p>XL</p>
-                          </span>
-                        </label>
-                        <label
-                          htmlFor="FreeSize"
-                          className={styles["checkbox"]}
-                        >
-                          <Field
-                            type="radio"
-                            id="FreeSize"
-                            name="sizeItemNew"
-                            value="Free Size"
-                          ></Field>
-                          <span>
-                            <p>Free Size</p>
-                          </span>
-                        </label>
+                  <Input
+                    customClass={styles["col-3"]}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      handleChange(e);
+                    }}
+                    value={values.qualityItemNew}
+                    title="Số Lượng"
+                    type="number"
+                    placeholder="10"
+                    name="qualityItemNew"
+                    id="qualityItemNew"
+                  />
 
-                        <ErrorMessage
-                          className={styles["errMess"]}
-                          name="sizeItemNew"
-                          component="div"
-                        />
-                      </div>
-                    </span>
-                    <span className={styles["box"]}>
-                      <label htmlFor="priceItemNew" className={styles["label"]}>
-                        Giá Bán
-                      </label>
-                      <Field
-                        className={styles["input"]}
-                        type="text"
-                        placeholder="200.000"
-                        name="priceItemNew"
-                        id="priceItemNew"
-                      />
-                      <ErrorMessage
-                        className={styles["errMess"]}
-                        name="priceItemNew"
-                        component="div"
-                      />
-                    </span>
-                    <span className={styles["box"]}>
-                      <label
-                        htmlFor="titleTagItemNew"
-                        className={styles["label"]}
-                      >
-                        Tiêu Đề SEO
-                      </label>
+                  <span className={styles["col-3"]}>
+                    <label htmlFor="colorItemNew" className={styles["label"]}>
+                      Màu Sắc
+                    </label>
 
-                      <Field
-                        className={styles["input"]}
-                        type="text"
-                        placeholder="lingerie, đồ bơi,..."
-                        name="titleTagItemNew"
-                        id="titleTagItemNew"
+                    <Field
+                      className={styles["input"]}
+                      type="color"
+                      name="colorItemNew"
+                      id="colorItemNew"
+                    />
+                    <ErrorMessage
+                      className={styles["errMess"]}
+                      name="colorItemNew"
+                      component="div"
+                    />
+                  </span>
+                  <span className={classnames(styles["col-3"], styles["size"])}>
+                    <label htmlFor="sizeItemNew" className={styles["label"]}>
+                      Size
+                    </label>
+                    <div className={styles["container"]}>
+                      <RadioInput
+                        title="S"
+                        id="S"
+                        name="sizeItemNew"
+                        value="S"
+                        onChange={(e) => handleChange(e)}
                       />
-                      <ErrorMessage
-                        className={styles["errMess"]}
-                        name="titleTagItemNew"
-                        component="div"
+                      <RadioInput
+                        title="M"
+                        id="M"
+                        name="sizeItemNew"
+                        value="M"
+                        onChange={(e) => handleChange(e)}
                       />
-                    </span>
-                    <span className={styles["box"]}>
-                      <label
-                        htmlFor="descripTagItemNew"
-                        className={styles["label"]}
-                      >
-                        Description SEO
-                      </label>
+                      <RadioInput
+                        title="L"
+                        id="L"
+                        name="sizeItemNew"
+                        value="L"
+                        onChange={(e) => handleChange(e)}
+                      />
+                      <RadioInput
+                        title="XL"
+                        id="XL"
+                        name="sizeItemNew"
+                        value="XL"
+                        onChange={(e) => handleChange(e)}
+                      />
+                      <RadioInput
+                        title="Free Size"
+                        id="Free Size"
+                        name="sizeItemNew"
+                        value="Free Size"
+                        onChange={(e) => handleChange(e)}
+                      />
+                    </div>
+                  </span>
 
-                      <Field
-                        className={styles["input"]}
-                        type="text"
-                        placeholder="lingerie, đồ bơi,..."
-                        name="descripTagItemNew"
-                        id="descripTagItemNew"
-                      />
-                      <ErrorMessage
-                        className={styles["errMess"]}
-                        name="descripTagItemNew"
-                        component="div"
-                      />
-                    </span>
-                  </div>
+                  <Input
+                    customClass={styles["col-1"]}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      handleChange(e);
+                    }}
+                    value={values.priceItemNew}
+                    title="Giá Bán"
+                    type="text"
+                    placeholder="200.000"
+                    name="priceItemNew"
+                    id="priceItemNew"
+                  />
+                  <Input
+                    customClass={styles["col-1"]}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      handleChange(e);
+                    }}
+                    value={values.priceItemNew}
+                    title="Tiêu Đề SEO"
+                    type="text"
+                    placeholder="lingerie, đồ bơi,..."
+                    name="titleTagItemNew"
+                    id="titleTagItemNew"
+                  />
+                  <Input
+                    customClass={styles["col-1"]}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      handleChange(e);
+                    }}
+                    value={values.priceItemNew}
+                    title="Description SEO"
+                    type="text"
+                    placeholder="lingerie, đồ bơi,..."
+                    name="descripTagItemNew"
+                    id="descripTagItemNew"
+                  />
                 </span>
 
                 <span className={styles["column"]}>
-                  <span className={styles["box"]}>
-                    <PreviewImg />
-                  </span>
-                  <span className={styles["box"]}>
-                    <label htmlFor="imgItemNew" className={styles["label"]}>
-                      Ảnh Sản Phẩm
-                    </label>
+                  <PreviewImg />
 
-                    <Field
-                      className={styles["input"]}
-                      type="text"
-                      placeholder="http://firebase.com/image"
-                      name="imgItemNew"
-                      id="imgItemNew"
-                    />
-                    <ErrorMessage
-                      className={styles["errMess"]}
-                      name="imgItemNew"
-                      component="div"
-                    />
-                  </span>
-                  <span className={styles["box"]}>
-                    <label
-                      htmlFor="keywordTagItemNew"
-                      className={styles["label"]}
-                    >
-                      Từ Khóa
-                    </label>
+                  <Input
+                    customClass={styles["col-1"]}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      handleChange(e);
+                    }}
+                    value={values.imgItemNew}
+                    title="Ảnh Sản Phẩm"
+                    type="text"
+                    placeholder="http://firebase.com/image"
+                    name="imgItemNew"
+                    id="imgItemNew"
+                  />
 
-                    <Field
-                      className={styles["input"]}
-                      type="text"
-                      placeholder="lingerie, đồ bơi,..."
-                      name="keywordTagItemNew"
-                      id="keywordTagItemNew"
-                    />
-                    <ErrorMessage
-                      className={styles["errMess"]}
-                      name="keywordTagItemNew"
-                      component="div"
-                    />
-                  </span>
-                  <span className={styles["box"]}>
-                    <label
-                      htmlFor="categoryItemNew"
-                      className={styles["label"]}
-                    >
-                      Thể Loại
-                    </label>
+                  <Input
+                    customClass={styles["col-1"]}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      handleChange(e);
+                    }}
+                    value={values.keywordTagItemNew}
+                    title="Từ Khóa"
+                    type="text"
+                    placeholder="lingerie, đồ bơi,..."
+                    name="keywordTagItemNew"
+                    id="keywordTagItemNew"
+                  />
+                  <Input
+                    customClass={styles["col-1"]}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      handleChange(e);
+                    }}
+                    value={values.categoryItemNew}
+                    title="Thể Loại"
+                    type="text"
+                    placeholder="Lingerie"
+                    name="categoryItemNew"
+                    id="categoryItemNew"
+                  />
 
-                    <Field
-                      className={styles["input"]}
-                      type="text"
-                      placeholder="Lingerie"
-                      name="categoryItemNew"
-                      id="categoryItemNew"
-                    />
-                    <ErrorMessage
-                      className={styles["errMess"]}
-                      name="categoryItemNew"
-                      component="div"
-                    />
-                  </span>
-                  <div className={styles["button-container"]}>
+                  <div className={styles["container"]}>
                     <ButtonMain type="submit">
                       {product ? "UPDATE" : "ADD"}
                     </ButtonMain>

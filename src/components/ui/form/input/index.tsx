@@ -8,7 +8,7 @@ export interface InputProps {
   value?: string | undefined;
   name: string;
   id?: string;
-  onChange: ChangeEventHandler;
+  onChange?: ChangeEventHandler;
   title?: string;
   type: string;
   placeholder?: string;
