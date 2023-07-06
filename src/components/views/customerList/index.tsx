@@ -23,8 +23,6 @@ const CustomerList: React.FC<CustomerListProps> = () => {
   const [data, setData] = useState([]);
   const [role, setRole] = useState("");
   const [modal, setModal] = useState(false);
-  const [profile, setProfile] = useState(false);
-  const [deleteUser, setDeleteUser] = useState<ICustomer | null>(null);
 
   const { user } = useAppSelector((state) => state.auth);
   const { message } = useAppSelector((state) => state.message);
@@ -77,7 +75,6 @@ const CustomerList: React.FC<CustomerListProps> = () => {
         cusAdress: `${infoUser.adressCus}`,
         cusNote: ``,
       });
-      setDeleteUser(infoUser);
 
       dispatch(messageActions.clearMessage());
     }
@@ -95,18 +92,17 @@ const CustomerList: React.FC<CustomerListProps> = () => {
       cusAdress: "",
       cusNote: "",
     });
-    setDeleteUser(null);
   };
 
-  const deleteItem = async (userRemove: ICustomer | null) => {
+  const deleteItem = async (userRemove: ICustomerNew | null) => {
     try {
       if (userRemove) {
         let confirmDelete = prompt(
-          `Nhập DELETE vào ô để xác nhận xóa ${userRemove?.fullNameCus}!`,
+          `Nhập DELETE vào ô để xác nhận xóa ${userRemove?.cusName}!`,
           ""
         );
         if (confirmDelete === "DELETE") {
-          let res = await customerService.deleteCustomer(userRemove?.idCus);
+          let res = await customerService.deleteCustomer(userRemove?.id);
           const errMessage = res?.data.errMessage;
           const message = res?.data.message;
           if (errMessage) {
@@ -114,14 +110,14 @@ const CustomerList: React.FC<CustomerListProps> = () => {
           }
           if (message) {
             dispatch(messageActions.clearMessage());
-            alert(userRemove?.fullNameCus + message);
-            setProfile(false);
+            alert(userRemove?.cusName + message);
+            setModal(false);
           }
         }
         if (confirmDelete === "" || null) {
           dispatch(
             messageActions.setMessage(
-              `Fail to remove ${userRemove?.fullNameCus}!`
+              `Fail to remove ${userRemove?.cusName}!`
             )
           );
         }
@@ -191,7 +187,6 @@ const CustomerList: React.FC<CustomerListProps> = () => {
       }
       if (message) {
         alert(`${cusName} ${message}`);
-        setProfile(false);
       }
     } catch (error) {
       console.log(error);
@@ -306,7 +301,7 @@ const CustomerList: React.FC<CustomerListProps> = () => {
                     <ButtonSub
                       type="button"
                       onClick={() =>
-                        deleteItem(!initialValue.id ? null : deleteUser)
+                        deleteItem(initialValue.id ? values : null)
                       }
                     >
                       Xóa Khách Hàng
@@ -318,45 +313,45 @@ const CustomerList: React.FC<CustomerListProps> = () => {
           </Modal>
         )}
         {data && (
-            <div className={styles["card-container"]}>
-              {React.Children.toArray(
-                data.map(
-                  ({
-                    idCus,
-                    imgCus,
-                    fullNameCus,
-                    emailCus,
-                    phoneCus,
-                    genderCus,
-                    adressCus,
-                    stateCus,
-                  }: ICustomer) => {
-                    return (
-                      <CardUserImg
-                        onClick={() =>
-                          openModal({
-                            idCus,
-                            imgCus,
-                            fullNameCus,
-                            emailCus,
-                            phoneCus,
-                            genderCus,
-                            adressCus,
-                            stateCus,
-                          })
-                        }
-                        imgCard={imgCus}
-                        classCustom={styles["card"]}
-                        titleCard={fullNameCus}
-                        textCardTwo={genderCus === "1" ? "Male" : "Female"}
-                        textCardThree={phoneCus}
-                        textCardFour={emailCus}
-                      />
-                    );
-                  }
-                )
-              )}
-            </div>
+          <div className={styles["card-container"]}>
+            {React.Children.toArray(
+              data.map(
+                ({
+                  idCus,
+                  imgCus,
+                  fullNameCus,
+                  emailCus,
+                  phoneCus,
+                  genderCus,
+                  adressCus,
+                  stateCus,
+                }: ICustomer) => {
+                  return (
+                    <CardUserImg
+                      onClick={() =>
+                        openModal({
+                          idCus,
+                          imgCus,
+                          fullNameCus,
+                          emailCus,
+                          phoneCus,
+                          genderCus,
+                          adressCus,
+                          stateCus,
+                        })
+                      }
+                      imgCard={imgCus}
+                      classCustom={styles["card"]}
+                      titleCard={fullNameCus}
+                      textCardTwo={genderCus === "1" ? "Male" : "Female"}
+                      textCardThree={phoneCus}
+                      textCardFour={emailCus}
+                    />
+                  );
+                }
+              )
+            )}
+          </div>
         )}
       </div>
     </Layout>

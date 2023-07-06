@@ -26,10 +26,7 @@ const MemberList: React.FC<MemberListProps> = () => {
 
   const [role, setRole] = useState("");
   const [modal, setModal] = useState(false);
-
-  const [profile, setProfile] = useState(false);
-
-  const [initialValue, setInitialValue] = useState({
+  const [initialValue, setInitialValue] = useState<IUserNew>({
     id: "",
     userName: "",
     userEmail: "",
@@ -66,11 +63,6 @@ const MemberList: React.FC<MemberListProps> = () => {
     }
   }, [user]);
 
-  const closeModal = () => {
-    setModal(false);
-    localStorage.removeItem("MODAL");
-  };
-
   const openModal = async (infoMem: IUser | null) => {
     setModal(true);
     localStorage.setItem("MODAL", "TRUE");
@@ -91,8 +83,10 @@ const MemberList: React.FC<MemberListProps> = () => {
     dispatch(messageActions.clearMessage());
   };
 
-  const closeItemModal = () => {
+  const closeModal = () => {
     setModal(false);
+    localStorage.removeItem("MODAL");
+
     setInitialValue({
       id: "",
       userName: "",
@@ -105,55 +99,38 @@ const MemberList: React.FC<MemberListProps> = () => {
     });
   };
 
-  const deleteItem = async ({ id, fullNameUser }: IUser) => {
+  const deleteItem = async (deletedMem: IUserNew | null) => {
     try {
-      let confirmDelete = prompt(
-        `Nhập DELETE vào ô để xác nhận xóa ${fullNameUser}!`,
-        ""
-      );
-      if (confirmDelete === "DELETE") {
-        let res = await userService.deleteUser(id);
-        const errMessage = res?.data.errMessage;
-        const message = res?.data.message;
-        if (errMessage) {
-          dispatch(messageActions.setMessage(errMessage));
+      if (deletedMem) {
+        let confirmDelete = prompt(
+          `Nhập DELETE vào ô để xác nhận xóa ${deletedMem.userName}!`,
+          ""
+        );
+        if (confirmDelete === "DELETE") {
+          let res = await userService.deleteUser(deletedMem.id);
+          const errMessage = res?.data.errMessage;
+          const message = res?.data.message;
+          if (errMessage) {
+            dispatch(messageActions.setMessage(errMessage));
+          }
+          if (message) {
+            dispatch(messageActions.clearMessage());
+            alert(deletedMem.userName + message);
+            setModal(false);
+          }
         }
-        if (message) {
-          dispatch(messageActions.clearMessage());
-          alert(fullNameUser + message);
-          setProfile(false);
+        if (confirmDelete === "" || null) {
+          dispatch(
+            messageActions.setMessage(
+              `Fail to remove ${deletedMem.userName}!`
+            )
+          );
         }
-      }
-      if (confirmDelete === "" || null) {
-        dispatch(messageActions.setMessage(`Fail to remove ${fullNameUser}!`));
       }
     } catch (error) {
       console.log(error);
     }
   };
-
-  const validationSchema = Yup.object().shape({
-    userName: Yup.string()
-      .min(4, "Tối thiểu 4 ký tự hoặc hơn")
-      .required("Required!"),
-
-    userEmail: Yup.string()
-      .required("Required!")
-      .matches(
-        /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
-        "Please enter a valid email address!"
-      ),
-    userPass: Yup.string().required("Required!"),
-    userPhone: Yup.string()
-      .required("Required!")
-      .matches(
-        /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/,
-        "Please enter a valid phone number!"
-      ),
-    userGender: Yup.string().required("Required!"),
-    userAdress: Yup.string().required("Required!"),
-    userRole: Yup.string().required("Required!"),
-  });
 
   const handleRegister = (formValue: IUserNew, { resetForm }: any) => {
     const {
@@ -210,14 +187,14 @@ const MemberList: React.FC<MemberListProps> = () => {
       }
       if (message) {
         alert(`${userName} ${message}`);
-        setProfile(false);
+        setModal(false);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const validationSchemaItem = Yup.object().shape({
+  const validationSchema = Yup.object().shape({
     userName: Yup.string()
       .min(4, "Tối thiểu 4 ký tự hoặc hơn")
       .required("Required!"),
@@ -245,183 +222,7 @@ const MemberList: React.FC<MemberListProps> = () => {
         <div className={styles["btn-container"]}>
           <FunctionBtn onClickAdd={() => openModal(null)} />
         </div>
-        {/* {modal && (
-          <Modal onClick={closeModal}>
-            <h1>Let's signup!</h1>
-            <Formik
-              initialValues={initialValue}
-              validationSchema={validationSchema}
-              onSubmit={handleRegister}
-            >
-              {({ values, handleChange }: any) => (
-                <Form className={styles["form"]}>
-                  <div className={styles["container"]}>
-                    <span className={styles["box"]}>
-                      <Input
-                        customClass={styles["col-3"]}
-                        id="userName"
-                        type="text"
-                        title="Địa Chỉ"
-                        name="userName"
-                        placeholder="Nguyễn Văn A"
-                        value={values.userName}
-                        onChange={(e) => handleChange(e)}
-                      />
-                    </span>
-                    <span className={styles["box"]}>
-                      <label htmlFor="userEmail" className={styles["label"]}>
-                        Email
-                      </label>
 
-                      <Field
-                        className={styles["input"]}
-                        type="email"
-                        placeholder="nguyenvana@gmail.com"
-                        name="userEmail"
-                        id="userEmail"
-                        value={values.userEmail}
-                        onChange={(e: any) => handleChange(e)}
-                      />
-                      <ErrorMessage
-                        className={styles["errMess"]}
-                        name="userEmail"
-                        component="div"
-                      />
-                    </span>
-                    <span className={styles["box"]}>
-                      <label htmlFor="userPass" className={styles["label"]}>
-                        Mật Khẩu
-                      </label>
-
-                      <Field
-                        className={styles["input"]}
-                        type="password"
-                        placeholder="abc1223@"
-                        name="userPass"
-                        id="userPass"
-                        value={values.userPass}
-                        onChange={(e: any) => handleChange(e)}
-                      />
-                      <ErrorMessage
-                        className={styles["errMess"]}
-                        name="userPass"
-                        component="div"
-                      />
-                    </span>
-                    <span className={styles["box"]}>
-                      <label htmlFor="userPhone" className={styles["label"]}>
-                        Phone
-                      </label>
-
-                      <Field
-                        className={styles["input"]}
-                        type="phone"
-                        placeholder="0988379379"
-                        name="userPhone"
-                        id="userPhone"
-                        value={values.userPhone}
-                        onChange={(e: any) => handleChange(e)}
-                      />
-                      <ErrorMessage
-                        className={styles["errMess"]}
-                        name="userPhone"
-                        component="div"
-                      />
-                    </span>
-                    <span className={styles["box"]}>
-                      <label htmlFor="userAdress" className={styles["label"]}>
-                        Địa Chỉ
-                      </label>
-                      <Field
-                        className={styles["input"]}
-                        type="text"
-                        placeholder="100C Hậu Giang Quận 6 TP.HCM"
-                        name="userAdress"
-                        id="userAdress"
-                        value={values.userAdress}
-                        onChange={(e: any) => handleChange(e)}
-                      />
-                      <ErrorMessage
-                        className={styles["errMess"]}
-                        name="userAdress"
-                        component="div"
-                      />
-                    </span>
-                    <span className={styles["box"]}>
-                      <p>Giới Tính</p>
-                      <div className={styles["container-checkbox"]}>
-                        <label htmlFor="Male" className={styles["checkbox"]}>
-                          <Field
-                            type="radio"
-                            id="Male"
-                            name="userGender"
-                            value="1"
-                          ></Field>
-                          <span>
-                            <p>Male</p>
-                          </span>
-                        </label>
-                        <label htmlFor="Female" className={styles["checkbox"]}>
-                          <Field
-                            type="radio"
-                            id="Female"
-                            name="userGender"
-                            value="0"
-                          ></Field>
-                          <span>
-                            <p>Female</p>
-                          </span>
-                        </label>
-                        <ErrorMessage
-                          className={styles["errMess"]}
-                          name="userGender"
-                          component="div"
-                        />
-                      </div>
-                    </span>
-                    <span className={styles["box"]}>
-                      <p>Vai Trò</p>
-                      <div className={styles["container-checkbox"]}>
-                        <label htmlFor="Admin" className={styles["checkbox"]}>
-                          <Field
-                            type="radio"
-                            id="Admin"
-                            name="userRole"
-                            value="ADMIN"
-                          ></Field>
-                          <span>
-                            <p>Admin</p>
-                          </span>
-                        </label>
-                        <label htmlFor="Sale" className={styles["checkbox"]}>
-                          <Field
-                            type="radio"
-                            id="Sale"
-                            name="userRole"
-                            value="SALE"
-                          ></Field>
-                          <span>
-                            <p>Sale</p>
-                          </span>
-                        </label>
-                        <ErrorMessage
-                          className={styles["errMess"]}
-                          name="userRole"
-                          component="div"
-                        />
-                      </div>
-                    </span>
-                  </div>
-                  <p className={styles["message"]}>{message}</p>
-
-                  <div className={styles["button-container"]}>
-                    <button type="submit">Tạo Thành Viên</button>
-                  </div>
-                </Form>
-              )}
-            </Formik>
-          </Modal>
-        )} */}
         {data && (
           <ul className={styles["card-container"]}>
             {React.Children.toArray(
@@ -461,7 +262,7 @@ const MemberList: React.FC<MemberListProps> = () => {
           </ul>
         )}
         {modal && (
-          <Modal onClick={closeItemModal}>
+          <Modal onClick={closeModal}>
             <h1>
               {initialValue.id
                 ? `THÔNG TIN CỦA ${initialValue.userName}`
@@ -469,7 +270,7 @@ const MemberList: React.FC<MemberListProps> = () => {
             </h1>
             <Formik
               initialValues={initialValue}
-              validationSchema={validationSchemaItem}
+              validationSchema={validationSchema}
               onSubmit={handleUpdate}
             >
               {({ values, handleChange }: any) => (
@@ -587,7 +388,9 @@ const MemberList: React.FC<MemberListProps> = () => {
 
                     <ButtonSub
                       type="button"
-                      // onClick={() => deleteItem({ id, fullNameUser })}
+                      onClick={() =>
+                        deleteItem(initialValue.id ? values : null)
+                      }
                     >
                       Xóa Thành Viên
                     </ButtonSub>

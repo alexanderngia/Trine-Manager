@@ -25,6 +25,7 @@
   }
 
   @include dark {
+    background-color: $button-bg;
     &:hover {
       transform: scale(1.03);
       color: $light-white;

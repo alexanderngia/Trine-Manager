@@ -86,24 +86,25 @@ const ProductList: React.FC<ProductListProps> = () => {
           <FunctionBtn onClickAdd={addProduct} />
         </div>
         {data.length > 0 && (
-          <>
             <ul className={styles["card-container"]}>
               {React.Children.toArray(
                 search(data).map((listItems: any) => {
                   return (
                     <CardProductItem
+                      classCustomCard={styles["card"]}
                       onClick={() => openProduct(listItems)}
                       titleCard={listItems.nameItem}
                       imgCard={listItems.imgItem}
                       colorCard={listItems.colorItem}
                       sizeCard={listItems.sizeItem}
                       priceCard={listItems.priceItem}
+                      qtyCard={listItems.qualityItem}
+
                     />
                   );
                 })
               )}
             </ul>
-          </>
         )}
       </div>
     </Layout>
