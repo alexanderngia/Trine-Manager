@@ -1,6 +1,6 @@
 import FunctionBtn from "components/container/functionBtn";
 import { ButtonMain } from "components/ui/button/button";
-import { CardItem, CardProductItem } from "components/ui/card";
+import { CardProductItem } from "components/ui/card";
 import { Search } from "components/ui/search";
 import { Layout } from "components/views/layout";
 import { useAppDispatch, useAppSelector } from "hooks/useRedux";
@@ -41,7 +41,7 @@ const ProductList: React.FC<ProductListProps> = () => {
     }
   }, [user]);
 
-  const search = (data: any) => {
+  const search = (data: IProduct[]) => {
     return data.filter((product: any) => {
       return searchParam.some((newItem) => {
         return (
@@ -55,11 +55,11 @@ const ProductList: React.FC<ProductListProps> = () => {
     setQ(cat);
   };
 
-  const openProduct = (product: any) => {
+  const openProduct = (product: IProduct) => {
     dispatch(productActions.setProduct(product));
     history.push("/product");
   };
-  const handleAddProduct = () => {
+  const addProduct = () => {
     dispatch(productActions.clearProduct());
     history.push("/product");
   };
@@ -83,7 +83,7 @@ const ProductList: React.FC<ProductListProps> = () => {
             </ButtonMain>
             <ButtonMain onClick={() => filter("dress")}>DRESS</ButtonMain>
           </div>
-          <FunctionBtn />
+          <FunctionBtn onClickAdd={addProduct} />
         </div>
         {data.length > 0 && (
           <>
@@ -93,7 +93,6 @@ const ProductList: React.FC<ProductListProps> = () => {
                   return (
                     <CardProductItem
                       onClick={() => openProduct(listItems)}
-                      // classCustom={styles["product-list"]}
                       titleCard={listItems.nameItem}
                       imgCard={listItems.imgItem}
                       colorCard={listItems.colorItem}

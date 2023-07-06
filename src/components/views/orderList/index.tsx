@@ -55,7 +55,7 @@ const OrderList: React.FC<OrderListProps> = (props) => {
   const filter = (cat: string) => {
     setQ(cat);
   };
-  const handleAddOrder = () => {
+  const addOrder = () => {
     dispatch(orderActions.clearOrder());
     history.push("/order");
   };
@@ -76,8 +76,7 @@ const OrderList: React.FC<OrderListProps> = (props) => {
             <ButtonMain onClick={() => filter("shipping")}>SHIPPING</ButtonMain>
             <ButtonMain onClick={() => filter("done")}>DONE</ButtonMain>
           </div>
-          <FunctionBtn />
-
+          <FunctionBtn onClickAdd={addOrder} />
         </div>
         {data.length > 0 && (
           <ul className={styles["card-container"]}>

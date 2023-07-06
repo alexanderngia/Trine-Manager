@@ -4,6 +4,7 @@
 @import "styles/global";
 .root {
   @include flex();
+  column-gap: 15px;
   .btn {
     border-radius: 10px;
     .icon {

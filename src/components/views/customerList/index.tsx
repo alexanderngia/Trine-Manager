@@ -270,7 +270,6 @@ const CustomerList: React.FC<CustomerListProps> = () => {
                     <Textarea
                       customClass={styles["col-3"]}
                       id="cusNoteUpdate"
-                      type="text"
                       title="Ghi chú"
                       name="cusNote"
                       value={values.cusNote}
@@ -319,7 +318,6 @@ const CustomerList: React.FC<CustomerListProps> = () => {
           </Modal>
         )}
         {data && (
-          <>
             <div className={styles["card-container"]}>
               {React.Children.toArray(
                 data.map(
@@ -359,7 +357,6 @@ const CustomerList: React.FC<CustomerListProps> = () => {
                 )
               )}
             </div>
-          </>
         )}
       </div>
     </Layout>

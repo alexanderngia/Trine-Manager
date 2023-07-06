@@ -10,7 +10,6 @@ export interface TextareaProps {
   id?: string;
   onChange: ChangeEventHandler;
   title?: string;
-  type: string;
   placeholder?: string;
   hidden?: boolean;
 }
@@ -21,7 +20,6 @@ export const Textarea: React.FC<TextareaProps> = ({
   value,
   onChange,
   title,
-  type,
   id,
   hidden,
 }) => {

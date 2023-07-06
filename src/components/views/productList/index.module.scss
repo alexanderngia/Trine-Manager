@@ -31,9 +31,7 @@
     }
     .filter {
       @include flex();
-      .search {
-        margin-right: 15px;
-      }
+      column-gap: 15px;
     }
   }
 

@@ -75,53 +75,5 @@
   @include flex();
   justify-content: flex-end;
   column-gap: 15px;
-  // button {
-  //   font-family: $font-p;
-  //   text-transform: uppercase;
-  //   outline: 0;
-  //   background: $black;
-  //   width: 45%;
-  //   border: 0;
-  //   padding: 15px;
-  //   color: $white;
-  //   font-size: 14px;
-  //   font-weight: 600;
-  //   cursor: pointer;
-  //   &:active,
-  //   &:focus {
-  //     background: $black-fade;
-  //   }
-  //   &:first-of-type {
-  //     width: 45%;
-  //     @include Transition3();
-
-  //     @include light {
-  //       background: transparent;
-  //       border: 1px solid rgba($black, 0.3);
-  //       color: rgba($black, 0.3);
-  //       &:hover {
-  //         transform: scale(1.1);
-  //         background: $warning;
-  //         border: 1px solid $warning;
-  //         color: $light-white;
-  //       }
-  //     }
-  //   }
-  //   &[type="submit"] {
-  //     width: 45%;
-  //     @include light {
-  //       background: $black;
-  //       border: 1px solid $black;
-  //       color: $light-white;
-  //       @include Transition3();
-
-  //       &:hover {
-  //         transform: scale(1.1);
-  //         background: $light-primary;
-  //         border: 1px solid $light-primary;
-  //         color: $light-white;
-  //       }
-  //     }
-  //   }
-  // }
+  
 }

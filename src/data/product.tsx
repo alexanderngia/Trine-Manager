@@ -6,7 +6,7 @@ export const products: IProduct[] = [
     imgItem:
       "https://firebasestorage.googleapis.com/v0/b/upload-image-trine.appspot.com/o/images%2FAmrich%20dorm%202.jpegdf3fbd3b-5384-46cb-9248-87ecc4453bfd?alt=media&token=23eabc08-9812-488e-91e7-00fb7ce8a5c7",
     urlItem: "IPhone-X",
-    nameItem: "Lingeria nè",
+    nameItem: "Praesent sapien massa, con vallis a pellentesque nec sapien massa",
     bodyItem: "text nè",
     bodyHtmlItem: `<p>test nè</p>`,
     qualityItem: 10,
@@ -25,7 +25,7 @@ export const products: IProduct[] = [
     imgItem:
       "https://firebasestorage.googleapis.com/v0/b/upload-image-trine.appspot.com/o/images%2FAmrich%20dorm%202.jpegdf3fbd3b-5384-46cb-9248-87ecc4453bfd?alt=media&token=23eabc08-9812-488e-91e7-00fb7ce8a5c7",
     urlItem: "IPhone-X",
-    nameItem: "Lingeria",
+    nameItem: "Praesent sapien massa, con vallis a pellentesque nec sapien massa Lingeria",
     bodyItem: "text nè",
     bodyHtmlItem: `<p>test nè</p>`,
     qualityItem: 10,
@@ -44,7 +44,7 @@ export const products: IProduct[] = [
     imgItem:
       "https://firebasestorage.googleapis.com/v0/b/upload-image-trine.appspot.com/o/images%2FAmrich%20dorm%202.jpegdf3fbd3b-5384-46cb-9248-87ecc4453bfd?alt=media&token=23eabc08-9812-488e-91e7-00fb7ce8a5c7",
     urlItem: "IPhone-X",
-    nameItem: "Accessories",
+    nameItem: "Praesent sapien massa, con vallis a pellentesque nec sapien massa Accessories",
     bodyItem: "text nè",
     bodyHtmlItem: `<p>test nè</p>`,
     qualityItem: 10,
@@ -63,7 +63,7 @@ export const products: IProduct[] = [
     imgItem:
       "https://firebasestorage.googleapis.com/v0/b/upload-image-trine.appspot.com/o/images%2FAmrich%20dorm%202.jpegdf3fbd3b-5384-46cb-9248-87ecc4453bfd?alt=media&token=23eabc08-9812-488e-91e7-00fb7ce8a5c7",
     urlItem: "IPhone-X",
-    nameItem: "Accessories",
+    nameItem: "Accessories Praesent sapien massa, con vallis a pellentesque nec sapien massa",
     bodyItem: "text nè",
     bodyHtmlItem: `<p>test nè</p>`,
     qualityItem: 10,
@@ -82,7 +82,7 @@ export const products: IProduct[] = [
     imgItem:
       "https://firebasestorage.googleapis.com/v0/b/upload-image-trine.appspot.com/o/images%2FAmrich%20dorm%202.jpegdf3fbd3b-5384-46cb-9248-87ecc4453bfd?alt=media&token=23eabc08-9812-488e-91e7-00fb7ce8a5c7",
     urlItem: "IPhone-X",
-    nameItem: "Dress",
+    nameItem: "Dress Praesent sapien massa, con vallis a pellentesque nec sapien massa",
     bodyItem: "text nè",
     bodyHtmlItem: `<p>test nè</p>`,
     qualityItem: 10,

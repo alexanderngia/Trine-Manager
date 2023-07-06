@@ -479,7 +479,7 @@ const Product: React.FC<ProductProps> = () => {
 
                   <div className={styles["container"]}>
                     <ButtonMain type="submit">
-                      {product ? "UPDATE" : "ADD"}
+                      {product ? "Update" : "Add"}
                     </ButtonMain>
                     <ButtonSub
                       type="button"

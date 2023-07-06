@@ -277,7 +277,6 @@ const Post: React.FC<PostProps> = () => {
                       id="urlNew"
                       type="text"
                       name="urlNew"
-                      placeholder="TIÊU ĐỀ"
                     />
                   </span>
                   <span className={styles["col-1"]}>

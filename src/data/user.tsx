@@ -3,11 +3,11 @@ import { IUser } from "types/user";
 export const Users: IUser[] = [
   {
     fullNameUser: "Alexander",
-    emailUser: "admin@gmail.com",
+    emailUser: "admin1@gmail.com",
     passwordUser: "",
     phoneUser: "0944606333",
     genderUser: "1",
-    adressUser: "ADMIN",
+    adressUser: "419 Hậu Giang",
     typeRole: "ADMIN",
   },
   {
@@ -16,7 +16,7 @@ export const Users: IUser[] = [
     passwordUser: "",
     phoneUser: "0944606333",
     genderUser: "1",
-    adressUser: "ADMIN",
+    adressUser: "419 Hậu Giang",
     typeRole: "ADMIN",
   },
 ];

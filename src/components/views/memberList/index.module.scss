@@ -17,6 +17,7 @@
     color: $white;
     font-family: $font-p;
     font-size: 1.5rem;
+    text-transform: uppercase;
     line-height: 50px;
     padding: 2% 0%;
   }
@@ -47,10 +48,36 @@
   position: relative;
   z-index: 1;
   text-align: center;
+  column-gap: 2%;
+  row-gap: 30px;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  flex-wrap: wrap;
+
+  .box {
+    @include flexCol();
+    justify-content: space-between;
+    align-items: flex-start;
+    p {
+      font-size: 0.7rem;
+    }
+    .container {
+      column-gap: 15px;
+      display: flex;
+      width: 100%;
+    }
+  }
   .container {
-    column-gap: 7%;
+    column-gap: 2%;
     display: flex;
     width: 100%;
     flex-wrap: wrap;
+    row-gap: 20px;
+  }
+  .button-container {
+    @include flex();
+    justify-content: flex-end;
+    column-gap: 15px;
   }
 }

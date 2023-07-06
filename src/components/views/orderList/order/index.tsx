@@ -1,8 +1,8 @@
 import { ButtonMain, ButtonSub } from "components/ui/button/button";
-import { CardItem } from "components/ui/card";
+import { CardCart, CardProductItem } from "components/ui/card";
 import { Search } from "components/ui/search";
 import { Layout } from "components/views/layout";
-import { Field, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import { useAppDispatch, useAppSelector } from "hooks/useRedux";
 import React, { useEffect, useState } from "react";
 import { messageActions } from "redux/reducers/messageSlice";
@@ -12,6 +12,8 @@ import { IProduct } from "types/product";
 import { history } from "utils/history";
 import styles from "./index.module.scss";
 
+import { Input } from "components/ui/form/input";
+import { Textarea } from "components/ui/form/textarea";
 import orderService from "services/orderService";
 
 export interface OrderProps {}
@@ -237,6 +239,8 @@ const Order: React.FC<OrderProps> = () => {
         <div className={styles["container-cart"]}>
           <div className={styles["column"]}>
             <span className={styles["row"]}>
+            <label className={styles["label"]}>Chọn Sản Phẩm</label>
+
               <Search
                 name="search-form"
                 id="search-form"
@@ -261,7 +265,6 @@ const Order: React.FC<OrderProps> = () => {
             </span>
 
             <span className={styles["row"]}>
-              <label className={styles["label"]}>Chọn Sản Phẩm</label>
 
               {data.length > 0 && (
                 <>
@@ -269,18 +272,17 @@ const Order: React.FC<OrderProps> = () => {
                     {React.Children.toArray(
                       search(data).map((listItems: any) => {
                         return (
-                          <CardItem
-                            className={styles["card-item"]}
+                          <CardProductItem
+                            classCustomCard={styles["item"]}
                             onClick={() =>
                               // dispatch(cartActions.addToCart(listItems))
                               handleAddToCart(listItems)
                             }
                             titleCard={listItems.nameItem}
                             imgCard={listItems.imgItem}
-                            qtyCard={listItems.qualityItem}
                             colorCard={listItems.colorItem}
                             sizeCard={listItems.sizeItem}
-                            priceCard={listItems.priceItem}
+                            qtyCard={listItems.qualityItem}
                           />
                         );
                       })
@@ -290,165 +292,133 @@ const Order: React.FC<OrderProps> = () => {
               )}
             </span>
             <span className={styles["row"]}>
+              <label className={styles["label"]}>Thông Tin Khách Hàng</label>
               <Formik
                 initialValues={initialValue}
                 validateOnChange={true}
                 onSubmit={order ? handleUpdate : handleRegister}
-                // onSubmit={(values) => {
-                //   console.log(values);
-                // }}
                 enableReinitialize={true}
               >
-                {({ values, setFieldValue }: any) => (
+                {({ values, handleChange, setFieldValue }: any) => (
                   <Form className={styles["form"]}>
-                    <div className={styles["container"]}>
-                      <span className={styles["box"]}>
-                        <Field
-                          className={styles["input"]}
-                          type="text"
-                          name="idOrderNew"
-                          hidden
-                        />
+                    <Input
+                      customClass={styles["col-3"]}
+                      type="text"
+                      name="idOrderNew"
+                      hidden
+                    />
 
-                        <label htmlFor="cusNameNew" className={styles["label"]}>
-                          Tên Khách Hàng
-                        </label>
-                        <Field
-                          id="cusNameNew"
-                          className={styles["input"]}
-                          type="text"
-                          name="cusNameNew"
-                        />
-                      </span>
-                      <span className={styles["box"]}>
-                        <label
-                          htmlFor="cusPhoneNew"
-                          className={styles["label"]}
-                        >
-                          Số Điện Thoại
-                        </label>
-                        <Field
-                          className={styles["input"]}
-                          type="number"
-                          name="cusPhoneNew"
-                          id="cusPhoneNew"
-                        />
-                      </span>
-                      <span className={styles["box"]}>
-                        <label
-                          htmlFor="cusEmailNew"
-                          className={styles["label"]}
-                        >
-                          Email
-                        </label>
-                        <Field
-                          className={styles["input"]}
-                          type="email"
-                          name="cusEmailNew"
-                          id="cusEmailNew"
-                        />
-                      </span>
-                      <span className={styles["box"]}>
-                        <label
-                          htmlFor="cusAdressNew"
-                          className={styles["label"]}
-                        >
-                          Địa Chỉ
-                        </label>
-                        <Field
-                          className={styles["input"]}
-                          type="text"
-                          name="cusAdressNew"
-                          id="cusAdressNew"
-                        />
-                      </span>
-                      <span className={styles["box"]}>
-                        <label
-                          htmlFor="orderNoteNew"
-                          className={styles["label"]}
-                        >
-                          Ghi Chú Đơn Hàng
-                        </label>
-                        <Field
-                          className={styles["input"]}
-                          type="text"
-                          placeholder="Khách quen cần gấp, giao trong ngày"
-                          name="orderNoteNew"
-                          id="orderNoteNew"
-                        />
-                      </span>
+                    <Input
+                      customClass={styles["col-3"]}
+                      id="cusNameNew"
+                      type="text"
+                      title="Tên Khách Hàng"
+                      name="cusNameNew"
+                      placeholder="Nguyễn Văn A"
+                      value={values.cusNameNew}
+                      onChange={(e) => handleChange(e)}
+                    />
+                    <Input
+                      customClass={styles["col-3"]}
+                      id="cusPhoneNew"
+                      type="text"
+                      title="Số Điện Thoại"
+                      name="cusPhoneNew"
+                      placeholder="Nguyễn Văn A"
+                      value={values.cusPhoneNew}
+                      onChange={(e) => handleChange(e)}
+                    />
 
-                      <div className={styles["button-container"]}>
-                        <ButtonSub
-                          type="button"
-                          onClick={() => handleDeleteItem(values)}
-                        >
-                          Delete
-                        </ButtonSub>
-                        <ButtonMain type="submit">
-                          {order ? "Cập Nhật" : "Đặt Hàng"}
-                        </ButtonMain>
-                      </div>
+                    <Input
+                      customClass={styles["col-3"]}
+                      id="cusEmailNew"
+                      type="email"
+                      title="Email"
+                      name="cusEmailNew"
+                      placeholder="nguyenvana@gmail.com"
+                      value={values.cusEmailNew}
+                      onChange={(e) => handleChange(e)}
+                    />
+
+                    <Input
+                      customClass={styles["col-3"]}
+                      id="cusAdressNew"
+                      type="text"
+                      title="Địa Chỉ"
+                      name="cusAdressNew"
+                      placeholder="491 Hậu Giang Quận 6 TP HCM"
+                      value={values.cusAdressNew}
+                      onChange={(e) => handleChange(e)}
+                    />
+                    <Textarea
+                      customClass={styles["col-3"]}
+                      title="Ghi Chú Đơn Hàng"
+                      placeholder="Khách quen cần gấp, giao trong ngày"
+                      name="orderNoteNew"
+                      id="orderNoteNew"
+                      value={values.orderNoteNew}
+                      onChange={(e) => handleChange(e)}
+                    />
+
+                    <div className={styles["button-container"]}>
+                      <ButtonMain type="submit">
+                        {order ? "Cập Nhật" : "Đặt Hàng"}
+                      </ButtonMain>
+                      <ButtonSub
+                        type="button"
+                        onClick={() => handleDeleteItem(values)}
+                      >
+                        Delete
+                      </ButtonSub>
                     </div>
-                    {/* <p className={styles["message"]}>{message}</p> */}
                   </Form>
                 )}
               </Formik>
             </span>
           </div>
           <div className={styles["column"]}>
-            <div className={styles["cart-box"]}>
-              <div className={styles["cart"]}>
-                <div className={styles["cart-items"]}>
-                  {cart && cart.length === 0 ? (
-                    <div className={styles["cart-text"]}>
-                      Chọn sản phẩm thêm vào giỏ hàng!
-                    </div>
-                  ) : null}
+            <div className={styles["cart"]}>
+              {cart && cart.length === 0 ? (
+                <div className={styles["cart-text"]}>
+                  <p>Chọn sản phẩm thêm vào giỏ hàng!</p>
+                </div>
+              ) : null}
 
-                  {cart &&
-                    React.Children.toArray(
-                      cart.map((item: any) => {
-                        return (
-                          <CardItem
-                            onClick={() => handleRemoveFromCart(item)}
-                            titleCard={item?.nameItem}
-                            imgCard={item?.imgItem}
-                            priceCard={item?.priceItem}
-                            sizeCard={item?.sizeItem}
-                            colorCard={item?.colorItem}
-                            qtyCard={item?.amount}
-                          ></CardItem>
-                        );
-                      })
-                    )}
-                </div>
+              {cart &&
+                React.Children.toArray(
+                  cart.map((item: any) => {
+                    return (
+                      <CardCart
+                        onClick={() => handleRemoveFromCart(item)}
+                        titleCard={item?.nameItem}
+                        imgCard={item?.imgItem}
+                        priceCard={item?.priceItem}
+                        sizeCard={item?.sizeItem}
+                        colorCard={item?.colorItem}
+                        qtyCard={item?.amount}
+                      ></CardCart>
+                    );
+                  })
+                )}
+            </div>
+            <div className={styles["cart-total"]}>
+              <div className={styles["row"]}>
+                <p className={styles["title"]}>Đơn Hàng:</p>
+                <p>{totalPrice.toLocaleString()}</p>
               </div>
-              <div className={styles["cart-total"]}>
-                <hr />
-                <div className={styles["sub-total"]}>
-                  <div className={styles["row"]}>
-                    <span>Price:</span>
-                    <span>{totalPrice.toLocaleString()}</span>
-                  </div>
-                  <div className={styles["row"]}>
-                    <span>VAT 10%: </span>
-                    <span>{(totalPrice * 0.1).toLocaleString()}</span>
-                  </div>
-                  <div className={styles["row"]}>
-                    <span>Shipping: </span>
-                    <span>{totalPrice.toLocaleString()}</span>
-                  </div>
-                </div>
-                <hr />
-                <div className={styles["total"]}>
-                  <div className={styles["row"]}>
-                    <span>TOTAL: </span>
-                    <span>
-                      {(totalPrice + totalPrice * 0.1).toLocaleString()}
-                    </span>
-                  </div>
-                </div>
+
+              <div className={styles["row"]}>
+                <p className={styles["title"]}>Phí Vận Chuyển: </p>
+                <p>{totalPrice.toLocaleString()}</p>
+              </div>
+              <hr />
+              <div className={styles["row"]}>
+                <p className={styles["title"]}>Đã bao gồm thuế VAT 10% :</p>
+                <p>{(totalPrice * 0.1).toLocaleString()}</p>
+              </div>
+              <div className={styles["row"]}>
+                <p className={styles["title"]}>TỔNG: </p>
+                <p>{(totalPrice + totalPrice * 0.1).toLocaleString()}</p>
               </div>
             </div>
           </div>

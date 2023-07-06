@@ -12,21 +12,18 @@
   border-radius: 10px;
   @include Transition2();
   cursor: pointer;
-  background-color: $button-bg;
-  color: $light-white;
+  background-color: $light-white;
+  color: $light-second;
   width: 100%;
   list-style: none;
+  @include boxShadowBtn();
 
-  @include light {
-    @include boxShadowBtn();
-    background-color: $light-white;
-    color: $light-second;
-    &:hover {
-      transform: scale(1.03);
-      background-color: $light-primary;
-      color: $light-white;
-    }
+  &:hover {
+    transform: scale(1.03);
+    background-color: $light-primary;
+    color: $light-white;
   }
+
   @include dark {
     &:hover {
       transform: scale(1.03);
@@ -101,64 +98,6 @@
         }
       }
     }
-    &-item {
-      @include flex();
-      justify-content: flex-start;
-      width: 100%;
-      .img {
-        display: flex;
-        img {
-          width: 50px;
-          height: 50px;
-          border-radius: 5px;
-        }
-      }
-      .column {
-        @include flex();
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        padding-left: 20px;
-        width: 60%;
-
-        li {
-          width: 100%;
-          h3 {
-            font-weight: 700;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-          &:nth-of-type(2),
-          &:nth-of-type(3),
-          &:nth-of-type(4) {
-            color: rgba($light-second, 0.6);
-            width: 20%;
-            @include dark {
-              color: rgba($light-white, 0.6);
-            }
-          }
-        }
-        .pad-color {
-          width: fit-content;
-          height: fit-content;
-          padding: 2px;
-          border-radius: 50px;
-          background-color: rgba($light-white, 0.6);
-          @include light {
-            @include boxShadow();
-          }
-          .color {
-            width: 8px;
-            height: 8px;
-            border-radius: 25px;
-          }
-        }
-      }
-      .price {
-        width: 30%;
-        text-align: right;
-      }
-    }
   }
 
   &.userCard,
@@ -228,13 +167,14 @@
 .cardProductItem {
   @include flex();
   justify-content: space-between;
-  width: 200px;
+  width: 100%;
   height: 80px;
   border-radius: 12px;
   padding: 12px;
   background-color: $light-white;
   @include boxShadowBtn();
   @include Transition3();
+  cursor: pointer;
 
   @include dark {
     background-color: $button-bg;
@@ -252,8 +192,8 @@
   .thumb {
     @include flex();
     position: relative;
-    width: 30%;
-    height: 100%;
+    width: 50px;
+    height: 50px;
     img {
       width: 100%;
       height: 100%;
@@ -261,10 +201,9 @@
     }
   }
   .info {
-    padding: 0 5%;
     @include flex();
     justify-content: flex-start;
-    width: 67%;
+    width: 77%;
     height: 100%;
     font-weight: 400;
     color: $black;
@@ -279,7 +218,7 @@
       }
     }
     .title {
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       padding: 0;
       width: 100%;
       text-transform: capitalize;
@@ -315,15 +254,85 @@
         z-index: 1;
       }
     }
-    .size {
+    .size,
+    .qty {
       font-weight: 800;
       font-family: $font-head;
     }
 
     .price {
-      width: 100%;
       font-weight: 800;
       font-size: 0.6rem;
+    }
+  }
+}
+
+.card-cart {
+  background-color: transparent;
+  cursor: pointer;
+  box-shadow: unset;
+
+  .container {
+    @include flex();
+    justify-content: flex-start;
+    width: 100%;
+    column-gap: 10px;
+    .img {
+      display: flex;
+      img {
+        width: 50px;
+        height: 50px;
+        border-radius: 5px;
+      }
+    }
+    .column {
+      width: 85%;
+      @include flex();
+      align-items: flex-start;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      column-gap: 10px;
+      row-gap: 10px;
+      h3 {
+        font-size: 0.6rem;
+        font-weight: 800;
+        width: 68%;
+        font-family: $font-p;
+        letter-spacing: 0.05rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* number of lines to show */
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        @include dark {
+          color: $light-white;
+        }
+      }
+      .price {
+        width: 29%;
+        font-size: 0.6rem;
+        font-weight: 800;
+        text-align: right;
+      }
+      .color {
+        display: block;
+        width: 15px;
+        height: 15px;
+        border-radius: 50px;
+        border: 2px solid $white;
+        @include boxShadow();
+
+        @include dark {
+          box-shadow: unset;
+        }
+      }
+      .size,
+      .qty {
+        font-size: 0.7rem;
+        font-family: $font-head;
+        font-weight: 800;
+      }
     }
   }
 }

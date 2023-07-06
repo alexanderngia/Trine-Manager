@@ -7,6 +7,7 @@ export interface CardProps {
   className?: string;
   classCustom?: string;
   classThumb?: string;
+  classCustomCard?: string;
   onClick?: any;
   href?: string;
   imgCard?: string;
@@ -118,7 +119,7 @@ export const Card: React.FC<CardProps> = ({
   );
 };
 
-export const CardItem: React.FC<CardProps> = ({
+export const CardCart: React.FC<CardProps> = ({
   className,
   onClick,
   imgCard,
@@ -133,35 +134,32 @@ export const CardItem: React.FC<CardProps> = ({
   textCardFour,
 }) => {
   return (
-    <li onClick={onClick} className={classNames(styles["root"], className)}>
-      <ul className={styles["card-item"]}>
+    <li
+      onClick={onClick}
+      className={classNames(styles["root"], styles["card-cart"], className)}
+    >
+      <ul className={styles["container"]}>
         {imgCard && (
           <li className={styles["img"]}>
             <Image alt={imgCard} src={imgCard} />
           </li>
         )}
-        <span className={styles["column"]}>
-          <li>
-            <h3>{titleCard}</h3>
-          </li>
-          {qtyCard && <li>{qtyCard}x</li>}
-          {sizeCard && <li>{sizeCard}</li>}
-          {colorCard && (
-            <li>
-              <div className={styles["pad-color"]}>
-                <div
-                  className={styles["color"]}
-                  style={{
-                    backgroundColor: `${colorCard}`,
-                  }}
-                ></div>
-              </div>
-            </li>
+        <li className={styles["column"]}>
+          <h3>{titleCard}</h3>
+          {priceCard && (
+            <p className={styles["price"]}>{priceCard.toLocaleString()} VND</p>
           )}
-        </span>
-        {priceCard && (
-          <li className={styles["price"]}>{priceCard.toLocaleString()}</li>
-        )}
+          {colorCard && (
+            <span
+              style={{ backgroundColor: `${colorCard}` }}
+              className={styles["color"]}
+            ></span>
+          )}
+          {sizeCard && <p className={styles["size"]}>{sizeCard}</p>}
+
+          {qtyCard && <p className={styles["qty"]}>x {qtyCard}</p>}
+        </li>
+
         {textCardOne && <li>{textCardOne}</li>}
         {textCardTwo && <li>{textCardTwo}</li>}
         {textCardThree && <li>{textCardThree}</li>}
@@ -278,42 +276,43 @@ export const CardProductItem: React.FC<CardProps> = ({
   titleCard,
   imgCard,
   priceCard,
-  href,
   sizeCard,
   colorCard,
+  qtyCard,
   classCustom,
+  classCustomCard,
   classThumb,
   ...props
 }) => {
   return (
-    <a href={href}>
-      <div
-        className={classnames(styles["cardProductItem"], classCustom)}
-        {...props}
-      >
-        {imgCard && (
-          <div className={classnames(styles["thumb"], classThumb)}>
-            <Image alt={imgCard} src={imgCard} />
-          </div>
-        )}
-
-        <div className={classnames(styles["info"], classCustom)}>
-          <p className={styles["title"]}>{titleCard}</p>
-
-          {colorCard && (
-            <span
-              className={styles["color"]}
-              style={{ backgroundColor: `${colorCard}` }}
-            ></span>
-          )}
-          {sizeCard && <p className={styles["size"]}>{sizeCard}</p>}
-          {priceCard && (
-            <p className={styles["price"]}>
-              {priceCard?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} VND
-            </p>
-          )}
+    <div
+      className={classnames(styles["cardProductItem"], classCustomCard)}
+      {...props}
+    >
+      {imgCard && (
+        <div className={classnames(styles["thumb"], classThumb)}>
+          <Image alt={imgCard} src={imgCard} />
         </div>
+      )}
+
+      <div className={classnames(styles["info"], classCustom)}>
+        <p className={styles["title"]}>{titleCard}</p>
+
+        {colorCard && (
+          <span
+            className={styles["color"]}
+            style={{ backgroundColor: `${colorCard}` }}
+          ></span>
+        )}
+        {sizeCard && <p className={styles["size"]}>{sizeCard}</p>}
+        {qtyCard && <p className={styles["qty"]}>x {qtyCard}</p>}
+
+        {priceCard && (
+          <p className={styles["price"]}>
+            {priceCard?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} VND
+          </p>
+        )}
       </div>
-    </a>
+    </div>
   );
 };

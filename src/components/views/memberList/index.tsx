@@ -2,7 +2,7 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 
 import FunctionBtn from "components/container/functionBtn";
-import { ButtonSub } from "components/ui/button/button";
+import { ButtonMain, ButtonSub } from "components/ui/button/button";
 import { CardList, CardUser } from "components/ui/card";
 import { Modal } from "components/ui/modal/modal";
 import { Layout } from "components/views/layout";
@@ -13,6 +13,10 @@ import userService from "services/userService";
 import * as Yup from "yup";
 import styles from "./index.module.scss";
 import { IUser, IUserNew } from "types/user";
+import { Input } from "components/ui/form/input";
+import { RadioInput } from "components/ui/form/radio";
+import classNames from "classnames";
+import classnames from "classnames";
 
 export interface MemberListProps {}
 
@@ -62,47 +66,33 @@ const MemberList: React.FC<MemberListProps> = () => {
     }
   }, [user]);
 
-  const openModal = () => {
-    setModal(true);
-    localStorage.setItem("MODAL", "TRUE");
-    dispatch(messageActions.clearMessage());
-  };
-
   const closeModal = () => {
     setModal(false);
     localStorage.removeItem("MODAL");
   };
 
-  const openItemModal = async ({
-    id,
-    fullNameUser,
-    genderUser,
-    phoneUser,
-    emailUser,
-    adressUser,
-    typeRole,
-  }: IUser) => {
-    setProfile(true);
-    setInitialValue({
-      ...initialValue,
-      id: `${id}`,
-      userName: `${fullNameUser}`,
-      userEmail: `${emailUser}`,
-      // userPass: `${infoUser.passwordUser}`,
-      userPhone: `${phoneUser}`,
-      userGender: `${genderUser}`,
-      userAdress: `${adressUser}`,
-      userRole: `${typeRole}`,
-    });
-    setDeleteUser({
-      id,
-      fullNameUser,
-    });
+  const openModal = async (infoMem: IUser | null) => {
+    setModal(true);
+    localStorage.setItem("MODAL", "TRUE");
+    if (infoMem) {
+      setInitialValue({
+        ...initialValue,
+        id: `${infoMem.id}`,
+        userName: `${infoMem.fullNameUser}`,
+        userEmail: `${infoMem.emailUser}`,
+        // userPass: `${infoUser.passwordUser}`,
+        userPhone: `${infoMem.phoneUser}`,
+        userGender: `${infoMem.genderUser}`,
+        userAdress: `${infoMem.adressUser}`,
+        userRole: `${infoMem.typeRole}`,
+      });
+      setDeleteUser(infoMem);
+    }
     dispatch(messageActions.clearMessage());
   };
 
   const closeItemModal = () => {
-    setProfile(false);
+    setModal(false);
     setInitialValue({
       id: "",
       userName: "",
@@ -253,9 +243,9 @@ const MemberList: React.FC<MemberListProps> = () => {
       <div className={styles["root"]}>
         <h1>DANH SÁCH THÀNH VIÊN</h1>
         <div className={styles["btn-container"]}>
-          <FunctionBtn />
+          <FunctionBtn onClickAdd={() => openModal(null)} />
         </div>
-        {modal && (
+        {/* {modal && (
           <Modal onClick={closeModal}>
             <h1>Let's signup!</h1>
             <Formik
@@ -267,22 +257,15 @@ const MemberList: React.FC<MemberListProps> = () => {
                 <Form className={styles["form"]}>
                   <div className={styles["container"]}>
                     <span className={styles["box"]}>
-                      <label htmlFor="userName" className={styles["label"]}>
-                        Full Name
-                      </label>
-                      <Field
+                      <Input
+                        customClass={styles["col-3"]}
                         id="userName"
-                        className={styles["input"]}
                         type="text"
+                        title="Địa Chỉ"
+                        name="userName"
                         placeholder="Nguyễn Văn A"
-                        name="userName"
                         value={values.userName}
-                        onChange={(e: any) => handleChange(e)}
-                      />
-                      <ErrorMessage
-                        className={styles["errMess"]}
-                        name="userName"
-                        component="div"
+                        onChange={(e) => handleChange(e)}
                       />
                     </span>
                     <span className={styles["box"]}>
@@ -438,250 +421,181 @@ const MemberList: React.FC<MemberListProps> = () => {
               )}
             </Formik>
           </Modal>
-        )}
+        )} */}
         {data && (
-          <>
-            <ul className={styles["card-container"]}>
-              {React.Children.toArray(
-                data.map(
-                  ({
-                    id,
-                    fullNameUser,
-                    genderUser,
-                    phoneUser,
-                    emailUser,
-                    adressUser,
-                    typeRole,
-                  }: IUser) => {
-                    return (
-                      <CardUser
-                        onClick={() =>
-                          openItemModal({
-                            id,
-                            fullNameUser,
-                            genderUser,
-                            phoneUser,
-                            emailUser,
-                            adressUser,
-                            typeRole,
-                          })
-                        }
-                        classCustom={styles["card"]}
-                        titleCard={fullNameUser}
-                        textCardTwo={typeRole}
-                        textCardThree={phoneUser}
-                        textCardFour={emailUser}
-                      />
-                    );
-                  }
-                )
-              )}
-            </ul>
-            {profile && (
-              <Modal onClick={closeItemModal}>
-                <h1>THÔNG TIN THÀNH VIÊN</h1>
-                <Formik
-                  initialValues={initialValue}
-                  validationSchema={validationSchemaItem}
-                  onSubmit={handleUpdate}
-                >
-                  {({ values, handleChange }: any) => (
-                    <Form className={styles["form"]}>
-                      <div className={styles["container"]}>
-                        <span className={styles["box"]}>
-                          <Field
-                            className={styles["input"]}
-                            type="text"
-                            name="id"
-                            value={values.id}
-                            onChange={(e: any) => handleChange(e)}
-                            hidden
-                          />
-                          <label
-                            htmlFor="userNameUpdate"
-                            className={styles["label"]}
-                          >
-                            Full Name
-                          </label>
-
-                          <Field
-                            id="userNameUpdate"
-                            className={styles["input"]}
-                            type="text"
-                            placeholder="Nguyễn Văn A"
-                            name="userName"
-                            value={values.userName}
-                            onChange={(e: any) => handleChange(e)}
-                          />
-                          <ErrorMessage
-                            className={styles["errMess"]}
-                            name="userName"
-                            component="div"
-                          />
-                        </span>
-                        <span className={styles["box"]}>
-                          <label
-                            htmlFor="userEmailUpdate"
-                            className={styles["label"]}
-                          >
-                            Email
-                          </label>
-
-                          <Field
-                            className={styles["input"]}
-                            type="email"
-                            placeholder="nguyenvana@gmail.com"
-                            name="userEmail"
-                            id="userEmailUpdate"
-                            value={values.userEmail}
-                            onChange={(e: any) => handleChange(e)}
-                          />
-                          <ErrorMessage
-                            className={styles["errMess"]}
-                            name="userEmail"
-                            component="div"
-                          />
-                        </span>
-                        <span className={styles["box"]}>
-                          <label
-                            htmlFor="userPhoneUpdate"
-                            className={styles["label"]}
-                          >
-                            Phone
-                          </label>
-
-                          <Field
-                            className={styles["input"]}
-                            type="phone"
-                            placeholder="0988379379"
-                            name="userPhone"
-                            id="userPhoneUpdate"
-                            value={values.userPhone}
-                            onChange={(e: any) => handleChange(e)}
-                          />
-                          <ErrorMessage
-                            className={styles["errMess"]}
-                            name="userPhone"
-                            component="div"
-                          />
-                        </span>
-                        <span className={styles["box"]}>
-                          <label
-                            htmlFor="userAdressUpdate"
-                            className={styles["label"]}
-                          >
-                            Địa Chỉ
-                          </label>
-                          <Field
-                            className={styles["input"]}
-                            type="text"
-                            placeholder="100C Hậu Giang Quận 6 TP.HCM"
-                            name="userAdress"
-                            id="userAdressUpdate"
-                            value={values.userAdress}
-                            onChange={(e: any) => handleChange(e)}
-                          />
-                          <ErrorMessage
-                            className={styles["errMess"]}
-                            name="userAdress"
-                            component="div"
-                          />
-                        </span>
-                        <span className={styles["box"]}>
-                          <p>Giới Tính</p>
-                          <div className={styles["container-checkbox"]}>
-                            <label
-                              htmlFor="MaleUpdate"
-                              className={styles["checkbox"]}
-                            >
-                              <Field
-                                type="radio"
-                                id="MaleUpdate"
-                                name="userGender"
-                                value="1"
-                              ></Field>
-                              <span>
-                                <p>Male</p>
-                              </span>
-                            </label>
-                            <label
-                              htmlFor="FemaleUpdate"
-                              className={styles["checkbox"]}
-                            >
-                              <Field
-                                type="radio"
-                                id="FemaleUpdate"
-                                name="userGender"
-                                value="0"
-                              ></Field>
-                              <span>
-                                <p>Female</p>
-                              </span>
-                            </label>
-                            <ErrorMessage
-                              className={styles["errMess"]}
-                              name="userGender"
-                              component="div"
-                            />
-                          </div>
-                        </span>
-                        <span className={styles["box"]}>
-                          <p>Vai Trò</p>
-                          <div className={styles["container-checkbox"]}>
-                            <label
-                              htmlFor="AdminUpdate"
-                              className={styles["checkbox"]}
-                            >
-                              <Field
-                                type="radio"
-                                id="AdminUpdate"
-                                name="userRole"
-                                value="ADMIN"
-                              ></Field>
-                              <span>
-                                <p>Admin</p>
-                              </span>
-                            </label>
-                            <label
-                              htmlFor="SaleUpdate"
-                              className={styles["checkbox"]}
-                            >
-                              <Field
-                                type="radio"
-                                id="SaleUpdate"
-                                name="userRole"
-                                value="SALE"
-                              ></Field>
-                              <span>
-                                <p>Sale</p>
-                              </span>
-                            </label>
-
-                            <ErrorMessage
-                              className={styles["errMess"]}
-                              name="userRole"
-                              component="div"
-                            />
-                          </div>
-                        </span>
-                      </div>
-                      <p className={styles["message"]}>{message}</p>
-
-                      <div className={styles["button-container"]}>
-                        <ButtonSub
-                          type="button"
-                          // onClick={() => deleteItem({ id, fullNameUser })}
-                        >
-                          Xóa Thành Viên
-                        </ButtonSub>
-                        <button type="submit">Cập Nhật</button>
-                      </div>
-                    </Form>
-                  )}
-                </Formik>
-              </Modal>
+          <ul className={styles["card-container"]}>
+            {React.Children.toArray(
+              data.map(
+                ({
+                  id,
+                  fullNameUser,
+                  genderUser,
+                  phoneUser,
+                  emailUser,
+                  adressUser,
+                  typeRole,
+                }: IUser) => {
+                  return (
+                    <CardUser
+                      onClick={() =>
+                        openModal({
+                          id,
+                          fullNameUser,
+                          genderUser,
+                          phoneUser,
+                          emailUser,
+                          adressUser,
+                          typeRole,
+                        })
+                      }
+                      classCustom={styles["card"]}
+                      titleCard={fullNameUser}
+                      textCardTwo={typeRole}
+                      textCardThree={phoneUser}
+                      textCardFour={emailUser}
+                    />
+                  );
+                }
+              )
             )}
-          </>
+          </ul>
+        )}
+        {modal && (
+          <Modal onClick={closeItemModal}>
+            <h1>
+              {initialValue.id
+                ? `THÔNG TIN CỦA ${initialValue.userName}`
+                : "THÊM THÀNH VIÊN"}
+            </h1>
+            <Formik
+              initialValues={initialValue}
+              validationSchema={validationSchemaItem}
+              onSubmit={handleUpdate}
+            >
+              {({ values, handleChange }: any) => (
+                <Form className={styles["form"]}>
+                  <div className={styles["container"]}>
+                    <Input
+                      id="id"
+                      type="text"
+                      name="id"
+                      value={values.id}
+                      onChange={(e) => handleChange(e)}
+                      hidden
+                    />
+                    <Input
+                      customClass={styles["col-3"]}
+                      id="userName"
+                      type="text"
+                      title="Full Name"
+                      name="userName"
+                      placeholder="Nguyễn Văn A"
+                      value={values.userName}
+                      onChange={(e) => handleChange(e)}
+                    />
+                    {!initialValue.id && (
+                      <Input
+                        customClass={styles["col-3"]}
+                        id="userPass"
+                        type="password"
+                        title="Mật Khẩu"
+                        name="userPass"
+                        placeholder="abc1223@"
+                        value={values.userPass}
+                        onChange={(e) => handleChange(e)}
+                      />
+                    )}
+
+                    <Input
+                      customClass={styles["col-3"]}
+                      id="userEmail"
+                      type="email"
+                      title="Email"
+                      name="userEmail"
+                      placeholder="nguyenvana@gmail.com"
+                      value={values.userEmail}
+                      onChange={(e) => handleChange(e)}
+                    />
+                    <Input
+                      customClass={styles["col-3"]}
+                      id="userPhone"
+                      type="text"
+                      title="Phone"
+                      name="userPhone"
+                      placeholder="0988379379"
+                      value={values.userPhone}
+                      onChange={(e) => handleChange(e)}
+                    />
+
+                    <Input
+                      customClass={styles["col-3"]}
+                      id="userAdress"
+                      type="text"
+                      title="Địa Chỉ"
+                      name="userAdress"
+                      placeholder="100C Hậu Giang Quận 6 TP.HCM"
+                      value={values.userAdress}
+                      onChange={(e) => handleChange(e)}
+                    />
+
+                    <span
+                      className={classnames(styles["col-4"], styles["box"])}
+                    >
+                      <p>Giới Tính</p>
+                      <div className={styles["container"]}>
+                        <RadioInput
+                          name="userGender"
+                          id="MaleUpdate"
+                          value="1"
+                          title="Male"
+                          onChange={(e) => handleChange(e)}
+                        />
+                        <RadioInput
+                          name="userGender"
+                          id="FemaleUpdate"
+                          value="0"
+                          title="Female"
+                          onChange={(e) => handleChange(e)}
+                        />
+                      </div>
+                    </span>
+                    <span
+                      className={classnames(styles["col-4"], styles["box"])}
+                    >
+                      <p>Vai Trò</p>
+                      <div className={styles["container"]}>
+                        <RadioInput
+                          name="userRole"
+                          id="AdminUpdate"
+                          value="ADMIN"
+                          title="Admin"
+                          onChange={(e) => handleChange(e)}
+                        />
+                        <RadioInput
+                          name="userRole"
+                          id="SaleUpdate"
+                          value="SALE"
+                          title="Sale"
+                          onChange={(e) => handleChange(e)}
+                        />
+                      </div>
+                    </span>
+                  </div>
+
+                  <div className={styles["button-container"]}>
+                    <ButtonMain type="submit">Cập Nhật</ButtonMain>
+
+                    <ButtonSub
+                      type="button"
+                      // onClick={() => deleteItem({ id, fullNameUser })}
+                    >
+                      Xóa Thành Viên
+                    </ButtonSub>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </Modal>
         )}
       </div>
     </Layout>

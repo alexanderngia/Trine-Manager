@@ -14,7 +14,7 @@ import styles from "./index.module.scss";
 
 export interface PostListProps {}
 
-const PostList: React.FC<PostListProps> = (props) => {
+const PostList: React.FC<PostListProps> = () => {
   const [data, setData] = useState<IPost[]>([]);
   const [role, setRole] = useState("");
   const [q, setQ] = useState("");
@@ -40,12 +40,11 @@ const PostList: React.FC<PostListProps> = (props) => {
     }
   }, [user]);
 
-  const search = (data: any) => {
-    return data.filter((product: any) => {
+  const search = (data: IPost[]) => {
+    return data.filter((post: any) => {
       return searchParam.some((newItem) => {
         return (
-          product[newItem]?.toString().toLowerCase().indexOf(q.toLowerCase()) >
-          -1
+          post[newItem]?.toString().toLowerCase().indexOf(q.toLowerCase()) > -1
         );
       });
     });
@@ -54,11 +53,11 @@ const PostList: React.FC<PostListProps> = (props) => {
     setQ(cat);
   };
 
-  const openPost = (post: any) => {
+  const openPost = (post: IPost) => {
     dispatch(postActions.setPost(post));
     history.push("/post");
   };
-  const handleAddPost = () => {
+  const addPost = () => {
     dispatch(postActions.clearPost());
     history.push("/post");
   };
@@ -81,16 +80,16 @@ const PostList: React.FC<PostListProps> = (props) => {
             </ButtonMain>
             <ButtonMain onClick={() => filter("dress")}>DRESS</ButtonMain>
           </div>
-          <FunctionBtn />
+          <FunctionBtn onClickAdd={addPost} />
         </div>
         {data && (
           <>
             <div className={styles["card-container"]}>
               {React.Children.toArray(
-                search(data).map((listItems: any) => {
+                search(data).map((listItems: IPost) => {
                   return (
                     <CardUserImg
-                    classCustom={styles["card"]}
+                      classCustom={styles["card"]}
                       onClick={() => openPost(listItems)}
                       titleCard={listItems.title}
                       imgCard={listItems.featureImg}
