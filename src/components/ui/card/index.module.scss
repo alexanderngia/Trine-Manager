@@ -269,6 +269,9 @@
 }
 
 .card-cart {
+  @include dark {
+    background-color: transparent;
+  }
   background-color: transparent;
   cursor: pointer;
   box-shadow: unset;

@@ -1,21 +1,21 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 
+import classnames from "classnames";
 import FunctionBtn from "components/container/functionBtn";
-import { ButtonSub, ButtonMain } from "components/ui/button/button";
+import { ButtonMain, ButtonSub } from "components/ui/button/button";
 import { CardUserImg } from "components/ui/card";
+import { Input } from "components/ui/form/input";
+import { RadioInput } from "components/ui/form/radio";
+import { Textarea } from "components/ui/form/textarea";
 import { Modal } from "components/ui/modal/modal";
 import { Layout } from "components/views/layout";
 import { useAppDispatch, useAppSelector } from "hooks/useRedux";
 import { messageActions } from "redux/reducers/messageSlice";
 import customerService from "services/customerService";
+import { ICustomer, ICustomerNew } from "types/customer";
 import * as Yup from "yup";
 import styles from "./index.module.scss";
-import { ICustomer, ICustomerNew } from "types/customer";
-import { Input } from "components/ui/form/input";
-import { RadioInput } from "components/ui/form/radio";
-import classnames from "classnames";
-import { Textarea } from "components/ui/form/textarea";
 
 export interface CustomerListProps {}
 

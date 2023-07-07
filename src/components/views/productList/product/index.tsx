@@ -1,3 +1,8 @@
+import classnames from "classnames";
+import { ButtonMain, ButtonSub } from "components/ui/button/button";
+import { Input } from "components/ui/form/input";
+import { RadioInput } from "components/ui/form/radio";
+import PreviewImg from "components/ui/image/previewImg";
 import { Layout } from "components/views/layout";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useAppDispatch, useAppSelector } from "hooks/useRedux";
@@ -6,14 +11,10 @@ import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
 import { messageActions } from "redux/reducers/messageSlice";
 import productService from "services/productService";
-import PreviewImg from "components/ui/image/previewImg";
-import { Input } from "components/ui/form/input";
+import { IProductNew } from "types/product";
+import { history } from "utils/history";
 import styles from "./index.module.scss";
 import "./index.scss";
-import { ButtonMain, ButtonSub } from "components/ui/button/button";
-import { history } from "utils/history";
-import { RadioInput } from "components/ui/form/radio";
-import classnames from "classnames";
 const { v4 } = require("uuid");
 const MarkdownIt = require("markdown-it");
 const mdParser = new MarkdownIt();
@@ -26,7 +27,7 @@ const Product: React.FC<ProductProps> = () => {
   const { product } = useAppSelector((state) => state.product);
   const dispatch = useAppDispatch();
 
-  const [initialValue, setInitialValue] = useState({
+  const [initialValue, setInitialValue] = useState<IProductNew>({
     id: "",
     idItemNew: `${v4()}`,
     imgItemNew: "",
@@ -34,10 +35,10 @@ const Product: React.FC<ProductProps> = () => {
     nameItemNew: "",
     bodyItemNew: "",
     bodyHtmlItemNew: "",
-    qualityItemNew: "",
+    qualityItemNew: 0,
     colorItemNew: "#000000",
     sizeItemNew: "",
-    priceItemNew: "",
+    priceItemNew: 0,
     categoryItemNew: "",
     keywordTagItemNew: "",
     titleTagItemNew: "",
@@ -70,10 +71,10 @@ const Product: React.FC<ProductProps> = () => {
             nameItemNew: `${product.nameItem}`,
             bodyItemNew: `${product.bodyItem}`,
             bodyHtmlItemNew: `${product.bodyHtmlItem}`,
-            qualityItemNew: `${product.qualityItem}`,
+            qualityItemNew: product.qualityItem,
             colorItemNew: `${product.colorItem}`,
             sizeItemNew: `${product.sizeItem}`,
-            priceItemNew: `${product.priceItem}`,
+            priceItemNew: product.priceItem,
             categoryItemNew: `${product.categoryItem}`,
             keywordTagItemNew: `${product.keywordTagItem}`,
             titleTagItemNew: `${product.nameItem}`,
@@ -89,7 +90,7 @@ const Product: React.FC<ProductProps> = () => {
     fetchData();
   }, [dispatch, product]);
 
-  const handleRegister = async (formValue: any, { resetForm }: any) => {
+  const handleRegister = async (formValue: IProductNew, { resetForm }: any) => {
     const {
       idItemNew,
       imgItemNew,
@@ -142,7 +143,7 @@ const Product: React.FC<ProductProps> = () => {
       console.log(error);
     }
   };
-  const handleUpdate = async (formValue: any) => {
+  const handleUpdate = async (formValue: IProductNew) => {
     const {
       id,
       idItemNew,
@@ -194,29 +195,33 @@ const Product: React.FC<ProductProps> = () => {
     }
   };
 
-  const handleDeleteItem = async (deleteItem: any) => {
+  const handleDeleteItem = async (deleteItem: IProductNew | null) => {
     try {
-      let confirmDelete = prompt(
-        `Nhập DELETE vào ô để xác nhận xóa ${deleteItem.nameItemNew}!`,
-        ""
-      );
-      if (confirmDelete === "DELETE") {
-        let res = await productService.deleteProduct(deleteItem.idItemNew);
-        const errMessage = res?.data.errMessage;
-        const message = res?.data.message;
-        if (errMessage) {
-          dispatch(messageActions.setMessage(errMessage));
-        }
-        if (message) {
-          dispatch(messageActions.clearMessage());
-          await alert(deleteItem.nameItemNew + message);
-          history.push("/product-manager");
-        }
-      }
-      if (confirmDelete === "" || null) {
-        dispatch(
-          messageActions.setMessage(`Fail to remove ${deleteItem.nameItemNew}!`)
+      if (deleteItem) {
+        let confirmDelete = prompt(
+          `Nhập DELETE vào ô để xác nhận xóa ${deleteItem.nameItemNew}!`,
+          ""
         );
+        if (confirmDelete === "DELETE") {
+          let res = await productService.deleteProduct(deleteItem.idItemNew);
+          const errMessage = res?.data.errMessage;
+          const message = res?.data.message;
+          if (errMessage) {
+            dispatch(messageActions.setMessage(errMessage));
+          }
+          if (message) {
+            dispatch(messageActions.clearMessage());
+            await alert(deleteItem.nameItemNew + message);
+            history.push("/product-manager");
+          }
+        }
+        if (confirmDelete === "" || null) {
+          dispatch(
+            messageActions.setMessage(
+              `Fail to remove ${deleteItem.nameItemNew}!`
+            )
+          );
+        }
       }
     } catch (error) {
       console.log(error);
@@ -270,14 +275,7 @@ const Product: React.FC<ProductProps> = () => {
                     name="idItemNew"
                     hidden
                   />
-                  <Input
-                    onChange={() =>
-                      setFieldValue("authorItemNew", `${product.authorItem}`)
-                    }
-                    type="text"
-                    name="authorItemNew"
-                    hidden
-                  />
+                  <Input type="text" name="authorItemNew" hidden />
                   <Input
                     customClass={styles["col-1"]}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -311,6 +309,9 @@ const Product: React.FC<ProductProps> = () => {
                         .replace(/đ/g, "d")
                         .replace(/Đ/g, "D")
                         .toLowerCase()}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        handleChange(e);
+                      }}
                       id="urlItemNew"
                     />
                   </span>
@@ -483,7 +484,7 @@ const Product: React.FC<ProductProps> = () => {
                     </ButtonMain>
                     <ButtonSub
                       type="button"
-                      onClick={() => handleDeleteItem(values)}
+                      onClick={() => handleDeleteItem(product ? values : null)}
                     >
                       Delete
                     </ButtonSub>

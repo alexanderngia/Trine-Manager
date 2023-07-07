@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IAddPost } from "types/post";
+import { IPostNew } from "types/post";
 import { post } from "data/post";
 
 const getPost: () => Promise<any> = async () => {
@@ -21,7 +21,7 @@ const createPost = ({
   keywordTagNew,
   titleTagNew,
   descripTagNew,
-}: IAddPost) => {
+}: IPostNew) => {
   if (process.env.CREATE_POST_API)
     return axios.post(process.env.CREATE_POST_API, {
       author: authorNew,
@@ -49,7 +49,7 @@ const updatePost = async ({
   keywordTagNew,
   titleTagNew,
   descripTagNew,
-}: IAddPost) => {
+}: IPostNew) => {
   if (process.env.EDIT_POST_API)
     return await axios.put(process.env.EDIT_POST_API, {
       id: id,

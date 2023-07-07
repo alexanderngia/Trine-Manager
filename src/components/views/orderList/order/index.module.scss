@@ -35,7 +35,6 @@
       width: 65%;
       row-gap: 25px;
       .row {
-
         @include flex();
         justify-content: flex-start;
         align-items: flex-start;
@@ -93,7 +92,6 @@
           height: 100%;
           padding: 10px;
 
-       
           .form {
             column-gap: 2%;
             @include flex();
@@ -115,6 +113,8 @@
       width: 30%;
       height: 100%;
       row-gap: 20px;
+      position: sticky;
+      top: 100px;
 
       .cart {
         padding: 10px;

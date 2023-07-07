@@ -17,7 +17,7 @@ export interface IProduct {
   authorItem: string;
 }
 
-export interface IAddProduct {
+export interface IProductNew {
   id?: string;
   idItemNew: string;
   imgItemNew: string;

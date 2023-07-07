@@ -1,17 +1,18 @@
+import { ButtonMain, ButtonSub } from "components/ui/button/button";
+import { Input } from "components/ui/form/input";
+import PreviewImg from "components/ui/image/previewImg";
 import { Layout } from "components/views/layout";
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import { useAppDispatch, useAppSelector } from "hooks/useRedux";
 import React, { useEffect, useState } from "react";
 import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
 import { messageActions } from "redux/reducers/messageSlice";
 import postService from "services/postService";
-import PreviewImg from "components/ui/image/previewImg";
+import { IPostNew } from "types/post";
+import { history } from "utils/history";
 import styles from "./index.module.scss";
 import "./index.scss";
-import { ButtonMain, ButtonSub } from "components/ui/button/button";
-import { history } from "utils/history";
-import { Input } from "components/ui/form/input";
 
 const MarkdownIt = require("markdown-it");
 const mdParser = new MarkdownIt(/* Markdown-it options */);
@@ -24,7 +25,7 @@ const Post: React.FC<PostProps> = () => {
   const { post } = useAppSelector((state) => state.post);
   const dispatch = useAppDispatch();
 
-  const [initialValue, setInitialValue] = useState({
+  const [initialValue, setInitialValue] = useState<IPostNew>({
     id: "",
     // authorNew: `${user.fullNameUser}`,
     authorNew: ``,
@@ -78,7 +79,7 @@ const Post: React.FC<PostProps> = () => {
     fetchData();
   }, [dispatch, post]);
 
-  const handleRegister = async (formValue: any, { resetForm }: any) => {
+  const handleRegister = async (formValue: IPostNew, { resetForm }: any) => {
     const {
       authorNew,
       urlNew,
@@ -119,7 +120,7 @@ const Post: React.FC<PostProps> = () => {
       console.log(error);
     }
   };
-  const handleUpdate = async (formValue: any) => {
+  const handleUpdate = async (formValue: IPostNew) => {
     const {
       id,
       authorNew,
@@ -160,29 +161,31 @@ const Post: React.FC<PostProps> = () => {
       console.log(error);
     }
   };
-  const handleDeleteItem = async (deleteItem: any) => {
+  const handleDeleteItem = async (deleteItem: IPostNew | null) => {
     try {
-      let confirmDelete = prompt(
-        `Nhập DELETE vào ô để xác nhận xóa ${deleteItem.titleNew}!`,
-        ""
-      );
-      if (confirmDelete === "DELETE") {
-        let res = await postService.deletePost(deleteItem.id);
-        const errMessage = res?.data.errMessage;
-        const message = res?.data.message;
-        if (errMessage) {
-          dispatch(messageActions.setMessage(errMessage));
-        }
-        if (message) {
-          dispatch(messageActions.clearMessage());
-          await alert(deleteItem.titleNew + message);
-          history.push("/post-manager");
-        }
-      }
-      if (confirmDelete === "" || null) {
-        dispatch(
-          messageActions.setMessage(`Fail to remove ${deleteItem.titleNew}!`)
+      if (deleteItem) {
+        let confirmDelete = prompt(
+          `Nhập DELETE vào ô để xác nhận xóa ${deleteItem.titleNew}!`,
+          ""
         );
+        if (confirmDelete === "DELETE") {
+          let res = await postService.deletePost(deleteItem.id);
+          const errMessage = res?.data.errMessage;
+          const message = res?.data.message;
+          if (errMessage) {
+            dispatch(messageActions.setMessage(errMessage));
+          }
+          if (message) {
+            dispatch(messageActions.clearMessage());
+            await alert(deleteItem.titleNew + message);
+            history.push("/post-manager");
+          }
+        }
+        if (confirmDelete === "" || null) {
+          dispatch(
+            messageActions.setMessage(`Fail to remove ${deleteItem.titleNew}!`)
+          );
+        }
       }
     } catch (error) {
       console.log(error);
@@ -234,7 +237,7 @@ const Post: React.FC<PostProps> = () => {
                     onChange={() =>
                       setFieldValue("authorNew", `${post.author}`)
                     }
-                    value={values.id}
+                    value={values.authorNew}
                     type="text"
                     name="authorNew"
                     hidden
@@ -363,7 +366,7 @@ const Post: React.FC<PostProps> = () => {
                     </ButtonMain>
                     <ButtonSub
                       type="button"
-                      onClick={() => handleDeleteItem(values)}
+                      onClick={() => handleDeleteItem(post ? values : null)}
                     >
                       Delete
                     </ButtonSub>

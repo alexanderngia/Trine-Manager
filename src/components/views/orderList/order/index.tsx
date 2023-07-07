@@ -4,7 +4,7 @@ import { Search } from "components/ui/search";
 import { Layout } from "components/views/layout";
 import { Form, Formik } from "formik";
 import { useAppDispatch, useAppSelector } from "hooks/useRedux";
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { messageActions } from "redux/reducers/messageSlice";
 import postService from "services/postService";
 import productService from "services/productService";
@@ -15,7 +15,12 @@ import styles from "./index.module.scss";
 import { Input } from "components/ui/form/input";
 import { Textarea } from "components/ui/form/textarea";
 import orderService from "services/orderService";
-
+import { CountryData, DistrictData, StateData, WardData } from "types/country";
+import { IOrderNew } from "types/order";
+import InputSelectAdress from "components/ui/form/selectAdress";
+import { Country } from "data/country";
+import InputPayment from "components/ui/form/payment";
+import { Bank, Card, Dollar, Wallet } from "components/ui/icon";
 export interface OrderProps {}
 
 const Order: React.FC<OrderProps> = () => {
@@ -23,24 +28,43 @@ const Order: React.FC<OrderProps> = () => {
   const [cart, setCart] = useState<any[]>([]);
   const [totalPrice, setTotalPrice] = useState<number>(0);
 
+  const [q, setQ] = useState("");
+  const [searchParam] = useState(["nameItem", "categoryItem"]);
+
+  const [selectedCountry, setSelectedCountry] = useState<CountryData | null>(
+    null
+  );
+  const [selectedState, setSelectedState] = useState<StateData | null>(null);
+  const [selectedDistrict, setSelectedDistrict] = useState<DistrictData | null>(
+    null
+  );
+  const [selectedWard, setSelectedWard] = useState<WardData | null>(null);
+
   const { user } = useAppSelector((state) => state.auth);
   const { message } = useAppSelector((state) => state.message);
   const { order } = useAppSelector((state) => state.order);
   // const { cart } = useAppSelector((state) => state.cart);
-
-  const [q, setQ] = useState("");
-  const [searchParam] = useState(["nameItem", "categoryItem"]);
   const dispatch = useAppDispatch();
   const { v4 } = require("uuid");
 
-  const [initialValue, setInitialValue] = useState({
+  const [initialValue, setInitialValue] = useState<IOrderNew>({
     id: "",
     idOrderNew: `${v4()}`,
     cusNameNew: "",
     cusEmailNew: "",
     cusPhoneNew: "",
     cusAdressNew: "",
-    orderNoteNew: "",
+    cusCountryNew: "",
+    cusStateNew: "",
+    cusDistrictNew: "",
+    cusWardNew: "",
+    cusPaymentNew: "COD",
+    cusOrderNoteNew: "",
+    discount: "",
+    price: 0,
+    shippingFee: 0,
+    vat: 0,
+    total: 0,
   });
 
   useEffect(() => {
@@ -57,7 +81,7 @@ const Order: React.FC<OrderProps> = () => {
             cusEmailNew: `${order.cusEmail}`,
             cusPhoneNew: `${order.cusPhone}`,
             cusAdressNew: `${order.cusAdress}`,
-            orderNoteNew: `${order.orderNote}`,
+            cusOrderNoteNew: `${order.orderNote}`,
           });
           dispatch(messageActions.clearMessage());
         }
@@ -85,7 +109,7 @@ const Order: React.FC<OrderProps> = () => {
       cusEmailNew,
       cusPhoneNew,
       cusAdressNew,
-      orderNoteNew,
+      cusOrderNoteNew,
     } = infoOrder;
 
     try {
@@ -95,7 +119,7 @@ const Order: React.FC<OrderProps> = () => {
         cusEmailNew,
         cusPhoneNew,
         cusAdressNew,
-        orderNoteNew,
+        cusOrderNoteNew,
         cart,
       });
 
@@ -232,6 +256,64 @@ const Order: React.FC<OrderProps> = () => {
     setQ(cat);
   };
 
+  const onHandleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const countryName = e.target.value;
+    const selectedCountry = Country.find(
+      (country) => country.name === countryName
+    );
+    if (selectedCountry) {
+      setSelectedCountry(selectedCountry);
+      setInitialValue({ ...initialValue, cusCountryNew: selectedCountry.name });
+    }
+    setSelectedState(null);
+    setSelectedDistrict(null);
+    setSelectedWard(null);
+  };
+
+  const onHandleStateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedState = selectedCountry?.state.find(
+      (state) => state.name === e.target.value
+    );
+    if (selectedState) {
+      setSelectedState(selectedState);
+      selectedState.code === 79
+        ? setInitialValue({
+            ...initialValue,
+            cusStateNew: selectedState.name,
+            shippingFee: 0,
+          })
+        : setInitialValue({
+            ...initialValue,
+            cusStateNew: selectedState.name,
+            shippingFee: 40000,
+          });
+    }
+    setSelectedDistrict(null);
+    setSelectedWard(null);
+  };
+  const onHandleDistrictChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedDistrict = selectedState?.districts.find(
+      (district) => district.name === e.target.value
+    );
+    if (selectedDistrict) {
+      setSelectedDistrict(selectedDistrict);
+      setInitialValue({
+        ...initialValue,
+        cusDistrictNew: selectedDistrict.name,
+      });
+    }
+    setSelectedWard(null);
+  };
+  const onHandleWardChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedWard = selectedDistrict?.wards.find(
+      (ward) => ward.name === e.target.value
+    );
+    if (selectedWard) {
+      setSelectedWard(selectedWard);
+      setInitialValue({ ...initialValue, cusWardNew: selectedWard.name });
+    }
+  };
+
   return (
     <Layout>
       <div className={styles["root"]}>
@@ -239,7 +321,7 @@ const Order: React.FC<OrderProps> = () => {
         <div className={styles["container-cart"]}>
           <div className={styles["column"]}>
             <span className={styles["row"]}>
-            <label className={styles["label"]}>Chọn Sản Phẩm</label>
+              <label className={styles["label"]}>Chọn Sản Phẩm</label>
 
               <Search
                 name="search-form"
@@ -265,7 +347,6 @@ const Order: React.FC<OrderProps> = () => {
             </span>
 
             <span className={styles["row"]}>
-
               {data.length > 0 && (
                 <>
                   <ul className={styles["container-card"]}>
@@ -339,16 +420,31 @@ const Order: React.FC<OrderProps> = () => {
                       value={values.cusEmailNew}
                       onChange={(e) => handleChange(e)}
                     />
-
+                    <label className={styles["label"]}>Địa Chỉ Giao Hàng</label>
                     <Input
                       customClass={styles["col-3"]}
                       id="cusAdressNew"
                       type="text"
-                      title="Địa Chỉ"
+                      title="Số Nhà, Tên Đường"
                       name="cusAdressNew"
-                      placeholder="491 Hậu Giang Quận 6 TP HCM"
+                      placeholder="491 Hậu Giang"
                       value={values.cusAdressNew}
                       onChange={(e) => handleChange(e)}
+                    />
+                    <InputSelectAdress
+                      arrow={true}
+                      col1={styles["col-3"]}
+                      col2={styles["col-3"]}
+                      col3={styles["col-3"]}
+                      col4={styles["col-3"]}
+                      selectedCountry={selectedCountry}
+                      selectedState={selectedState}
+                      selectedDistrict={selectedDistrict}
+                      selectedWard={selectedWard}
+                      onHandleCountry={onHandleCountryChange}
+                      onHandleState={onHandleStateChange}
+                      onHandleDistrict={onHandleDistrictChange}
+                      onHandleWard={onHandleWardChange}
                     />
                     <Textarea
                       customClass={styles["col-3"]}
@@ -359,7 +455,65 @@ const Order: React.FC<OrderProps> = () => {
                       value={values.orderNoteNew}
                       onChange={(e) => handleChange(e)}
                     />
-
+                    <label className={styles["label"]}>
+                      Phương Thức Thanh Toán
+                    </label>
+                    <InputPayment
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        handleChange(e)
+                      }
+                      id="COD"
+                      value="COD"
+                      subLabel="Thanh toán ngay khi nhận hàng"
+                      label="COD"
+                      name="cusPaymentNew"
+                      required
+                    >
+                      <Dollar />
+                    </InputPayment>
+                    <InputPayment
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        handleChange(e)
+                      }
+                      id="BT"
+                      value="BANK TRANSFER"
+                      subLabel="Chuyển khoản ngân hàng"
+                      label="BANK TRANSFER"
+                      arrow={true}
+                      name="cusPaymentNew"
+                      required
+                    >
+                      <Bank />
+                    </InputPayment>
+                    <InputPayment
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        handleChange(e)
+                      }
+                      id="MOMO"
+                      value="MOMO"
+                      subLabel="Thanh toán bằng ví điện tử"
+                      label="MOMO"
+                      name="cusPaymentNew"
+                      arrow={true}
+                      required
+                    >
+                      <Wallet />
+                    </InputPayment>
+                    <InputPayment
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        handleChange(e)
+                      }
+                      id="VISA/MASTERCARD"
+                      value="VISA/MASTERCARD"
+                      subLabel="Thanh toán bằng thẻ ngân hàng"
+                      label="Visa / Mastercard"
+                      name="cusPaymentNew"
+                      arrow={true}
+                      required
+                      disabled
+                    >
+                      <Card />
+                    </InputPayment>
                     <div className={styles["button-container"]}>
                       <ButtonMain type="submit">
                         {order ? "Cập Nhật" : "Đặt Hàng"}

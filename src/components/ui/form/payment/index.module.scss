@@ -1,0 +1,148 @@
+@import "styles/mixin";
+@import "styles/variables";
+@import "styles/responsive";
+.root {
+  @include flexCol();
+  width: 100%;
+  position: relative;
+  justify-content: flex-start;
+  input {
+    position: absolute;
+    margin: 0;
+    width: 17px;
+    height: 17px;
+    left: 18px;
+    top: 24px;
+
+    z-index: 1;
+  }
+  .descript {
+    display: none;
+  }
+
+  .label {
+    border: 1px solid transparent;
+    @include boxShadow();
+    @include flex();
+    justify-content: flex-start;
+    width: 100%;
+    height: 65px;
+    cursor: pointer;
+    padding: 0px 30px;
+    position: relative;
+    background-color: $white;
+    @include dark {
+      background-color: $button-bg;
+      color: $light-white;
+      .col {
+        &:first-of-type {
+          svg {
+            fill: $light-white;
+          }
+        }
+      }
+    }
+
+    .chevronDown {
+      width: 15px;
+      height: 15px;
+      position: absolute;
+      top: 23px;
+      right: 20px;
+      transform: rotate(-90deg);
+      @include Transition3();
+    }
+
+    .describe {
+      flex-direction: column;
+      align-items: flex-start;
+      height: 100%;
+      width: 60%;
+      font-family: $font-p;
+      color: $black-fade;
+      font-size: 0.8rem;
+      font-weight: bold;
+      row-gap: 4px;
+      @include dark {
+        color: $light-white;
+      }
+      p {
+        line-height: 1;
+        padding: 0;
+      }
+    }
+  }
+  .descript {
+    .info {
+      @include flex();
+      width: 100%;
+      justify-content: space-between;
+      padding: 20px 80px 30px 80px;
+      @include dark {
+        background-color: $button-bg;
+        color: $light-white;
+      }
+      .col {
+        width: 36%;
+        flex-direction: column;
+        align-items: flex-start;
+
+        &:last-of-type {
+          justify-content: flex-start;
+          height: 180px;
+          row-gap: 10px;
+          width: 58%;
+          p {
+            padding: 0;
+          }
+        }
+        h5 {
+          font-family: $font-p;
+          font-weight: bold;
+        }
+        .img {
+          position: relative;
+          width: 200px;
+          height: 280px;
+        }
+        .momo {
+          height: 250px;
+        }
+      }
+    }
+  }
+  input:checked + .label {
+    border: 1px solid $black-fade;
+    color: $light-white !important;
+
+    .col {
+      &:first-of-type {
+        svg {
+          fill: $light-white;
+        }
+      }
+    }
+    .chevronDown {
+      transform: rotate(0);
+      fill: $light-white;
+    }
+    .describe {
+      color: $light-white;
+      p {
+        color: $light-white;
+      }
+    }
+  }
+  input:checked ~ .descript {
+    @include flex();
+    width: 100%;
+    background-color: $white;
+    border: 1px solid $black-fade;
+    border-top: 0;
+  }
+  .col {
+    @include flex();
+    width: 8%;
+    height: 100%;
+  }
+}

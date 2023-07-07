@@ -12,7 +12,7 @@ export interface IPost {
     descripTag: string;
   }
 
-  export interface IAddPost {
+  export interface IPostNew {
     id?: string;
     authorNew: string;
     urlNew: string;

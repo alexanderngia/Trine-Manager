@@ -1,27 +1,25 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 
+import classnames from "classnames";
 import FunctionBtn from "components/container/functionBtn";
 import { ButtonMain, ButtonSub } from "components/ui/button/button";
-import { CardList, CardUser } from "components/ui/card";
+import { CardUser } from "components/ui/card";
+import { Input } from "components/ui/form/input";
+import { RadioInput } from "components/ui/form/radio";
 import { Modal } from "components/ui/modal/modal";
 import { Layout } from "components/views/layout";
 import { useAppDispatch, useAppSelector } from "hooks/useRedux";
 import { register } from "redux/reducers/authSlice";
 import { messageActions } from "redux/reducers/messageSlice";
 import userService from "services/userService";
+import { IUser, IUserNew } from "types/user";
 import * as Yup from "yup";
 import styles from "./index.module.scss";
-import { IUser, IUserNew } from "types/user";
-import { Input } from "components/ui/form/input";
-import { RadioInput } from "components/ui/form/radio";
-import classNames from "classnames";
-import classnames from "classnames";
 
 export interface MemberListProps {}
 
 const MemberList: React.FC<MemberListProps> = () => {
-  const [deleteUser, setDeleteUser] = useState<IUser>();
   const [data, setData] = useState<IUser[]>([]);
 
   const [role, setRole] = useState("");
@@ -78,7 +76,6 @@ const MemberList: React.FC<MemberListProps> = () => {
         userAdress: `${infoMem.adressUser}`,
         userRole: `${infoMem.typeRole}`,
       });
-      setDeleteUser(infoMem);
     }
     dispatch(messageActions.clearMessage());
   };

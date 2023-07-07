@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IAddProduct } from "types/product";
+import { IProductNew } from "types/product";
 import { products } from "data/product";
 const getProduct: () => Promise<any> = async () => {
   // if (process.env.GET_PRODUCT_API)
@@ -26,7 +26,7 @@ const createProduct = ({
   titleTagItemNew,
   descripTagItemNew,
   authorItemNew,
-}: IAddProduct) => {
+}: IProductNew) => {
   if (process.env.CREATE_PRODUCT_API)
     return axios.post(process.env.CREATE_PRODUCT_API, {
       idItem: idItemNew,
@@ -64,7 +64,7 @@ const updateProduct = async ({
   titleTagItemNew,
   descripTagItemNew,
   authorItemNew,
-}: IAddProduct) => {
+}: IProductNew) => {
   if (process.env.UPDATE_PRODUCT_API)
     return await axios.put(process.env.UPDATE_PRODUCT_API, {
       id: id,

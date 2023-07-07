@@ -42,7 +42,7 @@
   background-color: $light-white;
   @include boxShadow();
   &::placeholder {
-    color: $black-fade;
+    color: $black-hover;
   }
   &:focus,
   &:active {
