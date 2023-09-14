@@ -24,10 +24,15 @@ import { Bank, Card, Dollar, Wallet } from "components/ui/icon";
 export interface OrderProps {}
 
 const Order: React.FC<OrderProps> = () => {
+  const { user } = useAppSelector((state) => state.auth);
+  const { message } = useAppSelector((state) => state.message);
+  const { order } = useAppSelector((state) => state.order);
+  // const { cart } = useAppSelector((state) => state.cart);
+  const dispatch = useAppDispatch();
+  const { v4 } = require("uuid");
+
   const [data, setData] = useState<IProduct[]>([]);
   const [cart, setCart] = useState<any[]>([]);
-  const [totalPrice, setTotalPrice] = useState<number>(0);
-
   const [q, setQ] = useState("");
   const [searchParam] = useState(["nameItem", "categoryItem"]);
 
@@ -39,13 +44,20 @@ const Order: React.FC<OrderProps> = () => {
     null
   );
   const [selectedWard, setSelectedWard] = useState<WardData | null>(null);
-
-  const { user } = useAppSelector((state) => state.auth);
-  const { message } = useAppSelector((state) => state.message);
-  const { order } = useAppSelector((state) => state.order);
-  // const { cart } = useAppSelector((state) => state.cart);
-  const dispatch = useAppDispatch();
-  const { v4 } = require("uuid");
+  const discountList = [
+    {
+      code: "HKPHP",
+      value: 0.1,
+    },
+    {
+      code: "ABCDE",
+      value: 0.2,
+    },
+    {
+      code: "HKHK",
+      value: 0.3,
+    },
+  ];
 
   const [initialValue, setInitialValue] = useState<IOrderNew>({
     id: "",
@@ -60,11 +72,13 @@ const Order: React.FC<OrderProps> = () => {
     cusWardNew: "",
     cusPaymentNew: "COD",
     cusOrderNoteNew: "",
-    discount: "",
+    discountCode: "",
+    discountValue: 0,
     price: 0,
     shippingFee: 0,
     vat: 0,
     total: 0,
+    cart: [],
   });
 
   useEffect(() => {
@@ -75,6 +89,7 @@ const Order: React.FC<OrderProps> = () => {
 
         if (order) {
           setInitialValue({
+            ...initialValue,
             id: `${order.id}`,
             idOrderNew: `${order.idOrder}`,
             cusNameNew: `${order.cusName}`,
@@ -93,16 +108,22 @@ const Order: React.FC<OrderProps> = () => {
   }, []);
 
   useEffect(() => {
-    setTotalPrice(
-      cart.reduce(
-        (accumulator, current) =>
-          accumulator + current.priceItem * current.amount,
-        0
-      )
+    const totalCart = cart.reduce(
+      (total: any, item) => total + item.priceItem * item.amount,
+      0
     );
-  }, [cart]);
+    setInitialValue({
+      ...initialValue,
+      price: totalCart * (1 - initialValue.discountValue),
+      vat: totalCart * 0.1,
+      total: initialValue.price + initialValue.shippingFee + initialValue.vat,
+    });
+    console.log("effect");
+  }, [cart, initialValue.price, initialValue.shippingFee]);
 
-  const handleRegister = async (infoOrder: any) => {
+
+
+  const handleSubmit = async (infoOrder: any) => {
     const {
       idOrderNew,
       cusNameNew,
@@ -113,15 +134,16 @@ const Order: React.FC<OrderProps> = () => {
     } = infoOrder;
 
     try {
-      await orderService.createOrder({
-        idOrderNew,
-        cusNameNew,
-        cusEmailNew,
-        cusPhoneNew,
-        cusAdressNew,
-        cusOrderNoteNew,
-        cart,
-      });
+      console.log(infoOrder, "infoOrder");
+      // await orderService.createOrder({
+      //   idOrderNew,
+      //   cusNameNew,
+      //   cusEmailNew,
+      //   cusPhoneNew,
+      //   cusAdressNew,
+      //   cusOrderNoteNew,
+      //   cart,
+      // });
 
       // const message = res.data.message;
       // const errMessage = res.data.errMessage;
@@ -256,132 +278,182 @@ const Order: React.FC<OrderProps> = () => {
     setQ(cat);
   };
 
-  const onHandleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const onHandleCountryChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+    setFieldValue: any
+  ) => {
     const countryName = e.target.value;
-    const selectedCountry = Country.find(
+    const countryCurrent = Country.find(
       (country) => country.name === countryName
     );
-    if (selectedCountry) {
-      setSelectedCountry(selectedCountry);
-      setInitialValue({ ...initialValue, cusCountryNew: selectedCountry.name });
+    if (countryCurrent) {
+      setSelectedCountry(countryCurrent);
+      setFieldValue("cusCountryNew", countryCurrent.name);
     }
     setSelectedState(null);
     setSelectedDistrict(null);
     setSelectedWard(null);
   };
 
-  const onHandleStateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedState = selectedCountry?.state.find(
+  const onHandleStateChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+    setFieldValue: any
+  ) => {
+    const stateCurrent = selectedCountry?.state.find(
       (state) => state.name === e.target.value
     );
-    if (selectedState) {
-      setSelectedState(selectedState);
-      selectedState.code === 79
-        ? setInitialValue({
-            ...initialValue,
-            cusStateNew: selectedState.name,
-            shippingFee: 0,
-          })
-        : setInitialValue({
-            ...initialValue,
-            cusStateNew: selectedState.name,
-            shippingFee: 40000,
-          });
+    if (stateCurrent) {
+      setSelectedState(stateCurrent);
+
+      if (stateCurrent.code === 79) {
+        setFieldValue("cusStateNew", stateCurrent.name);
+        setInitialValue({
+          ...initialValue,
+          shippingFee: 0,
+        });
+      } else {
+        setFieldValue("cusStateNew", stateCurrent.name);
+        setInitialValue({
+          ...initialValue,
+          shippingFee: 40000,
+        });
+      }
     }
     setSelectedDistrict(null);
     setSelectedWard(null);
   };
-  const onHandleDistrictChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const onHandleDistrictChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+    setFieldValue: any
+  ) => {
     const selectedDistrict = selectedState?.districts.find(
       (district) => district.name === e.target.value
     );
     if (selectedDistrict) {
       setSelectedDistrict(selectedDistrict);
-      setInitialValue({
-        ...initialValue,
-        cusDistrictNew: selectedDistrict.name,
-      });
+      setFieldValue("cusDistrictNew", selectedDistrict.name);
     }
     setSelectedWard(null);
   };
-  const onHandleWardChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const onHandleWardChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+    setFieldValue: any
+  ) => {
     const selectedWard = selectedDistrict?.wards.find(
       (ward) => ward.name === e.target.value
     );
     if (selectedWard) {
       setSelectedWard(selectedWard);
-      setInitialValue({ ...initialValue, cusWardNew: selectedWard.name });
+      setFieldValue("cusWardNew", selectedWard.name);
     }
   };
+  const onHandleDiscountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    discountList.filter(({ code, value }) => {
+      return code === e.target.value
+        ? setInitialValue({
+            ...initialValue,
+            discountCode: code,
+            discountValue: value,
+          })
+        : setInitialValue({
+            ...initialValue,
+            discountCode: "",
+            discountValue: 0,
+          });
+    });
+    console.log(e.target.value, "e.target.value");
+  };
 
+  const handleTotal = (discount, shipping, vat) => {
+    const totalCart = cart.reduce(
+      (total: any, item) => total + item.priceItem * item.amount,
+      0
+    );
+
+    // Apply discount
+    const discountAmount = totalAmount * (discountPercentage / 100);
+    totalAmount -= discountAmount;
+
+    // Add shipping fee
+    totalAmount += shippingFee;
+
+    // Add VAT
+    const vatAmount = totalAmount * (vatPercentage / 100);
+    totalAmount += vatAmount;
+
+    return totalAmount;
+  };
   return (
     <Layout>
       <div className={styles["root"]}>
         <h1>{order ? "CẬP NHẬT ĐƠN HÀNG" : "TẠO ĐƠN HÀNG"}</h1>
-        <div className={styles["container-cart"]}>
-          <div className={styles["column"]}>
-            <span className={styles["row"]}>
-              <label className={styles["label"]}>Chọn Sản Phẩm</label>
+        <div className={styles["container"]}>
+          <Formik
+            initialValues={initialValue}
+            validateOnChange={true}
+            onSubmit={order ? handleUpdate : handleSubmit}
+            enableReinitialize={true}
+          >
+            {({ values, handleChange, setFieldValue }: any) => (
+              <Form className={styles["form"]}>
+                <div className={styles["column"]}>
+                  <span className={styles["row"]}>
+                    <label className={styles["label"]}>Chọn Sản Phẩm</label>
 
-              <Search
-                name="search-form"
-                id="search-form"
-                value={q}
-                className={styles["search"]}
-                onChange={(e: any) => setQ(e.target.value)}
-              />
-              <div className={styles["filter"]}>
-                <ButtonMain onClick={() => filter("lingeria")}>
-                  LINGERIA
-                </ButtonMain>
-                <ButtonMain onClick={() => filter("accessories")}>
-                  ACCESSORIES
-                </ButtonMain>
-                <ButtonMain
-                  onClick={() => filter("dress")}
-                  classCustom={styles["last-button"]}
-                >
-                  DRESS
-                </ButtonMain>
-              </div>
-            </span>
+                    <Search
+                      name="search-form"
+                      id="search-form"
+                      value={q}
+                      className={styles["search"]}
+                      onChange={(e: any) => setQ(e.target.value)}
+                    />
+                    <div className={styles["filter"]}>
+                      <ButtonMain onClick={() => filter("lingeria")}>
+                        LINGERIA
+                      </ButtonMain>
+                      <ButtonMain onClick={() => filter("accessories")}>
+                        ACCESSORIES
+                      </ButtonMain>
+                      <ButtonMain
+                        onClick={() => filter("dress")}
+                        classCustom={styles["last-button"]}
+                      >
+                        DRESS
+                      </ButtonMain>
+                    </div>
+                  </span>
 
-            <span className={styles["row"]}>
-              {data.length > 0 && (
-                <>
-                  <ul className={styles["container-card"]}>
-                    {React.Children.toArray(
-                      search(data).map((listItems: any) => {
-                        return (
-                          <CardProductItem
-                            classCustomCard={styles["item"]}
-                            onClick={() =>
-                              // dispatch(cartActions.addToCart(listItems))
-                              handleAddToCart(listItems)
-                            }
-                            titleCard={listItems.nameItem}
-                            imgCard={listItems.imgItem}
-                            colorCard={listItems.colorItem}
-                            sizeCard={listItems.sizeItem}
-                            qtyCard={listItems.qualityItem}
-                          />
-                        );
-                      })
+                  <span className={styles["row"]}>
+                    {data.length > 0 && (
+                      <>
+                        <ul className={styles["container-card"]}>
+                          {React.Children.toArray(
+                            search(data).map((listItems: any) => {
+                              return (
+                                <CardProductItem
+                                  classCustomCard={styles["item"]}
+                                  onClick={() =>
+                                    // dispatch(cartActions.addToCart(listItems))
+                                    handleAddToCart(listItems)
+                                  }
+                                  titleCard={listItems.nameItem}
+                                  imgCard={listItems.imgItem}
+                                  colorCard={listItems.colorItem}
+                                  sizeCard={listItems.sizeItem}
+                                  qtyCard={listItems.qualityItem}
+                                />
+                              );
+                            })
+                          )}
+                        </ul>
+                      </>
                     )}
-                  </ul>
-                </>
-              )}
-            </span>
-            <span className={styles["row"]}>
-              <label className={styles["label"]}>Thông Tin Khách Hàng</label>
-              <Formik
-                initialValues={initialValue}
-                validateOnChange={true}
-                onSubmit={order ? handleUpdate : handleRegister}
-                enableReinitialize={true}
-              >
-                {({ values, handleChange, setFieldValue }: any) => (
-                  <Form className={styles["form"]}>
+                  </span>
+                  <span className={styles["row"]}>
+                    <label className={styles["label"]}>
+                      Thông Tin Khách Hàng
+                    </label>
+
                     <Input
                       customClass={styles["col-3"]}
                       type="text"
@@ -441,10 +513,18 @@ const Order: React.FC<OrderProps> = () => {
                       selectedState={selectedState}
                       selectedDistrict={selectedDistrict}
                       selectedWard={selectedWard}
-                      onHandleCountry={onHandleCountryChange}
-                      onHandleState={onHandleStateChange}
-                      onHandleDistrict={onHandleDistrictChange}
-                      onHandleWard={onHandleWardChange}
+                      onHandleCountry={(e: ChangeEvent<HTMLSelectElement>) => {
+                        onHandleCountryChange(e, setFieldValue);
+                      }}
+                      onHandleState={(e: ChangeEvent<HTMLSelectElement>) => {
+                        onHandleStateChange(e, setFieldValue);
+                      }}
+                      onHandleDistrict={(e: ChangeEvent<HTMLSelectElement>) => {
+                        onHandleDistrictChange(e, setFieldValue);
+                      }}
+                      onHandleWard={(e: ChangeEvent<HTMLSelectElement>) => {
+                        onHandleWardChange(e, setFieldValue);
+                      }}
                     />
                     <Textarea
                       customClass={styles["col-3"]}
@@ -525,57 +605,87 @@ const Order: React.FC<OrderProps> = () => {
                         Delete
                       </ButtonSub>
                     </div>
-                  </Form>
-                )}
-              </Formik>
-            </span>
-          </div>
-          <div className={styles["column"]}>
-            <div className={styles["cart"]}>
-              {cart && cart.length === 0 ? (
-                <div className={styles["cart-text"]}>
-                  <p>Chọn sản phẩm thêm vào giỏ hàng!</p>
+                  </span>
                 </div>
-              ) : null}
+                <div className={styles["column"]}>
+                  <div className={styles["cart"]}>
+                    {cart && cart.length === 0 ? (
+                      <div className={styles["cart-text"]}>
+                        <p>Chọn sản phẩm thêm vào giỏ hàng!</p>
+                      </div>
+                    ) : null}
 
-              {cart &&
-                React.Children.toArray(
-                  cart.map((item: any) => {
-                    return (
-                      <CardCart
-                        onClick={() => handleRemoveFromCart(item)}
-                        titleCard={item?.nameItem}
-                        imgCard={item?.imgItem}
-                        priceCard={item?.priceItem}
-                        sizeCard={item?.sizeItem}
-                        colorCard={item?.colorItem}
-                        qtyCard={item?.amount}
-                      ></CardCart>
-                    );
-                  })
-                )}
-            </div>
-            <div className={styles["cart-total"]}>
-              <div className={styles["row"]}>
-                <p className={styles["title"]}>Đơn Hàng:</p>
-                <p>{totalPrice.toLocaleString()}</p>
-              </div>
+                    {cart &&
+                      React.Children.toArray(
+                        cart.map((item: any) => {
+                          return (
+                            <CardCart
+                              onClick={() => handleRemoveFromCart(item)}
+                              titleCard={item?.nameItem}
+                              imgCard={item?.imgItem}
+                              priceCard={item?.priceItem}
+                              sizeCard={item?.sizeItem}
+                              colorCard={item?.colorItem}
+                              qtyCard={item?.amount}
+                            ></CardCart>
+                          );
+                        })
+                      )}
+                  </div>
+                  <div className={styles["total"]}>
+                    <Input
+                      customClass={styles["col-1"]}
+                      id="discount"
+                      type="text"
+                      title="Mã Giảm Giá"
+                      name="discount"
+                      placeholder="HKPAP"
+                      value={values.discount}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        onHandleDiscountChange(e);
+                      }}
+                    />
+                    <div className={styles["row"]}>
+                      <p className={styles["title"]}>Đơn hàng:</p>
+                      <p>{values.price.toLocaleString()}&nbsp; VND</p>
+                    </div>
 
-              <div className={styles["row"]}>
-                <p className={styles["title"]}>Phí Vận Chuyển: </p>
-                <p>{totalPrice.toLocaleString()}</p>
-              </div>
-              <hr />
-              <div className={styles["row"]}>
-                <p className={styles["title"]}>Đã bao gồm thuế VAT 10% :</p>
-                <p>{(totalPrice * 0.1).toLocaleString()}</p>
-              </div>
-              <div className={styles["row"]}>
-                <p className={styles["title"]}>TỔNG: </p>
-                <p>{(totalPrice + totalPrice * 0.1).toLocaleString()}</p>
-              </div>
-            </div>
-          </div>
+                    <div className={styles["row"]}>
+                      <p className={styles["title"]}>Phí vận chuyển: </p>
+
+                      <p>
+                        {values.shippingFee
+                          ?.toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        &nbsp; VND
+                      </p>
+                    </div>
+                    <div className={styles["row"]}>
+                      <p className={styles["title"]}>
+                        Đã bao gồm thuế VAT 10% :
+                      </p>
+                      <p>
+                        {values.vat
+                          ?.toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        &nbsp; VND
+                      </p>
+                    </div>
+                    <div className={styles["row"]}>
+                      <p className={styles["title"]}>TỔNG: </p>
+                      <p>
+                        {/* {values.total
+                          ?.toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
+                          handleTotal
+                        &nbsp; VND
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </Form>
+            )}
+          </Formik>
         </div>
       </div>
     </Layout>
